@@ -1,0 +1,55 @@
+:root {
+    --bg-deep: #111111;
+    --bg-base: #1e1e1e;
+    --bg-panel: #252526;
+    --bg-header: #2d2d30;
+    --bg-hover: #37373d;
+    --bg-active: #004a77;
+    --border-color: #3f3f46;
+    --border-light: #555555;
+    --text-main: #cccccc;
+    --text-muted: #858585;
+    --text-light: #ffffff;
+    --accent: #007acc;
+    --accent-hover: #0098ff;
+
+    --axis-x: #f44336;
+    --axis-y: #4caf50;
+    --axis-z: #2196f3;
+    --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    --font-mono: 'Consolas', 'Courier New', monospace;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+::-webkit-scrollbar-track {
+    background: var(--bg-base);
+}
+::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 5px;
+    border: 2px solid var(--bg-base);
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--border-light);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    user-select: none;
+}
+
+body, #app {
+    font-family: var(--font-family);
+    background-color: var(--bg-deep);
+    color: var(--text-main);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    font-size: 13px;
+}

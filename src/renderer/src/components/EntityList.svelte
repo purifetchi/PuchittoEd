@@ -1,8 +1,15 @@
 <script lang="ts">
   import { onMount } from "svelte"
   import { editor } from "../editor/editorGame"
+  import EntityListItem from "./entities/EntityListItem.svelte"
+  import type { GameObject } from "puchitto/objects"
+  import { selectionState } from "../state/selectionState.svelte"
 
-  let objects = []
+  let objects: GameObject<unknown>[] = []
+
+  let onclicked = (id) => {
+    selectionState.id = id
+  }
 
   onMount(() => {
     editor.eventStream.on("objectAttached", _ => {
@@ -11,9 +18,16 @@
   })
 </script>
 
-<div>
-  <div>Entities:</div>
+<div class="entity-list">
   {#each objects as object}
-    <div>{object.id} - {object.name}</div>
+    <EntityListItem name={object.name} id={object.id} onselect={onclicked} selected={object.id == selectionState.id} />
   {/each}
 </div>
+
+<style>
+  .entity-list {
+    padding-top: 5px;
+    height: 100%;
+    overflow-y: scroll;
+  }
+</style>

@@ -1,8 +1,7 @@
 <script lang="ts">
-  import EntityList from "./components/EntityList.svelte"
-  import PuchittoView from "./components/PuchittoView.svelte"
+  import MenuBar from "./components/MenuBar.svelte"
+  import Workspace from "./components/Workspace.svelte"
 </script>
 
-<div>puchittoed</div>
-<PuchittoView />
-<EntityList />
+<MenuBar />
+<Workspace />
