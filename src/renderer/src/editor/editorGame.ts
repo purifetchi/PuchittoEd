@@ -1,4 +1,5 @@
-import { Game, GameLoader } from "puchitto";
+import { Game, GameLoader } from 'puchitto'
+import { AssetProtocolDataProvider } from './assetProtocolDataProvider'
 
 /**
  * The backing class for the editor, extending a normal Puchitto game.
@@ -7,18 +8,17 @@ export class EditorGame extends Game {
   /**
    * Creates a new scene.
    */
-  newScene() {
+  newScene(): void {
     this.createScene()
   }
 
   /**
    * Loads a level from a buffer.
-   * @param buffer The buffer to load from.
    */
-  async loadLevelFile(buffer: ArrayBufferLike) {
+  async loadLevel(): Promise<void> {
     this.createScene()
 
-    await this._dataManager.loadPackageFromBuffer(buffer)
+    this._dataManager.addProvider(new AssetProtocolDataProvider())
     const gameLoader = new GameLoader(this)
     await gameLoader.load()
   }
@@ -28,4 +28,3 @@ export class EditorGame extends Game {
  * The singleton instance of the editor.
  */
 export const editor = new EditorGame()
-

@@ -1,11 +1,11 @@
-import type { NetworkListener, NetworkReader } from "puchitto/networking";
+import type { NetworkListener, NetworkReader } from 'puchitto/networking'
 
 export class OfflineNetworkListener implements NetworkListener {
-  onError?: (ev: Event) => Promise<unknown>;
+  onError?: (ev: Event) => Promise<unknown>
 
-  onData?: (nr: NetworkReader) => Promise<unknown>;
+  onData?: (nr: NetworkReader) => Promise<unknown>
 
-  onDisconnect?: (ev: Event) => Promise<unknown>;
+  onDisconnect?: (ev: Event) => Promise<unknown>
 
   private _listening: boolean = false
 
@@ -13,11 +13,11 @@ export class OfflineNetworkListener implements NetworkListener {
     return this._listening
   }
 
-  listen() {
+  listen(): void {
     this._listening = true
   }
 
-  sendRaw(_: Uint8Array) {
-
+  sendRaw(): void {
+    // ignored
   }
 }

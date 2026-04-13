@@ -1,22 +1,20 @@
-<div id="puchitto-view" bind:this={container}>
-
-</div>
-
 <script lang="ts">
-  import { onMount } from 'svelte';
+  import { onMount } from 'svelte'
   import { editor } from '../editor/editorGame'
   import { OfflineNetworkListener } from '../editor/offlineNetworkListener'
 
-  let container: HTMLElement;
+  let container: HTMLElement
 
   onMount(() => {
     editor.run({
       element: container,
-      server: "",
-      listenerFactory: (_) => new OfflineNetworkListener()
+      server: '',
+      listenerFactory: () => new OfflineNetworkListener()
     })
   })
 </script>
+
+<div id="puchitto-view" bind:this={container}></div>
 
 <style>
   #puchitto-view {

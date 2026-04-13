@@ -6,7 +6,7 @@
 <button class="entity-list-item" class:selected onclick={() => onselect(id)}>
   <Box size={16} />
   <span class="name">
-    { name }
+    {name}
   </span>
 </button>
 

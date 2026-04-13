@@ -1,10 +1,7 @@
 <script lang="ts">
-
 </script>
 
-<div class="asset-browser">
-
-</div>
+<div class="asset-browser"></div>
 
 <style>
   .asset-browser {

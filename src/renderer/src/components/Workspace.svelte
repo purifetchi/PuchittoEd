@@ -1,12 +1,10 @@
 <script lang="ts">
-  import AssetBrowserView from "./AssetBrowserView.svelte"
-  import EntityList from "./EntityList.svelte"
-  import InspectorView from "./InspectorView.svelte"
-  import PuchittoView from "./PuchittoView.svelte"
-  import Panel from "./workspace/Panel.svelte"
-  import PanelHeader from "./workspace/PanelHeader.svelte"
-
-
+  import AssetBrowserView from './AssetBrowserView.svelte'
+  import EntityList from './EntityList.svelte'
+  import InspectorView from './InspectorView.svelte'
+  import PuchittoView from './PuchittoView.svelte'
+  import Panel from './workspace/Panel.svelte'
+  import PanelHeader from './workspace/PanelHeader.svelte'
 </script>
 
 <div class="workspace">

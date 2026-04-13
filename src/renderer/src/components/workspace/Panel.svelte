@@ -2,7 +2,7 @@
   let { flex = 0.3 } = $props()
 </script>
 
-<div class="workspace-container" style:flex={flex}>
+<div class="workspace-container" style:flex>
   <slot></slot>
 </div>
 

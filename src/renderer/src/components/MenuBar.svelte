@@ -1,13 +1,15 @@
 <script lang="ts">
-  import { editor } from "../editor/editorGame"
+  import { editor } from '../editor/editorGame'
 
-  const newLevel = () => {
+  const newLevel = (): void => {
     editor.newScene()
   }
 
-  const loadLevel = async () => {
-    const data = await window.puchittoAPI.readFile()
-    editor.loadLevelFile(data)
+  const loadLevel = async (): Promise<void> => {
+    const selected = await window.puchittoAPI.selectProject()
+    if (selected) {
+      editor.loadLevel()
+    }
   }
 </script>
 
@@ -18,10 +20,10 @@
 
 <style>
   .menu-bar {
-      height: 28px;
-      background-color: var(--bg-header);
-      display: flex;
-      align-items: center;
-      border-bottom: 1px solid var(--bg-deep);
+    height: 28px;
+    background-color: var(--bg-header);
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid var(--bg-deep);
   }
 </style>
