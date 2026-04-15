@@ -14,14 +14,17 @@ export class EditorCameraObject extends CameraObject {
    * Updates the editor camera's movement.
    */
   tick(dt: number): void {
-    if (!this.game.input.mouseHeld) {
+    if (!this.game.input.cursorLocked) {
+      if (this.game.input.mousePressed) {
+        this.game.input.lockCursor()
+      }
       return
     }
 
     // Rotate the camera based on the delta!
-    const delta = this.game.input.mouseDelta.divide(this.game._getResolution())
-    this.threeObject.rotateX(delta.y)
-    this.threeObject.rotateOnWorldAxis(WORLD_Y_AXIS, delta.x)
+    const delta = this.game.input.mouseDelta.multiplyScalar(0.5 * dt)
+    this.threeObject.rotateX(-delta.y)
+    this.threeObject.rotateOnWorldAxis(WORLD_Y_AXIS, -delta.x)
 
     if (this.game.input.keyDown('KeyW')) {
       this.threeObject.translateZ(-7 * dt)
