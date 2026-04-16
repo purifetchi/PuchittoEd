@@ -11,13 +11,17 @@
     selectionState.id = id
   }
 
+  let reloadObjects = (): void => {
+    objects = [...editor._objects.filter((obj) => obj.tag !== 'editor')]
+  }
+
   onMount(() => {
     editor.eventStream.on('objectAttached', () => {
-      objects = [...editor._objects]
+      reloadObjects()
     })
 
     editor.eventStream.on('objectRemoved', () => {
-      objects = [...editor._objects]
+      reloadObjects()
     })
   })
 </script>

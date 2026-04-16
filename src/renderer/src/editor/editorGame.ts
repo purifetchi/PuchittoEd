@@ -2,6 +2,7 @@ import { Game, GameLoader } from 'puchitto'
 import { AssetProtocolDataProvider } from './assetProtocolDataProvider'
 import type { EntityFactory } from 'puchitto/level'
 import { EditorCameraObject } from './entities/editorCameraObject'
+import { SceneObjectSelectionSystem } from './systems/sceneObjectSelectionSystem.svelte'
 
 /**
  * The backing class for the editor, extending a normal Puchitto game.
@@ -17,6 +18,13 @@ export class EditorGame extends Game {
    */
   protected registerCustomEntities(factory: EntityFactory): void {
     factory.registerEntity<EditorCameraObject>('editorcamera', EditorCameraObject)
+  }
+
+  /**
+   * Registers the custom editor game systems.
+   */
+  protected registerCustomGameSystems(): void {
+    this.addGameSystem(new SceneObjectSelectionSystem())
   }
 
   /**
@@ -36,6 +44,13 @@ export class EditorGame extends Game {
     this._dataManager.addProvider(new AssetProtocolDataProvider())
     const gameLoader = new GameLoader(this)
     await gameLoader.load()
+  }
+
+  /**
+   * Saves the level.
+   */
+  saveLevel(): void {
+    // todo
   }
 
   /**
