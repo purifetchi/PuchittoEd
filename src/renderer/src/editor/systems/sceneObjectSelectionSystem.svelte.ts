@@ -76,12 +76,16 @@ export class SceneObjectSelectionSystem implements GameSystem {
 
   private _setSelection(object: GameObject<unknown> | null): void {
     if (object === null) {
-      resetSelectedObject()
+      if (selectionState.id !== -1) {
+        resetSelectedObject()
+      }
       this._outlinePass.selectedObjects = []
       return
     }
 
-    setSelectedObject(object)
+    if (selectionState.id !== object.id) {
+      setSelectedObject(object)
+    }
     this._outlinePass.selectedObjects = [object.threeObject]
   }
 }

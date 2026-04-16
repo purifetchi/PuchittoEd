@@ -3,7 +3,7 @@
   import { editor } from '../editor/editorGame'
   import EntityListItem from './entities/EntityListItem.svelte'
   import type { GameObject } from 'puchitto/objects'
-  import { selectionState } from '../state/selectionState.svelte'
+  import { resetSelectedObject, selectionState } from '../state/selectionState.svelte'
 
   let objects: GameObject<unknown>[] = []
 
@@ -21,6 +21,11 @@
     })
 
     editor.eventStream.on('objectRemoved', () => {
+      reloadObjects()
+    })
+
+    editor.eventStream.on('sceneCreated', () => {
+      resetSelectedObject()
       reloadObjects()
     })
   })
