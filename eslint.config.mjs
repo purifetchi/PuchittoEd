@@ -8,7 +8,7 @@ export default defineConfig(
   tseslint.configs.recommended,
   eslintPluginSvelte.configs['flat/recommended'],
   {
-    files: ['**/*.svelte'],
+    files: ['**/*.svelte', '**/*.svelte.ts', '**/*.svelte.js'],
     languageOptions: {
       parserOptions: {
         parser: tseslint.parser
@@ -16,7 +16,7 @@ export default defineConfig(
     }
   },
   {
-    files: ['**/*.{tsx,svelte}'],
+    files: ['**/*.tsx', '**/*.svelte', '**/*.svelte.ts'],
     rules: {
       'svelte/no-unused-svelte-ignore': 'off'
     }
