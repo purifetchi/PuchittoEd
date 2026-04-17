@@ -58,7 +58,7 @@ export class SceneObjectSelectionSystem implements GameSystem {
     const intersections = this._game.raycast()
     for (const intersected of intersections) {
       let object = intersected.object
-      while (object.userData['id'] === undefined) {
+      while (object !== undefined && object.userData['id'] === undefined) {
         object = object.parent
       }
 
@@ -67,6 +67,10 @@ export class SceneObjectSelectionSystem implements GameSystem {
       }
 
       const gameObject = this._game.getObjectById(object.userData['id'])
+      if (gameObject.tag === 'editor') {
+        continue
+      }
+
       this._setSelection(gameObject)
       return
     }
