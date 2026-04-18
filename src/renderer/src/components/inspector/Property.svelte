@@ -2,13 +2,13 @@
   import Label from '../common/Label.svelte'
   import InspectorRow from './InspectorRow.svelte'
 
-  let { label } = $props()
+  let { label }: { label: string } = $props()
 </script>
 
 <InspectorRow>
   <Label>{label}</Label>
   <div class="group">
-    <slot name="group"></slot>
+    <slot></slot>
   </div>
 </InspectorRow>
 

@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { GameObject } from 'puchitto/objects'
   import type { SerializedMetadataProps } from 'puchitto/serialization'
+  import Property from './Property.svelte'
 
   let { obj }: { obj: GameObject } = $props()
 
@@ -18,7 +19,9 @@
 
 <div>
   {#each keys as key, i (i)}
-    <div>{key}</div>
+    <Property label={key}>
+      <div>{obj[key]}</div>
+    </Property>
   {/each}
 </div>
 

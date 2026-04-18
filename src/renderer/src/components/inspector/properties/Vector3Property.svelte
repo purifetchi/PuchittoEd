@@ -70,44 +70,42 @@
 </script>
 
 <Property label={name}>
-  <svelte:fragment slot="group">
-    <div class="number-group">
-      <div
-        class="number-label x"
-        role="slider"
-        aria-valuenow={x}
-        tabindex="0"
-        onmousedown={() => mousedown('x')}
-      >
-        X
-      </div>
-      <input class="number-input" step="any" type="number" bind:value={x} />
+  <div class="number-group">
+    <div
+      class="number-label x"
+      role="slider"
+      aria-valuenow={x}
+      tabindex="0"
+      onmousedown={() => mousedown('x')}
+    >
+      X
     </div>
-    <div class="number-group">
-      <div
-        class="number-label y"
-        role="slider"
-        aria-valuenow={y}
-        tabindex="0"
-        onmousedown={() => mousedown('y')}
-      >
-        Y
-      </div>
-      <input class="number-input" step="any" type="number" bind:value={y} />
+    <input class="number-input" step="any" type="number" bind:value={x} />
+  </div>
+  <div class="number-group">
+    <div
+      class="number-label y"
+      role="slider"
+      aria-valuenow={y}
+      tabindex="0"
+      onmousedown={() => mousedown('y')}
+    >
+      Y
     </div>
-    <div class="number-group">
-      <div
-        class="number-label z"
-        role="slider"
-        aria-valuenow={z}
-        tabindex="0"
-        onmousedown={() => mousedown('z')}
-      >
-        Z
-      </div>
-      <input class="number-input" step="any" type="number" bind:value={z} />
+    <input class="number-input" step="any" type="number" bind:value={y} />
+  </div>
+  <div class="number-group">
+    <div
+      class="number-label z"
+      role="slider"
+      aria-valuenow={z}
+      tabindex="0"
+      onmousedown={() => mousedown('z')}
+    >
+      Z
     </div>
-  </svelte:fragment>
+    <input class="number-input" step="any" type="number" bind:value={z} />
+  </div>
 </Property>
 
 <style>

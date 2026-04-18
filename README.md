@@ -1,34 +1,7 @@
-# puchittoed
+# PuchittoEd
 
-An Electron application with Svelte and TypeScript
+An in-development realm editor for the [Puchitto](https://github.com/purifetchi/puchitto) framework. Built with Electron, Svelte and puchitto itself.
 
-## Recommended IDE Setup
+Its goal is to replace the set of Unity scripts I have written to make levels, also being agnostic of any project, being able to define rules for your own puchitto-based projects to extend the editor.
 
-- [VSCode](https://code.visualstudio.com/) + [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) + [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) + [Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode)
-
-## Project Setup
-
-### Install
-
-```bash
-$ npm install
-```
-
-### Development
-
-```bash
-$ npm run dev
-```
-
-### Build
-
-```bash
-# For windows
-$ npm run build:win
-
-# For macOS
-$ npm run build:mac
-
-# For Linux
-$ npm run build:linux
-```
+It's still very early... gomen...
