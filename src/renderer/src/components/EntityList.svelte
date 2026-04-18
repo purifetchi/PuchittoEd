@@ -5,7 +5,7 @@
   import type { GameObject } from 'puchitto/objects'
   import { resetSelectedObject, selectionState } from '../state/selectionState.svelte'
 
-  let objects: GameObject<unknown>[] = []
+  let objects: GameObject[] = []
 
   let onclicked = (id: number): void => {
     selectionState.id = id

@@ -1,24 +1,18 @@
 <script lang="ts">
+  import Label from '../common/Label.svelte'
   import InspectorRow from './InspectorRow.svelte'
 
   let { label } = $props()
 </script>
 
 <InspectorRow>
-  <div class="label">
-    {label}
-  </div>
+  <Label>{label}</Label>
   <div class="group">
     <slot name="group"></slot>
   </div>
 </InspectorRow>
 
 <style>
-  .label {
-    width: 70px;
-    color: var(--text-muted);
-  }
-
   .group {
     flex: 1;
     display: flex;

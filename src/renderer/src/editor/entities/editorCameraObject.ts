@@ -1,12 +1,11 @@
 import { MOUSE_RIGHT } from 'puchitto'
-import type { CameraEntityData } from 'puchitto/level'
 import { CameraObject, type GameObjectOptions } from 'puchitto/objects'
 import { Vector3 } from 'three'
 
 const WORLD_Y_AXIS = new Vector3(0, 1, 0)
 
 export class EditorCameraObject extends CameraObject {
-  constructor(opts: GameObjectOptions & CameraEntityData) {
+  constructor(opts: GameObjectOptions) {
     super(opts)
     this.tag = 'editor'
   }

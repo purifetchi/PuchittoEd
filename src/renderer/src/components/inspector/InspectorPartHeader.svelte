@@ -7,11 +7,9 @@
 </div>
 
 <style>
-  :root {
-    --border-color: #3f3f4655;
-  }
-
   .part-header {
+    --border-color: #3f3f4655;
+
     padding: 8px 10px;
     background: var(--bg-hover);
     display: flex;

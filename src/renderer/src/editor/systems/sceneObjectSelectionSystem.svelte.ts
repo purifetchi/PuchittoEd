@@ -78,7 +78,7 @@ export class SceneObjectSelectionSystem implements GameSystem {
     this._setSelection(null)
   }
 
-  private _setSelection(object: GameObject<unknown> | null): void {
+  private _setSelection(object: GameObject | null): void {
     if (object === null) {
       if (selectionState.id !== -1) {
         resetSelectedObject()

@@ -1,8 +1,8 @@
 <script lang="ts">
-  let { value = $bindable('') }: { value?: string } = $props()
+  let { value = $bindable(''), placeholder }: { value?: string; placeholder?: string } = $props()
 </script>
 
-<input class="text-input" bind:value />
+<input class="text-input" bind:value {placeholder} />
 
 <style>
   .text-input {

@@ -4,7 +4,7 @@ export const selectionState = $state({
   id: -1
 })
 
-export const setSelectedObject = (go: GameObject<unknown>): void => {
+export const setSelectedObject = (go: GameObject): void => {
   selectionState.id = go.id
 }
 

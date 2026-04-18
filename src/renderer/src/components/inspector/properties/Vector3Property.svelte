@@ -1,6 +1,6 @@
 <script lang="ts">
   import { untrack } from 'svelte'
-  import type { Vector3 } from 'three'
+  import type { Vector3Like } from 'three'
   import Property from '../Property.svelte'
 
   type Axis = 'x' | 'y' | 'z'
@@ -9,8 +9,11 @@
     name,
     accessor,
     setter
-  }: { name: string; accessor: () => Vector3; setter: (x: number, y: number, z: number) => void } =
-    $props()
+  }: {
+    name: string
+    accessor: () => Vector3Like
+    setter: (x: number, y: number, z: number) => void
+  } = $props()
 
   // svelte-ignore state_referenced_locally
   let x = $state(accessor().x)
