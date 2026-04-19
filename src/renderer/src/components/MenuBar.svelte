@@ -1,6 +1,5 @@
 <script lang="ts">
   import { editor } from '../editor/editorGame'
-  import { buildLevelJsonData } from '../editor/saving/levelBuilder'
   import DropdownButton from './menu/DropdownButton.svelte'
   import DropdownSeparator from './menu/DropdownSeparator.svelte'
   import MenuBarItem from './menu/MenuBarItem.svelte'
@@ -17,8 +16,7 @@
   }
 
   const saveLevel = async (): Promise<void> => {
-    const data = buildLevelJsonData(editor)
-    await window.puchittoAPI.saveLevel(data)
+    await editor.saveLevel()
   }
 
   const about = (): void => {

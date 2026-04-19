@@ -3,6 +3,9 @@ import { AssetProtocolDataProvider } from './assetProtocolDataProvider'
 import type { EntityFactory } from 'puchitto/level'
 import { EditorCameraObject } from './entities/editorCameraObject'
 import { SceneObjectSelectionSystem } from './systems/sceneObjectSelectionSystem.svelte'
+import type { GameObject, GameObjectOptions } from 'puchitto/objects'
+import { PlaceholderObject } from './entities/placeholderObject'
+import { buildLevelJsonData } from './saving/levelBuilder'
 
 /**
  * The backing class for the editor, extending a normal Puchitto game.
@@ -18,6 +21,7 @@ export class EditorGame extends Game {
    */
   protected registerCustomEntities(factory: EntityFactory): void {
     factory.registerEntity<EditorCameraObject>('editorcamera', EditorCameraObject)
+    factory.registerUnknownEntityHandler(this._makeUnknownEntity.bind(this))
   }
 
   /**
@@ -49,8 +53,31 @@ export class EditorGame extends Game {
   /**
    * Saves the level.
    */
-  saveLevel(): void {
-    // todo
+  async saveLevel(): Promise<void> {
+    const data = buildLevelJsonData(editor)
+    await window.puchittoAPI.saveLevel(data)
+  }
+
+  /**
+   * Creates a placeholder object for unknown entities.
+   * @param opts The options of the gameobject.
+   * @param type The type of the gameobject.
+   * @param data The extra data.
+   * @returns The placeholder object.
+   */
+  private _makeUnknownEntity(
+    opts: GameObjectOptions,
+    type: string,
+    data: Record<string, unknown>
+  ): GameObject {
+    console.log(`[EditorGame::_makeUnknownEntity] Created placeholder for ${type}.`)
+    const placeholder = new PlaceholderObject({
+      ...opts,
+      type,
+      data
+    })
+
+    return placeholder
   }
 
   /**
