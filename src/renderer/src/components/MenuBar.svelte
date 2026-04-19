@@ -1,5 +1,6 @@
 <script lang="ts">
   import { editor } from '../editor/editorGame'
+  import { buildLevelJsonData } from '../editor/saving/levelBuilder'
   import DropdownButton from './menu/DropdownButton.svelte'
   import DropdownSeparator from './menu/DropdownSeparator.svelte'
   import MenuBarItem from './menu/MenuBarItem.svelte'
@@ -15,6 +16,11 @@
     }
   }
 
+  const saveLevel = async (): Promise<void> => {
+    const data = buildLevelJsonData(editor)
+    await window.puchittoAPI.saveLevel(data)
+  }
+
   const about = (): void => {
     alert('PuchittoEd! todo...')
   }
@@ -26,8 +32,9 @@
 
 <header class="menu-bar">
   <MenuBarItem label="File">
-    <DropdownButton clicked={newLevel}>New</DropdownButton>
-    <DropdownButton clicked={loadLevel}>Load</DropdownButton>
+    <DropdownButton clicked={newLevel}>New realm</DropdownButton>
+    <DropdownButton clicked={loadLevel}>Load realm</DropdownButton>
+    <DropdownButton clicked={saveLevel}>Save realm</DropdownButton>
     <DropdownSeparator />
     <DropdownButton clicked={exit}>Exit</DropdownButton>
   </MenuBarItem>

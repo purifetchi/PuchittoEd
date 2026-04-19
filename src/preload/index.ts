@@ -1,5 +1,6 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
+import { Level } from 'puchitto/level'
 
 // Custom APIs for renderer
 const api = {}
@@ -12,7 +13,8 @@ if (process.contextIsolated) {
     contextBridge.exposeInMainWorld('electron', electronAPI)
     contextBridge.exposeInMainWorld('api', api)
     contextBridge.exposeInMainWorld('puchittoAPI', {
-      selectProject: () => ipcRenderer.invoke('select-project')
+      selectProject: () => ipcRenderer.invoke('select-project'),
+      saveLevel: (level: Level) => ipcRenderer.invoke('save-level', level)
     })
   } catch (error) {
     console.error(error)

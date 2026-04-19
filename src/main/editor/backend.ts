@@ -1,5 +1,7 @@
 import { dialog, ipcMain, net, protocol } from 'electron'
+import { writeFile } from 'fs/promises'
 import path from 'path'
+import { Level } from 'puchitto/level'
 
 /**
  * The backend of PuchittoEd.
@@ -24,6 +26,7 @@ export class EditorBackend {
    */
   registerElectronHooks(): void {
     ipcMain.handle('select-project', () => this._selectProject())
+    ipcMain.handle('save-level', (_, level: Level) => this._saveLevel(level))
     protocol.handle('asset', (req) => this._handleAssetRequest(req))
   }
 
@@ -53,5 +56,23 @@ export class EditorBackend {
     const absolutePath = path.join(this._currentProjectFolder!, filename)
 
     return net.fetch(absolutePath)
+  }
+
+  /**
+   * Saves a level.
+   * @param level The level data.
+   */
+  private async _saveLevel(level: Level): Promise<boolean> {
+    const serialized = JSON.stringify(level)
+    try {
+      const levelPath = path.join(this._currentProjectFolder!, 'level_new.json')
+      await writeFile(levelPath, serialized)
+      console.log(`Realm saved to ${levelPath}`)
+    } catch (e) {
+      console.log(e, 'Failed to write puchitto realm.')
+      return false
+    }
+
+    return true
   }
 }
