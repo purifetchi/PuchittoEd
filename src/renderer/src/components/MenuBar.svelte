@@ -1,5 +1,8 @@
 <script lang="ts">
   import { editor } from '../editor/editorGame'
+  import DropdownButton from './menu/DropdownButton.svelte'
+  import DropdownSeparator from './menu/DropdownSeparator.svelte'
+  import MenuBarItem from './menu/MenuBarItem.svelte'
 
   const newLevel = (): void => {
     editor.newScene()
@@ -11,11 +14,26 @@
       editor.loadLevel()
     }
   }
+
+  const about = (): void => {
+    alert('PuchittoEd! todo...')
+  }
+
+  const exit = (): void => {
+    window.close()
+  }
 </script>
 
 <header class="menu-bar">
-  <button onclick={newLevel}>new level</button>
-  <button onclick={loadLevel}>load level</button>
+  <MenuBarItem label="File">
+    <DropdownButton clicked={newLevel}>New</DropdownButton>
+    <DropdownButton clicked={loadLevel}>Load</DropdownButton>
+    <DropdownSeparator />
+    <DropdownButton clicked={exit}>Exit</DropdownButton>
+  </MenuBarItem>
+  <MenuBarItem label="About">
+    <DropdownButton clicked={about}>About PuchittoEd</DropdownButton>
+  </MenuBarItem>
 </header>
 
 <style>
