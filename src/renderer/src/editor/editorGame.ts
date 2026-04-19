@@ -6,11 +6,17 @@ import { SceneObjectSelectionSystem } from './systems/sceneObjectSelectionSystem
 import type { GameObject, GameObjectOptions } from 'puchitto/objects'
 import { PlaceholderObject } from './entities/placeholderObject'
 import { buildLevelJsonData } from './saving/levelBuilder'
+import type { GameData } from './data/gameData'
 
 /**
  * The backing class for the editor, extending a normal Puchitto game.
  */
 export class EditorGame extends Game {
+  /**
+   * The game data.
+   */
+  gameData: GameData
+
   /**
    * The editor camera.
    */
@@ -48,6 +54,9 @@ export class EditorGame extends Game {
     this._dataManager.addProvider(new AssetProtocolDataProvider())
     const gameLoader = new GameLoader(this)
     await gameLoader.load()
+
+    const data = await fetch('editor://puchitto/config.json')
+    this.gameData = (await data.json()) as GameData
   }
 
   /**

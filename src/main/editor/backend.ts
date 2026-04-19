@@ -1,4 +1,4 @@
-import { dialog, ipcMain, net, protocol } from 'electron'
+import { app, dialog, ipcMain, net, protocol } from 'electron'
 import { writeFile } from 'fs/promises'
 import path from 'path'
 import { Level } from 'puchitto/level'
@@ -17,7 +17,8 @@ export class EditorBackend {
    */
   registerSchemes(): void {
     protocol.registerSchemesAsPrivileged([
-      { scheme: 'asset', privileges: { bypassCSP: true, supportFetchAPI: true, secure: true } }
+      { scheme: 'asset', privileges: { bypassCSP: true, supportFetchAPI: true, secure: true } },
+      { scheme: 'editor', privileges: { bypassCSP: true, supportFetchAPI: true, secure: true } }
     ])
   }
 
@@ -28,6 +29,7 @@ export class EditorBackend {
     ipcMain.handle('select-project', () => this._selectProject())
     ipcMain.handle('save-level', (_, level: Level) => this._saveLevel(level))
     protocol.handle('asset', (req) => this._handleAssetRequest(req))
+    protocol.handle('editor', (req) => this._handleEditorRequest(req))
   }
 
   /**
@@ -54,6 +56,17 @@ export class EditorBackend {
   private async _handleAssetRequest(request: Request): Promise<Response> {
     const filename = request.url.slice('asset://'.length)
     const absolutePath = path.join(this._currentProjectFolder!, filename)
+
+    return net.fetch(absolutePath)
+  }
+
+  /**
+   * Handles the editor request.
+   * @param request The request being asked from us.
+   */
+  private async _handleEditorRequest(request: Request): Promise<Response> {
+    const filename = request.url.slice('editor://'.length)
+    const absolutePath = path.join(app.getAppPath(), 'resources', filename)
 
     return net.fetch(absolutePath)
   }

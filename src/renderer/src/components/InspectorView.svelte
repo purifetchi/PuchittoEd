@@ -5,14 +5,14 @@
   import InspectorPartHeader from './inspector/InspectorPartHeader.svelte'
   import Move from '@lucide/svelte/icons/move'
   import Vector3Property from './inspector/properties/Vector3Property.svelte'
-  import InspectorPart from './inspector/InspectorPart.svelte'
   import Box from '@lucide/svelte/icons/box'
   import Scroll from '@lucide/svelte/icons/scroll'
   import Input from './common/Input.svelte'
   import InspectorRow from './inspector/InspectorRow.svelte'
   import Checkbox from './common/Checkbox.svelte'
   import ObjectAntics from './inspector/miniantics/ObjectAntics.svelte'
-  import SerializedPropertiesInspector from './inspector/SerializedPropertiesInspector.svelte'
+  import ObjectInspector from './inspector/ObjectInspector.svelte'
+  import InspectorPart from './inspector/InspectorPart.svelte'
 
   let obj: GameObject | undefined = $derived(editor.getObjectById(selectionState.id))
 </script>
@@ -49,15 +49,7 @@
         setter={(x, y, z) => obj.threeObject.scale.set(x, y, z)}
       />
     </InspectorPart>
-    <InspectorPartHeader>
-      <div slot="icon">
-        <Box />
-      </div>
-      <div slot="name">{obj.constructor.name}</div>
-    </InspectorPartHeader>
-    <InspectorPart>
-      <SerializedPropertiesInspector {obj} />
-    </InspectorPart>
+    <ObjectInspector {obj} />
     <InspectorPartHeader>
       <div slot="icon">
         <Scroll />
