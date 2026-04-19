@@ -25,6 +25,12 @@
           "type": "number",
           "displayName": "Range"
         }
+      ],
+      "gizmos": [
+        {
+          "type": "icon",
+          "path": "gizmos/light.png"
+        }
       ]
     }
   ]

@@ -1,6 +1,3 @@
-/**
- * Definition for an entity gizmo.
- */
-export interface GizmoDefinition {
+import type { IconGizmoDefinition } from './gizmos/iconGizmoDefinition'
 
-}
+export type GizmoDefinition = IconGizmoDefinition

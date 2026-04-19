@@ -7,6 +7,7 @@ import {
   selectionState,
   setSelectedObject
 } from '../../state/selectionState.svelte'
+import { GenericGizmo } from '../entities/gizmos/genericGizmo'
 
 /**
  * The selection system for the scene.
@@ -87,9 +88,11 @@ export class SceneObjectSelectionSystem implements GameSystem {
       return
     }
 
-    if (selectionState.id !== object.id) {
-      setSelectedObject(object)
+    const actualObject = object instanceof GenericGizmo ? object.target : object
+
+    if (selectionState.id !== actualObject.id) {
+      setSelectedObject(actualObject)
     }
-    this._outlinePass.selectedObjects = [object.threeObject]
+    this._outlinePass.selectedObjects = [actualObject.threeObject]
   }
 }

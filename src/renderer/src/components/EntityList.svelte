@@ -12,7 +12,7 @@
   }
 
   let reloadObjects = (): void => {
-    objects = [...editor._objects.filter((obj) => obj.tag !== 'editor')]
+    objects = [...editor._objects.filter((obj) => obj.tag !== 'editor' && obj.tag !== 'internal')]
   }
 
   onMount(() => {

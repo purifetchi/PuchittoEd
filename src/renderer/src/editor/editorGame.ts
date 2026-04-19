@@ -7,6 +7,7 @@ import type { GameObject, GameObjectOptions } from 'puchitto/objects'
 import { PlaceholderObject } from './entities/placeholderObject'
 import { buildLevelJsonData } from './saving/levelBuilder'
 import type { GameData } from './data/gameData'
+import { IconGizmo } from './entities/gizmos/iconGizmo'
 
 /**
  * The backing class for the editor, extending a normal Puchitto game.
@@ -22,11 +23,15 @@ export class EditorGame extends Game {
    */
   private _editorCamera: EditorCameraObject
 
+  private _tmp = -3
+
   /**
    * Registers custom editor objects.
    */
   protected registerCustomEntities(factory: EntityFactory): void {
-    factory.registerEntity<EditorCameraObject>('editorcamera', EditorCameraObject)
+    factory.registerEntity<EditorCameraObject>('editor_camera', EditorCameraObject)
+    factory.registerEntity<IconGizmo>('editor_icon_gizmo', IconGizmo)
+
     factory.registerUnknownEntityHandler(this._makeUnknownEntity.bind(this))
   }
 
@@ -35,6 +40,10 @@ export class EditorGame extends Game {
    */
   protected registerCustomGameSystems(): void {
     this.addGameSystem(new SceneObjectSelectionSystem())
+  }
+
+  protected registerCustomEventStreamHandlers(): void {
+    this.eventStream.on('objectAttached', this._createObjectGizmos.bind(this))
   }
 
   /**
@@ -51,12 +60,12 @@ export class EditorGame extends Game {
   async loadLevel(): Promise<void> {
     this.newScene()
 
+    const data = await fetch('editor://puchitto/config.json')
+    this.gameData = (await data.json()) as GameData
+
     this._dataManager.addProvider(new AssetProtocolDataProvider())
     const gameLoader = new GameLoader(this)
     await gameLoader.load()
-
-    const data = await fetch('editor://puchitto/config.json')
-    this.gameData = (await data.json()) as GameData
   }
 
   /**
@@ -65,6 +74,42 @@ export class EditorGame extends Game {
   async saveLevel(): Promise<void> {
     const data = buildLevelJsonData(editor)
     await window.puchittoAPI.saveLevel(data)
+  }
+
+  /**
+   * Creates gizmos for the given object.
+   * @param obj The game object.
+   */
+  private _createObjectGizmos(obj: GameObject): void {
+    const type = obj instanceof PlaceholderObject ? obj.type : this._entityFactory.resolveType(obj)
+    const definition = this.gameData.entities.find((ent) => ent.type == type)
+
+    if (definition === undefined) {
+      // TODO: obsolete gizmo!
+      return
+    }
+
+    if (definition.gizmos === undefined) {
+      return
+    }
+
+    for (const gizmoDef of definition.gizmos) {
+      switch (gizmoDef.type) {
+        case 'icon': {
+          const icon = this._entityFactory.create<IconGizmo>('editor_icon_gizmo', this._tmp, {})
+          icon.icon = `editor://puchitto/${gizmoDef.path}`
+
+          this._tmp -= 1
+          icon.threeObject.parent = obj.threeObject
+          icon.target = obj
+          this.addObject(icon)
+          continue
+        }
+
+        default:
+          continue
+      }
+    }
   }
 
   /**
@@ -95,7 +140,7 @@ export class EditorGame extends Game {
   private _makeEditorEntities(): void {
     const res = this._getResolution()
 
-    this._editorCamera = this._entityFactory.create<EditorCameraObject>('editorcamera', -1, {
+    this._editorCamera = this._entityFactory.create<EditorCameraObject>('editor_camera', -1, {
       width: res.x,
       height: res.y,
       type: 'perspective'
