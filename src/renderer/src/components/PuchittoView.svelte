@@ -11,6 +11,8 @@
       server: '',
       listenerFactory: () => new OfflineNetworkListener()
     })
+
+    editor.newScene()
   })
 </script>
 

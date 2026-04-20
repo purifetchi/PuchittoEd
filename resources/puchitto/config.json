@@ -32,6 +32,16 @@
           "path": "gizmos/light.png"
         }
       ]
+    },
+    {
+      "type": "default",
+      "displayName": "Unknown Entity",
+      "gizmos": [
+        {
+          "type": "icon",
+          "path": "gizmos/obsolete.png"
+        }
+      ]
     }
   ]
 }

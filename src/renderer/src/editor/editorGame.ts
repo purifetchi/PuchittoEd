@@ -84,12 +84,24 @@ export class EditorGame extends Game {
    * @param obj The game object.
    */
   private _createObjectGizmos(obj: GameObject): void {
+    if (obj.tag === 'editor') {
+      return
+    }
+
     const type = obj instanceof PlaceholderObject ? obj.type : this._entityFactory.resolveType(obj)
-    const definition = this.gameData.entities.find((ent) => ent.type == type)
+    let definition = this.gameData.entities.find((ent) => ent.type === type)
 
     if (definition === undefined) {
-      // TODO: obsolete gizmo!
-      return
+      if (obj instanceof PlaceholderObject) {
+        const defaultEntity = this.gameData.entities.find((ent) => ent.type === 'default')
+        if (defaultEntity === undefined) {
+          return
+        }
+
+        definition = defaultEntity
+      } else {
+        return
+      }
     }
 
     if (definition.gizmos === undefined) {
