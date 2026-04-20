@@ -8,6 +8,8 @@ import { PlaceholderObject } from './entities/placeholderObject'
 import { buildLevelJsonData } from './saving/levelBuilder'
 import type { GameData } from './data/gameData'
 import { IconGizmo } from './entities/gizmos/iconGizmo'
+import { GridObject } from './entities/gridObject'
+import { Vector3 } from 'three'
 
 /**
  * The backing class for the editor, extending a normal Puchitto game.
@@ -31,6 +33,7 @@ export class EditorGame extends Game {
   protected registerCustomEntities(factory: EntityFactory): void {
     factory.registerEntity<EditorCameraObject>('editor_camera', EditorCameraObject)
     factory.registerEntity<IconGizmo>('editor_icon_gizmo', IconGizmo)
+    factory.registerEntity<GridObject>('editor_grid', GridObject)
 
     factory.registerUnknownEntityHandler(this._makeUnknownEntity.bind(this))
   }
@@ -143,9 +146,17 @@ export class EditorGame extends Game {
     this._editorCamera = this._entityFactory.create<EditorCameraObject>('editor_camera', -1, {
       width: res.x,
       height: res.y,
-      type: 'perspective'
+      type: 'perspective',
+      fov: 90,
+      near: 0.001
     })
+
+    this._editorCamera.transform.position = new Vector3(0, 1, 0)
     this.addObject(this._editorCamera)
+
+    const grid = this._entityFactory.create<GridObject>('editor_grid', -2, {})
+    this.addObject(grid)
+    grid.threeObject.rotateX(-Math.PI / 2)
 
     this.setMainCamera(this._editorCamera)
   }
