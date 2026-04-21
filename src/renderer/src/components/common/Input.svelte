@@ -1,11 +1,11 @@
 <script lang="ts">
-  let { value = $bindable(''), placeholder }: { value?: unknown; placeholder?: string } = $props()
+  let { value = $bindable(), ...rest } = $props()
 </script>
 
-<input class="text-input" bind:value {placeholder} />
+<input bind:value {...rest} />
 
 <style>
-  .text-input {
+  input {
     flex: 1;
     background: var(--bg-base);
     border: 1px solid var(--border-color);

@@ -25,7 +25,24 @@
     },
     {
       "type": "model",
-      "displayName": "Model"
+      "displayName": "Model",
+      "properties": [
+        {
+          "path": "path",
+          "type": "assetReference",
+          "displayName": "Asset"
+        },
+        {
+          "path": "clamp",
+          "type": "boolean",
+          "displayName": "Clamp textures?"
+        },
+        {
+          "path": "transparent",
+          "type": "boolean",
+          "displayName": "Object is transparent?"
+        }
+      ]
     },
     {
       "type": "light",

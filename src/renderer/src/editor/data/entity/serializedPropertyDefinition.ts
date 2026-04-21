@@ -8,7 +8,7 @@ export type PropertyType =
   | 'number'
   | 'color'
   | 'entityReference'
-  | 'model'
+  | 'assetReference'
 
 /**
  * Definition for a single serialized property.
