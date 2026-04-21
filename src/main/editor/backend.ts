@@ -1,7 +1,8 @@
-import { app, dialog, ipcMain, net, protocol } from 'electron'
-import { writeFile } from 'fs/promises'
+import { app, BrowserWindow, dialog, ipcMain, net, protocol } from 'electron'
+import { readdir, writeFile } from 'fs/promises'
 import path from 'path'
 import { Level } from 'puchitto/level'
+import { AssetOp } from '../../preload/editor/assetOps'
 
 /**
  * The backend of PuchittoEd.
@@ -11,6 +12,19 @@ export class EditorBackend {
    * The current project's folder.
    */
   private _currentProjectFolder?: string
+
+  /**
+   * The browser window running PuchittoEd.
+   */
+  private _window!: BrowserWindow
+
+  /**
+   * Sets the current main window.
+   * @param window The browser window.
+   */
+  setWindow(window: BrowserWindow): void {
+    this._window = window
+  }
 
   /**
    * Registers editor schemes
@@ -46,7 +60,27 @@ export class EditorBackend {
     }
 
     this._currentProjectFolder = path.dirname(result.filePaths[0])
+    await this._reloadAssetBrowserForRenderer()
+
     return true
+  }
+
+  /**
+   * Reloads the asset browser for the renderer.
+   */
+  private async _reloadAssetBrowserForRenderer(): Promise<void> {
+    const files = await readdir(this._currentProjectFolder!)
+    const ops: AssetOp[] = [
+      {
+        type: 'clearAll'
+      },
+      {
+        type: 'bulkLoad',
+        names: files
+      }
+    ]
+
+    this._window.webContents.send('update-assets', ops)
   }
 
   /**

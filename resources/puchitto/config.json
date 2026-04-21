@@ -7,6 +7,27 @@
       "displayName": "Marker"
     },
     {
+      "type": "audio",
+      "displayName": "Sound effect",
+      "properties": [
+        {
+          "path": "volume",
+          "type": "number",
+          "displayName": "Volume"
+        }
+      ],
+      "gizmos": [
+        {
+          "type": "icon",
+          "path": "gizmos/obsolete.png"
+        }
+      ]
+    },
+    {
+      "type": "model",
+      "displayName": "Model"
+    },
+    {
       "type": "light",
       "displayName": "Point Light",
       "properties": [

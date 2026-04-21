@@ -10,6 +10,8 @@ import type { GameData } from './data/gameData'
 import { IconGizmo } from './entities/gizmos/iconGizmo'
 import { GridObject } from './entities/gridObject'
 import { Vector3 } from 'three'
+import type { AssetOp } from '../../../preload/editor/assetOps'
+import { assetBrowserState } from '../state/assetState.svelte'
 
 /**
  * The backing class for the editor, extending a normal Puchitto game.
@@ -26,6 +28,14 @@ export class EditorGame extends Game {
   private _editorCamera: EditorCameraObject
 
   private _tmp = -3
+
+  /**
+   * Constructs a new editor.
+   */
+  constructor() {
+    super()
+    window.puchittoAPI.onAssetUpdate(this._onAssetBrowserUpdate.bind(this))
+  }
 
   /**
    * Registers custom editor objects.
@@ -77,6 +87,32 @@ export class EditorGame extends Game {
   async saveLevel(): Promise<void> {
     const data = buildLevelJsonData(editor)
     await window.puchittoAPI.saveLevel(data)
+  }
+
+  /**
+   * Called when the asset list changes.
+   * @param ops The list of delta operations.
+   */
+  private _onAssetBrowserUpdate(ops: AssetOp[]): void {
+    for (const op of ops) {
+      switch (op.type) {
+        case 'create':
+          assetBrowserState.assets.push(op.name)
+          continue
+
+        case 'delete':
+          assetBrowserState.assets = assetBrowserState.assets.filter((a) => a !== op.name)
+          continue
+
+        case 'clearAll':
+          assetBrowserState.assets = []
+          continue
+
+        case 'bulkLoad':
+          assetBrowserState.assets = assetBrowserState.assets.concat(op.names)
+          continue
+      }
+    }
   }
 
   /**

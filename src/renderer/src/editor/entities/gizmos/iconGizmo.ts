@@ -1,6 +1,13 @@
 import { type GameObjectOptions } from 'puchitto/objects'
 import { Serialized } from 'puchitto/serialization'
-import { SpriteMaterial, Sprite, TextureLoader, ClampToEdgeWrapping, Color, SRGBColorSpace } from 'three'
+import {
+  SpriteMaterial,
+  Sprite,
+  TextureLoader,
+  ClampToEdgeWrapping,
+  Color,
+  SRGBColorSpace
+} from 'three'
 import { GenericGizmo } from './genericGizmo'
 
 /**

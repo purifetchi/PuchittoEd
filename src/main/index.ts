@@ -19,6 +19,8 @@ function createWindow(): void {
     }
   })
 
+  backend.setWindow(mainWindow)
+
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
   })

@@ -1,6 +1,5 @@
 <script lang="ts">
   import type { GameObject } from 'puchitto/objects'
-  import InspectorPart from './InspectorPart.svelte'
   import InspectorPartHeader from './InspectorPartHeader.svelte'
   import SerializedPropertiesInspector from './SerializedPropertiesInspector.svelte'
   import Box from '@lucide/svelte/icons/box'
@@ -29,9 +28,7 @@
     </div>
     <div slot="name">{entityDef.displayName}</div>
   </InspectorPartHeader>
-  <InspectorPart>
-    <SerializedPropertiesInspector {obj} props={entityDef.properties} />
-  </InspectorPart>
+  <SerializedPropertiesInspector {obj} props={entityDef.properties} />
 {/if}
 
 <style>
