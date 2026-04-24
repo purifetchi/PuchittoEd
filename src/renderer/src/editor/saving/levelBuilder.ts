@@ -83,7 +83,13 @@ export const buildEntityDefinitions = (game: Game): LevelEntityDefinition[] => {
         name: obj.name,
         type: type,
         tag: obj.tag,
-        antics: [], // TODO
+        antics: obj.antics.map((ant) => {
+          return {
+            on: ant.on,
+            name: ant.name,
+            script: ant.script.source
+          }
+        }),
         visible: obj.visible,
         transform: {
           position: [obj.transform.position.x, obj.transform.position.y, obj.transform.position.z],
