@@ -159,7 +159,7 @@ export class EditorGame extends Game {
    * @param obj The game object.
    */
   private _createObjectGizmos(obj: GameObject): void {
-    if (obj.tag === 'editor') {
+    if (obj.tag === 'editor' || this.gameData === undefined) {
       return
     }
 

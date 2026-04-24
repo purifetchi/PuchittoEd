@@ -8,7 +8,7 @@
       "gizmos": [
         {
           "type": "icon",
-          "path": "gizmos/obsolete.png"
+          "path": "gizmos/marker.png"
         }
       ]
     },
@@ -30,7 +30,7 @@
       "gizmos": [
         {
           "type": "icon",
-          "path": "gizmos/obsolete.png"
+          "path": "gizmos/sound.png"
         }
       ]
     },

@@ -29,17 +29,11 @@ export class IconGizmo extends GenericGizmo {
       color: new Color('white'),
       transparent: true
     })
-    this.threeObject = new Sprite(this._mat)
-  }
-
-  onGameSet(): void {
-    this._attach()
+    this.attachThreeObject(new Sprite(this._mat))
   }
 
   onSerializedPropertyChanged(): void {
     this._mat.map?.dispose()
-
-    console.log(`loading ${this.icon}`)
 
     const loader = new TextureLoader()
     loader.load(this.icon, (tex) => {

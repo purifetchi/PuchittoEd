@@ -27,12 +27,7 @@ export class GridObject extends GameObject {
     })
 
     const geometry = new PlaneGeometry(10000, 10000)
-    this.threeObject = new Mesh(geometry, this._shader)
-
+    this.attachThreeObject(new Mesh(geometry, this._shader))
     this.threeObject.frustumCulled = false
-  }
-
-  onGameSet(): void {
-    this._attach()
   }
 }

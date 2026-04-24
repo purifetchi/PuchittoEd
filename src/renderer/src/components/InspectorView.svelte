@@ -13,19 +13,14 @@
   import ObjectAntics from './inspector/miniantics/ObjectAntics.svelte'
   import ObjectInspector from './inspector/ObjectInspector.svelte'
   import InspectorPart from './inspector/InspectorPart.svelte'
+  import ObjectProperties from './inspector/ObjectProperties.svelte'
 
   let obj: GameObject | undefined = $derived(editor.getObjectById(selectionState.id))
 </script>
 
 <div>
   {#if obj !== undefined}
-    <InspectorPart>
-      <InspectorRow>
-        <Checkbox bind:checked={obj.visible} />
-        <Box />
-        <Input bind:value={obj.name} />
-      </InspectorRow>
-    </InspectorPart>
+    <ObjectProperties {obj} />
     <InspectorPartHeader>
       <div slot="icon">
         <Move />

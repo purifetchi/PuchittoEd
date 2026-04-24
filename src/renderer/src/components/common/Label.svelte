@@ -1,12 +1,13 @@
-<script lang="ts"></script>
+<script lang="ts">
+  let { width = 70, ...rest } = $props()
+</script>
 
-<span class="label">
+<span class="label" style={`width: ${width}px`} {...rest}>
   <slot />
 </span>
 
 <style>
   .label {
-    width: 70px;
     color: var(--text-muted);
   }
 </style>

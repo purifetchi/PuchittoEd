@@ -19,10 +19,14 @@
   }
 
   $effect(() => {
-    accessor = () => arrayToColor(obj[path])
-    setter = (value: Color) => (obj[path] = colorToArray(value))
+    try {
+      accessor = () => arrayToColor(obj[path])
+      setter = (value: Color) => (obj[path] = colorToArray(value))
 
-    hex = '#' + accessor().getHexString()
+      hex = '#' + accessor().getHexString()
+    } catch {
+      // ignored!
+    }
   })
 
   $effect(() => {

@@ -1,5 +1,4 @@
 import { GameObject, type GameObjectOptions } from 'puchitto/objects'
-import { Object3D } from 'three'
 
 export class PlaceholderObject extends GameObject {
   /**
@@ -24,11 +23,5 @@ export class PlaceholderObject extends GameObject {
 
     this.type = type
     this.data = data
-
-    this.threeObject = new Object3D()
-  }
-
-  onGameSet(): void {
-    this._attach()
   }
 }

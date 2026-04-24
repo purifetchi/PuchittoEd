@@ -28,4 +28,9 @@ export interface SerializedPropertyDefinition {
    * The property type.
    */
   type: PropertyType
+
+  /**
+   * Property hints. For example the minimum size, max size, etc.
+   */
+  hints?: Record<string, unknown>
 }
