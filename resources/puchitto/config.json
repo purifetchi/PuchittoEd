@@ -4,12 +4,23 @@
   "entities": [
     {
       "type": "marker",
-      "displayName": "Marker"
+      "displayName": "Marker",
+      "gizmos": [
+        {
+          "type": "icon",
+          "path": "gizmos/obsolete.png"
+        }
+      ]
     },
     {
       "type": "audio",
       "displayName": "Sound effect",
       "properties": [
+        {
+          "path": "path",
+          "type": "assetReference",
+          "displayName": "Asset"
+        },
         {
           "path": "volume",
           "type": "number",

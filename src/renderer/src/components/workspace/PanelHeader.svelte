@@ -11,6 +11,7 @@
     background-color: var(--bg-header);
     display: flex;
     align-items: center;
+    justify-content: space-between;
     padding-left: 10px;
     font-weight: 600;
     font-size: 12px;

@@ -1,5 +1,6 @@
 <script lang="ts">
   import AssetBrowserView from './AssetBrowserView.svelte'
+  import EntityAddButton from './entities/EntityAddButton.svelte'
   import EntityList from './EntityList.svelte'
   import InspectorView from './InspectorView.svelte'
   import PuchittoView from './PuchittoView.svelte'
@@ -9,7 +10,10 @@
 
 <div class="workspace">
   <Panel>
-    <PanelHeader>HIERARCHY</PanelHeader>
+    <PanelHeader>
+      HIERARCHY
+      <EntityAddButton />
+    </PanelHeader>
     <EntityList />
   </Panel>
   <Panel flex={1}>

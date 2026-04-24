@@ -12,6 +12,8 @@ import { GridObject } from './entities/gridObject'
 import { Vector3 } from 'three'
 import type { AssetOp } from '../../../preload/editor/assetOps'
 import { assetBrowserState } from '../state/assetState.svelte'
+import { IdAllocator } from './idAllocator'
+import { EventEmitter } from '@mary/events'
 
 /**
  * The backing class for the editor, extending a normal Puchitto game.
@@ -23,11 +25,26 @@ export class EditorGame extends Game {
   gameData: GameData
 
   /**
+   * The ID allocator.
+   */
+  allocator: IdAllocator
+
+  /**
+   * The event stream for the editor itself.
+   */
+  editorEventStream = new EventEmitter<{
+    gameDataLoaded: []
+  }>()
+
+  /**
    * The editor camera.
    */
   private _editorCamera: EditorCameraObject
 
-  private _tmp = -3
+  /**
+   * The editor ID allocator.
+   */
+  private _editorIdAllocator: IdAllocator
 
   /**
    * Constructs a new editor.
@@ -35,6 +52,18 @@ export class EditorGame extends Game {
   constructor() {
     super()
     window.puchittoAPI.onAssetUpdate(this._onAssetBrowserUpdate.bind(this))
+
+    this._loadInitialConfig()
+  }
+
+  /**
+   * Load the initial config.
+   */
+  private async _loadInitialConfig(): Promise<void> {
+    const data = await fetch('editor://puchitto/config.json')
+    this.gameData = (await data.json()) as GameData
+
+    this.editorEventStream.emit('gameDataLoaded')
   }
 
   /**
@@ -60,9 +89,22 @@ export class EditorGame extends Game {
   }
 
   /**
+   * Creates the editor allocators.
+   */
+  private _createAllocators(): void {
+    this.allocator = new IdAllocator()
+    this._editorIdAllocator = new IdAllocator({
+      last: -1,
+      skip: -1
+    })
+  }
+
+  /**
    * Creates a new scene.
    */
   newScene(): void {
+    this._createAllocators()
+
     this.createScene()
     this._makeEditorEntities()
   }
@@ -72,9 +114,6 @@ export class EditorGame extends Game {
    */
   async loadLevel(): Promise<void> {
     this.newScene()
-
-    const data = await fetch('editor://puchitto/config.json')
-    this.gameData = (await data.json()) as GameData
 
     this._dataManager.addProvider(new AssetProtocolDataProvider())
     const gameLoader = new GameLoader(this)
@@ -147,10 +186,13 @@ export class EditorGame extends Game {
     for (const gizmoDef of definition.gizmos) {
       switch (gizmoDef.type) {
         case 'icon': {
-          const icon = this._entityFactory.create<IconGizmo>('editor_icon_gizmo', this._tmp, {})
+          const icon = this._entityFactory.create<IconGizmo>(
+            'editor_icon_gizmo',
+            this._editorIdAllocator.get(),
+            {}
+          )
           icon.icon = `editor://puchitto/${gizmoDef.path}`
 
-          this._tmp -= 1
           icon.threeObject.parent = obj.threeObject
           icon.target = obj
           this.addObject(icon)
@@ -191,18 +233,26 @@ export class EditorGame extends Game {
   private _makeEditorEntities(): void {
     const res = this._getResolution()
 
-    this._editorCamera = this._entityFactory.create<EditorCameraObject>('editor_camera', -1, {
-      width: res.x,
-      height: res.y,
-      type: 'perspective',
-      fov: 90,
-      near: 0.001
-    })
+    this._editorCamera = this._entityFactory.create<EditorCameraObject>(
+      'editor_camera',
+      this._editorIdAllocator.get(),
+      {
+        width: res.x,
+        height: res.y,
+        type: 'perspective',
+        fov: 90,
+        near: 0.001
+      }
+    )
 
     this._editorCamera.transform.position = new Vector3(0, 1, 0)
     this.addObject(this._editorCamera)
 
-    const grid = this._entityFactory.create<GridObject>('editor_grid', -2, {})
+    const grid = this._entityFactory.create<GridObject>(
+      'editor_grid',
+      this._editorIdAllocator.get(),
+      {}
+    )
     this.addObject(grid)
     grid.threeObject.rotateX(-Math.PI / 2)
 
