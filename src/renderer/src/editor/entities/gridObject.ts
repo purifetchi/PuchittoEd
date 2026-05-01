@@ -26,7 +26,9 @@ export class GridObject extends GameObject {
       side: DoubleSide
     })
 
-    const geometry = new PlaneGeometry(10000, 10000)
+    // TODO: Subdividing the geometry seems to fix grid splitting and jittering on Wayland/Linux.
+    //       Any other way to do so?
+    const geometry = new PlaneGeometry(10000, 10000, 32, 32)
     this.attachThreeObject(new Mesh(geometry, this._shader))
     this.threeObject.frustumCulled = false
   }
