@@ -14,6 +14,7 @@ import type { AssetOp } from '../../../preload/editor/assetOps'
 import { assetBrowserState } from '../state/assetState.svelte'
 import { IdAllocator } from './idAllocator'
 import { EventEmitter } from '@mary/events'
+import { TransformsObject } from './entities/transformsObject'
 
 /**
  * The backing class for the editor, extending a normal Puchitto game.
@@ -28,6 +29,11 @@ export class EditorGame extends Game {
    * The ID allocator.
    */
   allocator: IdAllocator
+
+  /**
+   * The handles.
+   */
+  handles: TransformsObject
 
   /**
    * The event stream for the editor itself.
@@ -73,6 +79,7 @@ export class EditorGame extends Game {
     factory.registerEntity<EditorCameraObject>('editor_camera', EditorCameraObject)
     factory.registerEntity<IconGizmo>('editor_icon_gizmo', IconGizmo)
     factory.registerEntity<GridObject>('editor_grid', GridObject)
+    factory.registerEntity<TransformsObject>('editor_transforms', TransformsObject)
 
     factory.registerUnknownEntityHandler(this._makeUnknownEntity.bind(this))
   }
@@ -255,6 +262,9 @@ export class EditorGame extends Game {
     )
     this.addObject(grid)
     grid.threeObject.rotateX(-Math.PI / 2)
+
+    this.handles = this._entityFactory.create<TransformsObject>('editor_transforms', this._editorIdAllocator.get(), {})
+    this.addObject(this.handles)
 
     this.setMainCamera(this._editorCamera)
   }

@@ -4,7 +4,7 @@ export class PlaceholderObject extends GameObject {
   /**
    * The type the object is substituting.
    */
-  type: string
+  readonly type: string
 
   /**
    * The data.

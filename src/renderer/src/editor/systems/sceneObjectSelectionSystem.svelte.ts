@@ -8,6 +8,8 @@ import {
   setSelectedObject
 } from '../../state/selectionState.svelte'
 import { GenericGizmo } from '../entities/gizmos/genericGizmo'
+import type { EditorGame } from '../editorGame'
+import { TransformsObject } from '../entities/transformsObject'
 
 /**
  * The selection system for the scene.
@@ -16,7 +18,7 @@ export class SceneObjectSelectionSystem implements GameSystem {
   /**
    * The game instance.
    */
-  private _game!: Game
+  private _game!: EditorGame
 
   /**
    * The outline pass.
@@ -24,7 +26,7 @@ export class SceneObjectSelectionSystem implements GameSystem {
   private _outlinePass: OutlinePass
 
   registerGame(game: Game): void {
-    this._game = game
+    this._game = game as EditorGame
 
     $effect(() => {
       if (selectionState.id === -1) {
@@ -56,6 +58,12 @@ export class SceneObjectSelectionSystem implements GameSystem {
       return
     }
 
+    // NOTE: Because we also need to check if we're intersecting with the axis handles
+    //       we want to avoid selecting an object during the raycast. That's why we have to
+    //       go through all of the intersections in order to find if any of them have been the
+    //       axis handles, if we had any object selected before.
+
+    let maybeNextSelectedObject: GameObject | undefined
     const intersections = this._game.raycast()
     for (const intersected of intersections) {
       let object = intersected.object
@@ -69,30 +77,39 @@ export class SceneObjectSelectionSystem implements GameSystem {
 
       const gameObject = this._game.getObjectById(object.userData['id'])
       if (gameObject.tag === 'editor') {
+        if (gameObject instanceof TransformsObject) {
+          // Get the axis we're interested in. It's the name of the initial obj.
+          const axisName = intersected.object.name
+          gameObject.setHandlingAxis(axisName)
+          return
+        }
         continue
       }
 
-      this._setSelection(gameObject)
-      return
+      if (maybeNextSelectedObject === undefined) {
+        maybeNextSelectedObject = gameObject
+      }
     }
 
-    this._setSelection(null)
+    this._setSelection(maybeNextSelectedObject)
   }
 
-  private _setSelection(object: GameObject | null): void {
-    if (object === null) {
+  private _setSelection(object: GameObject | undefined): void {
+    if (object === undefined) {
       if (selectionState.id !== -1) {
         resetSelectedObject()
       }
       this._outlinePass.selectedObjects = []
+      this._game.handles.setObject(object)
       return
     }
 
     const actualObject = object instanceof GenericGizmo ? object.target : object
-
     if (selectionState.id !== actualObject.id) {
       setSelectedObject(actualObject)
     }
+
     this._outlinePass.selectedObjects = [actualObject.threeObject]
+    this._game.handles.setObject(actualObject)
   }
 }
