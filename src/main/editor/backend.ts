@@ -31,8 +31,8 @@ export class EditorBackend {
    */
   registerSchemes(): void {
     protocol.registerSchemesAsPrivileged([
-      { scheme: 'asset', privileges: { bypassCSP: true, supportFetchAPI: true, secure: true } },
-      { scheme: 'editor', privileges: { bypassCSP: true, supportFetchAPI: true, secure: true } }
+      { scheme: 'asset', privileges:  { bypassCSP: true, supportFetchAPI: true, secure: true, corsEnabled: true } },
+      { scheme: 'editor', privileges: { bypassCSP: true, supportFetchAPI: true, secure: true, corsEnabled: true } }
     ])
   }
 
@@ -91,7 +91,7 @@ export class EditorBackend {
     const filename = request.url.slice('asset://'.length)
     const absolutePath = path.join(this._currentProjectFolder!, filename)
 
-    return net.fetch(absolutePath)
+    return net.fetch('file://' + absolutePath)
   }
 
   /**
@@ -102,7 +102,7 @@ export class EditorBackend {
     const filename = request.url.slice('editor://'.length)
     const absolutePath = path.join(app.getAppPath(), 'resources', filename)
 
-    return net.fetch(absolutePath)
+    return net.fetch('file://' + absolutePath)
   }
 
   /**
