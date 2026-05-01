@@ -97,7 +97,7 @@ export const buildEntityDefinitions = (game: Game): LevelEntityDefinition[] => {
             obj.transform.rotation.x,
             obj.transform.rotation.y,
             obj.transform.rotation.z,
-            obj.transform.rotation.z
+            obj.transform.rotation.w
           ],
           scale: [obj.transform.scale.x, obj.transform.scale.y, obj.transform.scale.z]
         },
