@@ -116,6 +116,7 @@ export class TransformsObject extends GameObject {
           break
 
         case 'rotation':
+          this._doRotationTransform(delta)
           break
 
         case 'scale':
@@ -184,6 +185,26 @@ export class TransformsObject extends GameObject {
 
       case 'z':
         this._selectedObject.transform.position.z += delta.z
+        break
+    }
+  }
+
+  /**
+   * Performs a rotation transform.
+   * @param delta The delta movement vector between the last two projected points.
+   */
+  private _doRotationTransform(delta: Vector3): void {
+    switch (this._currentAxis) {
+      case 'x':
+        this._selectedObject.transform.euler.x += delta.x
+        break
+
+      case 'y':
+        this._selectedObject.transform.euler.y += delta.y
+        break
+
+      case 'z':
+        this._selectedObject.transform.euler.z += delta.z
         break
     }
   }
