@@ -22,6 +22,21 @@
           "displayName": "Asset"
         },
         {
+          "path": "is3D",
+          "type": "boolean",
+          "displayName": "Is 3D?"
+        },
+        {
+          "path": "autoplay",
+          "type": "boolean",
+          "displayName": "Autoplay?"
+        },
+        {
+          "path": "looping",
+          "type": "boolean",
+          "displayName": "Looping?"
+        },
+        {
           "path": "volume",
           "type": "number",
           "displayName": "Volume"
