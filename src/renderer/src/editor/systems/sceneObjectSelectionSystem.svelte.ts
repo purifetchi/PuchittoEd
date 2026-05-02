@@ -81,6 +81,10 @@ export class SceneObjectSelectionSystem implements GameSystem {
       }
 
       const gameObject = this._game.getObjectById(object.userData['id'])
+      if (!gameObject.visible) {
+        continue
+      }
+
       if (gameObject.tag === 'editor') {
         if (gameObject instanceof TransformsObject) {
           // Get the axis we're interested in. It's the name of the initial obj.
