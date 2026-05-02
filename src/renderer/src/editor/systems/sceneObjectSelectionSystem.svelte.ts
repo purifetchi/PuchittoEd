@@ -25,6 +25,11 @@ export class SceneObjectSelectionSystem implements GameSystem {
    */
   private _outlinePass: OutlinePass
 
+  /**
+   * The last selected object.
+   */
+  private _lastSelectedObject?: GameObject
+
   registerGame(game: Game): void {
     this._game = game as EditorGame
 
@@ -94,13 +99,39 @@ export class SceneObjectSelectionSystem implements GameSystem {
     this._setSelection(maybeNextSelectedObject)
   }
 
+  /**
+   * Sets the selection-based gizmos as visible for an object.
+   * @param object The object to set the selection gizmos as visible for.
+   * @param visible Whether they are visible.
+   */
+  private _setSelectionGizmosVisible(object: GameObject, visible: boolean): void {
+    console.log(`Setting gizmos for ${object.name} to ${visible}`)
+    const gizmos = this._game.getObjectGizmos(object)
+    if (gizmos !== undefined && gizmos.length > 0) {
+      for (const gizmo of gizmos) {
+        if (gizmo.display === 'selected') {
+          gizmo.setVisible(visible)
+        }
+      }
+    }
+  }
+
+  /**
+   * Sets the new selected object.
+   * @param object The newly selected object.
+   */
   private _setSelection(object: GameObject | undefined): void {
+    if (this._lastSelectedObject !== undefined) {
+      this._setSelectionGizmosVisible(this._lastSelectedObject, false)
+    }
+
     if (object === undefined) {
       if (selectionState.id !== -1) {
         resetSelectedObject()
       }
       this._outlinePass.selectedObjects = []
       this._game.handles.setObject(object)
+      this._lastSelectedObject = object
       return
     }
 
@@ -111,5 +142,8 @@ export class SceneObjectSelectionSystem implements GameSystem {
 
     this._outlinePass.selectedObjects = [actualObject.threeObject]
     this._game.handles.setObject(actualObject)
+
+    this._setSelectionGizmosVisible(actualObject, true)
+    this._lastSelectedObject = actualObject
   }
 }

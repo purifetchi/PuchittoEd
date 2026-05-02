@@ -15,6 +15,8 @@ import { assetBrowserState } from '../state/assetState.svelte'
 import { IdAllocator } from './idAllocator'
 import { EventEmitter } from '@mary/events'
 import { TransformsObject } from './entities/transformsObject'
+import { SphereGizmo } from './entities/gizmos/sphereGizmo'
+import type { GenericGizmo } from './entities/gizmos/genericGizmo'
 
 /**
  * The backing class for the editor, extending a normal Puchitto game.
@@ -53,6 +55,11 @@ export class EditorGame extends Game {
   private _editorIdAllocator: IdAllocator
 
   /**
+   * A map from the object ids to the gizmos it contains.
+   */
+  private _objectGizmoMap: Map<number, GenericGizmo[]> = new Map<number, GenericGizmo[]>()
+
+  /**
    * Constructs a new editor.
    */
   constructor() {
@@ -60,6 +67,14 @@ export class EditorGame extends Game {
     window.puchittoAPI.onAssetUpdate(this._onAssetBrowserUpdate.bind(this))
 
     this._loadInitialConfig()
+  }
+
+  /**
+   * Gets the gizmos for an object.
+   * @param obj The object to get gizmos for.
+   */
+  getObjectGizmos(obj: GameObject): GenericGizmo[] | undefined {
+    return this._objectGizmoMap.get(obj.id)
   }
 
   /**
@@ -78,6 +93,7 @@ export class EditorGame extends Game {
   protected registerCustomEntities(factory: EntityFactory): void {
     factory.registerEntity<EditorCameraObject>('editor_camera', EditorCameraObject)
     factory.registerEntity<IconGizmo>('editor_icon_gizmo', IconGizmo)
+    factory.registerEntity<SphereGizmo>('editor_sphere_gizmo', SphereGizmo)
     factory.registerEntity<GridObject>('editor_grid', GridObject)
     factory.registerEntity<TransformsObject>('editor_transforms', TransformsObject)
 
@@ -190,7 +206,10 @@ export class EditorGame extends Game {
       return
     }
 
+    const gizmos: GenericGizmo[] = []
     for (const gizmoDef of definition.gizmos) {
+      let gizmo: GenericGizmo
+
       switch (gizmoDef.type) {
         case 'icon': {
           const icon = this._entityFactory.create<IconGizmo>(
@@ -200,16 +219,37 @@ export class EditorGame extends Game {
           )
           icon.icon = `editor://puchitto/${gizmoDef.path}`
 
-          icon.threeObject.parent = obj.threeObject
-          icon.target = obj
-          this.addObject(icon)
-          continue
+          gizmo = icon
+          break
+        }
+
+        case 'sphere': {
+          const sphere = this._entityFactory.create<SphereGizmo>(
+            'editor_sphere_gizmo',
+            this._editorIdAllocator.get(),
+            {}
+          )
+          sphere.path = gizmoDef.path
+          sphere.color = gizmoDef.color
+
+          gizmo = sphere
+          break
         }
 
         default:
-          continue
+          break
       }
+
+      gizmo.threeObject.parent = obj.threeObject
+      gizmo.target = obj
+      gizmo.display = gizmoDef.display
+      gizmo.setVisible(gizmoDef.display === 'always')
+      this.addObject(gizmo)
+
+      gizmos.push(gizmo)
     }
+
+    this._objectGizmoMap.set(obj.id, gizmos)
   }
 
   /**
@@ -263,7 +303,11 @@ export class EditorGame extends Game {
     this.addObject(grid)
     grid.threeObject.rotateX(-Math.PI / 2)
 
-    this.handles = this._entityFactory.create<TransformsObject>('editor_transforms', this._editorIdAllocator.get(), {})
+    this.handles = this._entityFactory.create<TransformsObject>(
+      'editor_transforms',
+      this._editorIdAllocator.get(),
+      {}
+    )
     this.addObject(this.handles)
 
     this.setMainCamera(this._editorCamera)

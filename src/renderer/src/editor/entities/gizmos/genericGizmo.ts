@@ -6,6 +6,11 @@ export abstract class GenericGizmo extends GameObject {
    */
   target: GameObject
 
+  /**
+   * When to display the gizmo.
+   */
+  display: 'always' | 'selected' = 'always'
+
   constructor(opts) {
     super(opts)
 

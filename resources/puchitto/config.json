@@ -30,6 +30,7 @@
       "gizmos": [
         {
           "type": "icon",
+          "display": "always",
           "path": "gizmos/sound.png"
         }
       ]
@@ -78,7 +79,14 @@
       "gizmos": [
         {
           "type": "icon",
+          "display": "always",
           "path": "gizmos/light.png"
+        },
+        {
+          "type": "sphere",
+          "display": "selected",
+          "path": "range",
+          "color": "orange"
         }
       ]
     },
@@ -88,6 +96,7 @@
       "gizmos": [
         {
           "type": "icon",
+          "display": "always",
           "path": "gizmos/obsolete.png"
         }
       ]
