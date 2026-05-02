@@ -11,6 +11,11 @@ import {
 } from 'three'
 
 /**
+ * The tool type.
+ */
+type Tool = 'position' | 'rotation' | 'scale'
+
+/**
  * The transform handles.
  */
 export class TransformsObject extends GameObject {
@@ -28,6 +33,11 @@ export class TransformsObject extends GameObject {
    * The current axis.
    */
   private _currentAxis?: string
+
+  /**
+   * The current tool.
+   */
+  private _tool: Tool = 'position'
 
   /**
    * The last point.
@@ -83,7 +93,7 @@ export class TransformsObject extends GameObject {
       return
     }
 
-    this.transform.position = this._selectedObject.transform.position
+    this._switchTools()
 
     if (this._currentAxis !== undefined) {
       if (!this.game.input.mouseHeld(MOUSE_LEFT)) {
@@ -99,9 +109,24 @@ export class TransformsObject extends GameObject {
       }
 
       const delta = tgt.clone().sub(this._lastPoint)
-      this._doPositionTransform(delta)
+
+      switch (this._tool) {
+        case 'position':
+          this._doPositionTransform(delta)
+          break
+
+        case 'rotation':
+          break
+
+        case 'scale':
+          this._doScaleTransform(delta)
+          break
+      }
+
       this._lastPoint = tgt
     }
+
+    this.transform.position = this._selectedObject.transform.position
   }
 
   /**
@@ -127,6 +152,23 @@ export class TransformsObject extends GameObject {
   }
 
   /**
+   * Switches the tools.
+   */
+  private _switchTools(): void {
+    if (this.game.input.cursorLocked) {
+      return
+    }
+
+    if (this.game.input.keyDown('KeyR')) {
+      this._tool = 'rotation'
+    } else if (this.game.input.keyDown('KeyS')) {
+      this._tool = 'scale'
+    } else if (this.game.input.keyDown('KeyG')) {
+      this._tool = 'position'
+    }
+  }
+
+  /**
    * Performs a position transform.
    * @param delta The delta movement vector between the last two projected points.
    */
@@ -142,6 +184,26 @@ export class TransformsObject extends GameObject {
 
       case 'z':
         this._selectedObject.transform.position.z += delta.z
+        break
+    }
+  }
+
+  /**
+   * Performs a scaling transform.
+   * @param delta The delta movement vector between the last two projected points.
+   */
+  private _doScaleTransform(delta: Vector3): void {
+    switch (this._currentAxis) {
+      case 'x':
+        this._selectedObject.transform.scale.x += delta.x
+        break
+
+      case 'y':
+        this._selectedObject.transform.scale.y += delta.y
+        break
+
+      case 'z':
+        this._selectedObject.transform.scale.z += delta.z
         break
     }
   }
