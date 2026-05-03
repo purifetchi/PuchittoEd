@@ -2,13 +2,18 @@ import { MOUSE_LEFT } from 'puchitto'
 import { GameObject, type GameObjectOptions } from 'puchitto/objects'
 import {
   BoxGeometry,
-  Mesh,
-  MeshBasicMaterial,
+  //Mesh,
+  //MeshBasicMaterial,
   Vector3,
-  type ColorRepresentation,
+  //type ColorRepresentation,
   Plane,
-  Ray
+  Ray,
+  Group,
+  Mesh,
+  type ColorRepresentation,
+  MeshBasicMaterial
 } from 'three'
+import { OBJLoader } from 'three/examples/jsm/Addons.js'
 
 /**
  * The tool type.
@@ -50,20 +55,23 @@ export class TransformsObject extends GameObject {
     this.tag = 'editor'
     this.setObject(undefined)
 
-    const meshX = this._makePositionMesh('#f44336', 'x')
-    const meshY = this._makePositionMesh('#4caf50', 'y')
-    const meshZ = this._makePositionMesh('#2196f3', 'z')
+    // this.attachThreeObject(meshX)
+    // this.attachThreeObject(meshY)
+    // this.attachThreeObject(meshZ)
 
-    this.attachThreeObject(meshX)
-    this.attachThreeObject(meshY)
-    this.attachThreeObject(meshZ)
+    // meshX.rotateOnWorldAxis(new Vector3(0, 1, 0), Math.PI / 2)
+    // meshY.rotateOnWorldAxis(new Vector3(1, 0, 0), Math.PI / 2)
 
-    meshX.rotateOnWorldAxis(new Vector3(0, 1, 0), Math.PI / 2)
-    meshY.rotateOnWorldAxis(new Vector3(1, 0, 0), Math.PI / 2)
+    // meshX.position.x += 0.5
+    // meshY.position.y += 0.5
+    // meshZ.position.z += 0.5
 
-    meshX.position.x += 0.5
-    meshY.position.y += 0.5
-    meshZ.position.z += 0.5
+    this.transform.setUniformScale(0.5)
+
+    new OBJLoader(opts.loader).load('editor://puchitto/models/handles/move.obj', (data) => {
+      this._colorModel(data)
+      this.attachThreeObject(data)
+    })
   }
 
   /**
@@ -186,6 +194,10 @@ export class TransformsObject extends GameObject {
       case 'z':
         this._selectedObject.transform.position.z += delta.z
         break
+
+      case 'all':
+        this._selectedObject.transform.position.add(delta)
+        break
     }
   }
 
@@ -230,21 +242,56 @@ export class TransformsObject extends GameObject {
   }
 
   /**
-   * Creates the positional mesh.
-   * @param color The color of the axis.
-   * @param axis The current axis.
-   * @returns A mesh.
+   * Colors the model.
+   * @param model The model.
    */
-  private _makePositionMesh(color: ColorRepresentation, axis: string): Mesh {
-    const mat = new MeshBasicMaterial({
-      color: color,
-      depthWrite: false,
-      depthTest: false,
-      transparent: true
-    })
-    const mesh = new Mesh(this._box, mat)
-    mesh.name = axis
+  private _colorModel(model: Group): void {
+    model.traverse((child) => {
+      if (!(child instanceof Mesh)) {
+        return
+      }
 
-    return mesh
+      let color: ColorRepresentation
+      switch (child.name) {
+        case 'x':
+          color = '#f44336'
+          break
+
+        case 'y':
+          color = '#4caf50'
+          break
+
+        case 'z':
+          color = '#2196f3'
+          break
+
+        default:
+          color = 'white'
+          break
+      }
+
+      const mat = new MeshBasicMaterial({
+        color: color,
+        depthWrite: false,
+        depthTest: false,
+        transparent: true
+      })
+
+      child.material = mat
+    })
   }
+
+  // /**
+  //  * Creates the positional mesh.
+  //  * @param color The color of the axis.
+  //  * @param axis The current axis.
+  //  * @returns A mesh.
+  //  */
+  // private _makePositionMesh(color: ColorRepresentation, axis: string): Mesh {
+  //
+  //   const mesh = new Mesh(this._box, mat)
+  //   mesh.name = axis
+
+  //   return mesh
+  // }
 }
