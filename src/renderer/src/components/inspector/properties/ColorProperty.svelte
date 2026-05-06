@@ -30,10 +30,14 @@
   })
 
   $effect(() => {
-    const previous = '#' + accessor().getHexString()
+    try {
+      const previous = '#' + accessor().getHexString()
 
-    if (previous !== hex) {
-      setter(new Color(hex))
+      if (previous !== hex) {
+        setter(new Color(hex))
+      }
+    } catch {
+      // ignored!
     }
   })
 </script>

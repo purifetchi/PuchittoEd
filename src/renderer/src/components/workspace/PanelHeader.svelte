@@ -1,8 +1,9 @@
 <script lang="ts">
+  let { children } = $props()
 </script>
 
 <div class="workspace-panel-header">
-  <slot></slot>
+  {@render children()}
 </div>
 
 <style>

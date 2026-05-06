@@ -1,9 +1,9 @@
 <script lang="ts">
-  let { flex = 0.3 } = $props()
+  let { flex = 0.3, children } = $props()
 </script>
 
 <div class="workspace-container" style:flex>
-  <slot></slot>
+  {@render children()}
 </div>
 
 <style>
@@ -12,5 +12,6 @@
     border-right: 1px solid var(--border-color);
     display: flex;
     flex-direction: column;
+    min-width: 0;
   }
 </style>

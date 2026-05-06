@@ -3,6 +3,7 @@ import { readdir, writeFile } from 'fs/promises'
 import path from 'path'
 import { Level } from 'puchitto/level'
 import { AssetOp } from '../../preload/editor/assetOps'
+import { ProjectWatcher } from './projectWatcher'
 
 /**
  * The backend of PuchittoEd.
@@ -19,6 +20,11 @@ export class EditorBackend {
   private _window!: BrowserWindow
 
   /**
+   * The current chokidar watcher.
+   */
+  private _watcher?: ProjectWatcher
+
+  /**
    * Sets the current main window.
    * @param window The browser window.
    */
@@ -31,8 +37,14 @@ export class EditorBackend {
    */
   registerSchemes(): void {
     protocol.registerSchemesAsPrivileged([
-      { scheme: 'asset', privileges:  { bypassCSP: true, supportFetchAPI: true, secure: true, corsEnabled: true } },
-      { scheme: 'editor', privileges: { bypassCSP: true, supportFetchAPI: true, secure: true, corsEnabled: true } }
+      {
+        scheme: 'asset',
+        privileges: { bypassCSP: true, supportFetchAPI: true, secure: true, corsEnabled: true }
+      },
+      {
+        scheme: 'editor',
+        privileges: { bypassCSP: true, supportFetchAPI: true, secure: true, corsEnabled: true }
+      }
     ])
   }
 
@@ -62,6 +74,11 @@ export class EditorBackend {
     this._currentProjectFolder = path.dirname(result.filePaths[0])
     await this._reloadAssetBrowserForRenderer()
 
+    this._watcher?.destroy()
+    this._watcher = new ProjectWatcher(this._currentProjectFolder, (ops) =>
+      this._sendAssetUpdate(ops)
+    )
+
     return true
   }
 
@@ -80,6 +97,14 @@ export class EditorBackend {
       }
     ]
 
+    this._sendAssetUpdate(ops)
+  }
+
+  /**
+   * Sends asset database updates to the renderer.
+   * @param ops The asset operations.
+   */
+  private _sendAssetUpdate(ops: AssetOp[]): void {
     this._window.webContents.send('update-assets', ops)
   }
 

@@ -175,6 +175,8 @@ export class EditorGame extends Game {
           continue
       }
     }
+
+    assetBrowserState.assets.sort()
   }
 
   /**
