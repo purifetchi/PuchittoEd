@@ -1,14 +1,15 @@
 <script lang="ts">
+  import type { Snippet } from 'svelte'
   import Label from '../common/Label.svelte'
   import InspectorRow from './InspectorRow.svelte'
 
-  let { label }: { label: string } = $props()
+  let { label, children }: { label: string; children: Snippet; } = $props()
 </script>
 
 <InspectorRow>
   <Label>{label}</Label>
   <div class="group">
-    <slot></slot>
+    {@render children()}
   </div>
 </InspectorRow>
 
@@ -17,5 +18,6 @@
     flex: 1;
     display: flex;
     gap: 5px;
+    align-items: center;
   }
 </style>
