@@ -4,7 +4,6 @@
   import Box from '@lucide/svelte/icons/box'
   import Circle from '@lucide/svelte/icons/circle'
   import Input from '../../common/Input.svelte'
-  import { assetDragNDropState } from '../../../state/assetState.svelte'
 
   let { name, obj, path }: { name: string; obj: GameObject; path: string } = $props()
 
@@ -14,24 +13,32 @@
 
   let droppable = $state(false)
 
-  let mouseup = (): void => {
-    if (assetDragNDropState.name !== '') {
-      asset = assetDragNDropState.name
-      assetDragNDropState.name = ''
-      droppable = false
+  let ondrop = (ev: DragEvent): void => {
+    ev.preventDefault()
+    const data = ev.dataTransfer.getData('x-puchitto/asset')
+    if (data !== '' && data !== undefined) {
+      asset = data
     }
+
+    droppable = false
   }
 
-  let mouseenter = (): void => {
-    if (assetDragNDropState.name !== '') {
+  let ondragenter = (ev: DragEvent): void => {
+    const isAsset = ev.dataTransfer.types.includes('x-puchitto/asset')
+    if (isAsset) {
       droppable = true
     }
+
+    ev.preventDefault()
   }
 
-  let mouseleave = (): void => {
-    if (assetDragNDropState.name !== '') {
-      droppable = false
-    }
+  let ondragover = (ev: DragEvent): void => {
+    ev.preventDefault()
+  }
+
+  let ondragleave = (): void => {
+    droppable = false
+    console.log('left..')
   }
 
   $effect(() => {
@@ -60,9 +67,10 @@
     placeholder="Missing asset."
     style="color: var(--accent); cursor: pointer; font-family: var(--font-mono); text-overflow: ellipsis;"
     class={droppable ? 'droppable' : ''}
-    onmouseup={mouseup}
-    onmouseenter={mouseenter}
-    onmouseleave={mouseleave}
+    {ondrop}
+    {ondragenter}
+    {ondragover}
+    {ondragleave}
   />
   <button class="icon-button" aria-label="Select an asset.">
     <Circle size="24" />
