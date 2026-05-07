@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Box from '@lucide/svelte/icons/box'
+  import AssetThumbnail from './AssetThumbnail.svelte'
 
   let { name }: { name: string } = $props()
 
@@ -10,7 +10,7 @@
 
 <div class="asset-item" role="gridcell" tabindex="0" {ondragstart} draggable="true">
   <div class="asset-icon">
-    <Box size="48" />
+    <AssetThumbnail filename={name} size={48} />
   </div>
   <div class="asset-name">
     {name}

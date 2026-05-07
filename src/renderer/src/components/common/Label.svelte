@@ -1,9 +1,9 @@
 <script lang="ts">
-  let { width = 70, ...rest } = $props()
+  let { width = 70, children, ...rest } = $props()
 </script>
 
 <span class="label" style={`width: ${width}px`} {...rest}>
-  <slot />
+  {@render children()}
 </span>
 
 <style>

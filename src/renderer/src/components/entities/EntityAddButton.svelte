@@ -5,10 +5,13 @@
   import { GameObject } from 'puchitto/objects'
   import type { EditorEntityDefinition } from '../../editor/data/editorEntityDefinition'
   import { onMount } from 'svelte'
+  import { selectionState } from '../../state/selectionState.svelte'
 
   let addObject = (type: string): void => {
     const object = editor._entityFactory.create<GameObject>(type, editor.allocator.get(), {})
     editor.addObject(object)
+
+    selectionState.id = object.id
   }
 
   let entities: EditorEntityDefinition[] = $state([])

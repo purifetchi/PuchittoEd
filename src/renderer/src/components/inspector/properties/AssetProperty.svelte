@@ -4,6 +4,7 @@
   import Box from '@lucide/svelte/icons/box'
   import Circle from '@lucide/svelte/icons/circle'
   import Input from '../../common/Input.svelte'
+  import AssetThumbnail from '../../assets/AssetThumbnail.svelte'
 
   let { name, obj, path }: { name: string; obj: GameObject; path: string } = $props()
 
@@ -59,7 +60,7 @@
 
 <Property label={name}>
   <div class="asset-thumb">
-    <Box size="22" />
+    <AssetThumbnail filename={asset} size={22} />
   </div>
   <Input
     bind:value={asset}

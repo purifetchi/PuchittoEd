@@ -3,7 +3,7 @@
   import Label from '../common/Label.svelte'
   import InspectorRow from './InspectorRow.svelte'
 
-  let { label, children }: { label: string; children: Snippet; } = $props()
+  let { label, children }: { label: string; children: Snippet } = $props()
 </script>
 
 <InspectorRow>
