@@ -17,6 +17,7 @@ import { EventEmitter } from '@mary/events'
 import { TransformsObject } from './entities/transformsObject'
 import { SphereGizmo } from './entities/gizmos/sphereGizmo'
 import type { GenericGizmo } from './entities/gizmos/genericGizmo'
+import { CameraSwitchSystem } from './systems/cameraSwitchSystem.svelte'
 
 /**
  * The backing class for the editor, extending a normal Puchitto game.
@@ -70,6 +71,13 @@ export class EditorGame extends Game {
   }
 
   /**
+   * Gets the editor's main camera.
+   */
+  get editorCamera(): EditorCameraObject {
+    return this._editorCamera
+  }
+
+  /**
    * Gets the gizmos for an object.
    * @param obj The object to get gizmos for.
    */
@@ -105,6 +113,7 @@ export class EditorGame extends Game {
    */
   protected registerCustomGameSystems(): void {
     this.addGameSystem(new SceneObjectSelectionSystem())
+    this.addGameSystem(new CameraSwitchSystem())
   }
 
   protected registerCustomEventStreamHandlers(): void {

@@ -106,6 +106,17 @@
       ]
     },
     {
+      "type": "camera",
+      "displayName": "Camera",
+      "gizmos": [
+        {
+          "type": "icon",
+          "display": "always",
+          "path": "gizmos/camera.png"
+        }
+      ]
+    },
+    {
       "type": "default",
       "displayName": "Unknown Entity",
       "gizmos": [

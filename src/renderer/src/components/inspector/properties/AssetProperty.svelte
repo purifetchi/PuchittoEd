@@ -1,7 +1,6 @@
 <script lang="ts">
   import { GameObject } from 'puchitto/objects'
   import Property from '../Property.svelte'
-  import Box from '@lucide/svelte/icons/box'
   import Circle from '@lucide/svelte/icons/circle'
   import Input from '../../common/Input.svelte'
   import AssetThumbnail from '../../assets/AssetThumbnail.svelte'
