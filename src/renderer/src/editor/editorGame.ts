@@ -18,6 +18,8 @@ import { TransformsObject } from './entities/transformsObject'
 import { SphereGizmo } from './entities/gizmos/sphereGizmo'
 import type { GenericGizmo } from './entities/gizmos/genericGizmo'
 import { CameraSwitchSystem } from './systems/cameraSwitchSystem.svelte'
+import { MeshGizmo } from './entities/gizmos/meshGizmo'
+import { selectionState } from '../state/selectionState.svelte'
 
 /**
  * The backing class for the editor, extending a normal Puchitto game.
@@ -49,6 +51,11 @@ export class EditorGame extends Game {
    * The editor camera.
    */
   private _editorCamera: EditorCameraObject
+
+  /**
+   * The grid.
+   */
+  private _grid?: GridObject
 
   /**
    * The editor ID allocator.
@@ -86,6 +93,21 @@ export class EditorGame extends Game {
   }
 
   /**
+   * Sets the visibility of editor objects.
+   * @param visible Whether editor objects are visible/
+   */
+  setObjectEditorVisibility(visible: boolean): void {
+    this.handles.setVisible(selectionState.id !== -1 && visible)
+    this._grid?.setVisible(visible)
+
+    for (const values of this._objectGizmoMap.values()) {
+      for (const gizmo of values) {
+        gizmo.setVisible(visible && (gizmo.display === 'always' || selectionState.id == gizmo.id))
+      }
+    }
+  }
+
+  /**
    * Load the initial config.
    */
   private async _loadInitialConfig(): Promise<void> {
@@ -100,8 +122,11 @@ export class EditorGame extends Game {
    */
   protected registerCustomEntities(factory: EntityFactory): void {
     factory.registerEntity<EditorCameraObject>('editor_camera', EditorCameraObject)
+
     factory.registerEntity<IconGizmo>('editor_icon_gizmo', IconGizmo)
     factory.registerEntity<SphereGizmo>('editor_sphere_gizmo', SphereGizmo)
+    factory.registerEntity<MeshGizmo>('editor_mesh_gizmo', MeshGizmo)
+
     factory.registerEntity<GridObject>('editor_grid', GridObject)
     factory.registerEntity<TransformsObject>('editor_transforms', TransformsObject)
 
@@ -247,6 +272,19 @@ export class EditorGame extends Game {
           break
         }
 
+        case 'mesh': {
+          const mesh = this._entityFactory.create<MeshGizmo>(
+            'editor_mesh_gizmo',
+            this._editorIdAllocator.get(),
+            {}
+          )
+          mesh.color = gizmoDef.color
+          mesh.model = `editor://puchitto/${gizmoDef.path}`
+
+          gizmo = mesh
+          break
+        }
+
         default:
           break
       }
@@ -306,13 +344,13 @@ export class EditorGame extends Game {
     this._editorCamera.transform.position = new Vector3(0, 1, 0)
     this.addObject(this._editorCamera)
 
-    const grid = this._entityFactory.create<GridObject>(
+    this._grid = this._entityFactory.create<GridObject>(
       'editor_grid',
       this._editorIdAllocator.get(),
       {}
     )
-    this.addObject(grid)
-    grid.threeObject.rotateX(-Math.PI / 2)
+    this.addObject(this._grid)
+    this._grid.threeObject.rotateX(-Math.PI / 2)
 
     this.handles = this._entityFactory.create<TransformsObject>(
       'editor_transforms',

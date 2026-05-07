@@ -273,18 +273,4 @@ export class TransformsObject extends GameObject {
       child.material = mat
     })
   }
-
-  // /**
-  //  * Creates the positional mesh.
-  //  * @param color The color of the axis.
-  //  * @param axis The current axis.
-  //  * @returns A mesh.
-  //  */
-  // private _makePositionMesh(color: ColorRepresentation, axis: string): Mesh {
-  //
-  //   const mesh = new Mesh(this._box, mat)
-  //   mesh.name = axis
-
-  //   return mesh
-  // }
 }

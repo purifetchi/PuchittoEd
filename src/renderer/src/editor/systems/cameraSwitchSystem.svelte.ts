@@ -42,9 +42,11 @@ export class CameraSwitchSystem implements GameSystem {
       }
 
       // Set as main camera!
+      this._game.setObjectEditorVisibility(false)
       this._game.setMainCamera(gameObject)
       this._viewingCamera = true
     } else if (!keyPressed && this._viewingCamera) {
+      this._game.setObjectEditorVisibility(true)
       this._game.setMainCamera(this._game.editorCamera)
       this._viewingCamera = false
     }

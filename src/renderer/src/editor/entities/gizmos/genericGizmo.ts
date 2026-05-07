@@ -1,6 +1,6 @@
 import { GameObject } from 'puchitto/objects'
 
-export abstract class GenericGizmo extends GameObject {
+export class GenericGizmo extends GameObject {
   /**
    * The target of the gizmo.
    */

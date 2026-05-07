@@ -110,9 +110,10 @@
       "displayName": "Camera",
       "gizmos": [
         {
-          "type": "icon",
+          "type": "mesh",
           "display": "always",
-          "path": "gizmos/camera.png"
+          "path": "gizmos/camera/camera.obj",
+          "color": "lime"
         }
       ]
     },
