@@ -1,33 +1,36 @@
 import { MOUSE_LEFT } from 'puchitto'
 import { GameObject, type GameObjectOptions } from 'puchitto/objects'
 import {
-  BoxGeometry,
-  //Mesh,
-  //MeshBasicMaterial,
   Vector3,
-  //type ColorRepresentation,
   Plane,
   Ray,
   Group,
   Mesh,
   type ColorRepresentation,
-  MeshBasicMaterial
+  MeshBasicMaterial,
+  Euler
 } from 'three'
 import { OBJLoader } from 'three/examples/jsm/Addons.js'
+import { transformsState } from '../../state/transformsState.svelte'
 
 /**
  * The tool type.
  */
-type Tool = 'position' | 'rotation' | 'scale'
+export type Tool = 'position' | 'rotation' | 'scale'
+
+/**
+ * The space we are operating in.
+ */
+export type Space = 'world' | 'local'
 
 /**
  * The transform handles.
  */
 export class TransformsObject extends GameObject {
   /**
-   * The shared box mesh.
+   * The base rotation
    */
-  private _box = new BoxGeometry(0.1, 0.1)
+  private readonly BASE_ROT = new Euler(0, 0, 0)
 
   /**
    * The currently selected object.
@@ -40,11 +43,6 @@ export class TransformsObject extends GameObject {
   private _currentAxis?: string
 
   /**
-   * The current tool.
-   */
-  private _tool: Tool = 'position'
-
-  /**
    * The last point.
    */
   private _lastPoint?: Vector3
@@ -54,17 +52,6 @@ export class TransformsObject extends GameObject {
 
     this.tag = 'editor'
     this.setObject(undefined)
-
-    // this.attachThreeObject(meshX)
-    // this.attachThreeObject(meshY)
-    // this.attachThreeObject(meshZ)
-
-    // meshX.rotateOnWorldAxis(new Vector3(0, 1, 0), Math.PI / 2)
-    // meshY.rotateOnWorldAxis(new Vector3(1, 0, 0), Math.PI / 2)
-
-    // meshX.position.x += 0.5
-    // meshY.position.y += 0.5
-    // meshZ.position.z += 0.5
 
     this.transform.setUniformScale(0.5)
 
@@ -118,7 +105,7 @@ export class TransformsObject extends GameObject {
 
       const delta = tgt.clone().sub(this._lastPoint)
 
-      switch (this._tool) {
+      switch (transformsState.tool) {
         case 'position':
           this._doPositionTransform(delta)
           break
@@ -136,6 +123,12 @@ export class TransformsObject extends GameObject {
     }
 
     this.transform.position = this._selectedObject.transform.position
+
+    if (transformsState.space === 'local') {
+      this.transform.rotation = this._selectedObject.transform.rotation
+    } else {
+      this.transform.euler = this.BASE_ROT
+    }
   }
 
   /**
@@ -169,11 +162,11 @@ export class TransformsObject extends GameObject {
     }
 
     if (this.game.input.keyDown('KeyR')) {
-      this._tool = 'rotation'
+      transformsState.tool = 'rotation'
     } else if (this.game.input.keyDown('KeyS')) {
-      this._tool = 'scale'
+      transformsState.tool = 'scale'
     } else if (this.game.input.keyDown('KeyG')) {
-      this._tool = 'position'
+      transformsState.tool = 'position'
     }
   }
 
