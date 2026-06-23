@@ -14,6 +14,7 @@ if (process.contextIsolated) {
     contextBridge.exposeInMainWorld('electron', electronAPI)
     contextBridge.exposeInMainWorld('api', api)
     contextBridge.exposeInMainWorld('puchittoAPI', {
+      selectNewProjectFolder: () => ipcRenderer.invoke('select-new-project-folder'),
       selectProject: () => ipcRenderer.invoke('select-project'),
       saveLevel: (level: Level) => ipcRenderer.invoke('save-level', level),
       onAssetUpdate: (callback: (ops: AssetOp[]) => void) =>

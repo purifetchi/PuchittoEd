@@ -7,10 +7,14 @@
   import { projectState } from '../state/projectState.svelte'
   import { afterEditorReady } from '../editor/helpers/loadHelpers'
 
-  const newLevel = (): void => {
-    afterEditorReady(async () => {
-      editor.newScene()
-    })
+  const newLevel = async (): Promise<void> => {
+    const selected = await window.puchittoAPI.selectNewProjectFolder()
+
+    if (selected) {
+      afterEditorReady(async () => {
+        editor.newScene()
+      })
+    }
   }
 
   const loadLevel = async (): Promise<void> => {
@@ -37,6 +41,7 @@
   onMount(() => {
     window.puchittoAPI.onProjectSelected((path) => {
       projectState.project = path
+      document.title = `PuchittoEd - ${path}`
     })
   })
 </script>

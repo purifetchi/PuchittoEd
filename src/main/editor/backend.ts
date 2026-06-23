@@ -52,6 +52,7 @@ export class EditorBackend {
    * Registers the necessary hooks in electron.
    */
   registerElectronHooks(): void {
+    ipcMain.handle('select-new-project-folder', () => this._selectNewProjectFolder())
     ipcMain.handle('select-project', () => this._selectProject())
     ipcMain.handle('save-level', (_, level: Level) => this._saveLevel(level))
     protocol.handle('asset', (req) => this._handleAssetRequest(req))
@@ -71,7 +72,33 @@ export class EditorBackend {
       return false
     }
 
-    this._currentProjectFolder = path.dirname(result.filePaths[0])
+    const projectPath = path.dirname(result.filePaths[0])
+    await this._setProjectFromPath(projectPath)
+    return true
+  }
+
+  /**
+   * Selects the current project.
+   */
+  private async _selectNewProjectFolder(): Promise<boolean> {
+    const result = await dialog.showOpenDialog({
+      title: 'Select the puchitto realm.',
+      properties: ['openDirectory']
+    })
+    if (result.canceled || result.filePaths.length < 1) {
+      return false
+    }
+
+    await this._setProjectFromPath(result.filePaths[0])
+    return true
+  }
+
+  /**
+   * Sets a project from its path.
+   * @param path The path to the project.
+   */
+  private async _setProjectFromPath(path: string): Promise<void> {
+    this._currentProjectFolder = path
     this._sendProjectFolder()
     await this._reloadAssetBrowserForRenderer()
 
@@ -79,8 +106,6 @@ export class EditorBackend {
     this._watcher = new ProjectWatcher(this._currentProjectFolder, (ops) =>
       this._sendAssetUpdate(ops)
     )
-
-    return true
   }
 
   /**
