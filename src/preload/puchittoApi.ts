@@ -8,4 +8,5 @@ export interface PuchittoAPI {
   selectProject: () => Promise<boolean>
   saveLevel: (level: Level) => Promise<boolean>
   onAssetUpdate: (callback: (ops: AssetOp[]) => void) => void
+  onProjectSelected: (callback: (path: string) => void) => void
 }

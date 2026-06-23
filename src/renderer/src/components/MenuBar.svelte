@@ -1,17 +1,24 @@
 <script lang="ts">
+  import { onMount } from 'svelte'
   import { editor } from '../editor/editorGame'
   import DropdownButton from './menu/DropdownButton.svelte'
   import DropdownSeparator from './menu/DropdownSeparator.svelte'
   import MenuBarItem from './menu/MenuBarItem.svelte'
+  import { projectState } from '../state/projectState.svelte'
+  import { afterEditorReady } from '../editor/helpers/loadHelpers'
 
   const newLevel = (): void => {
-    editor.newScene()
+    afterEditorReady(async () => {
+      editor.newScene()
+    })
   }
 
   const loadLevel = async (): Promise<void> => {
     const selected = await window.puchittoAPI.selectProject()
     if (selected) {
-      editor.loadLevel()
+      afterEditorReady(async () => {
+        await editor.loadLevel()
+      })
     }
   }
 
@@ -26,6 +33,12 @@
   const exit = (): void => {
     window.close()
   }
+
+  onMount(() => {
+    window.puchittoAPI.onProjectSelected((path) => {
+      projectState.project = path
+    })
+  })
 </script>
 
 <header class="menu-bar">

@@ -6,12 +6,14 @@
 
   let container: HTMLElement
 
-  onMount(() => {
+  onMount(async () => {
     editor.run({
       element: container,
       server: '',
       listenerFactory: () => new OfflineNetworkListener()
     })
+
+    await editor.setReady()
 
     editor.newScene()
   })

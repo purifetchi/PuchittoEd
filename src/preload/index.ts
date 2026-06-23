@@ -17,7 +17,9 @@ if (process.contextIsolated) {
       selectProject: () => ipcRenderer.invoke('select-project'),
       saveLevel: (level: Level) => ipcRenderer.invoke('save-level', level),
       onAssetUpdate: (callback: (ops: AssetOp[]) => void) =>
-        ipcRenderer.on('update-assets', (_, ops) => callback(ops))
+        ipcRenderer.on('update-assets', (_, ops) => callback(ops)),
+      onProjectSelected: (callback: (path: string) => void) =>
+        ipcRenderer.on('select-project', (_, path) => callback(path))
     })
   } catch (error) {
     console.error(error)

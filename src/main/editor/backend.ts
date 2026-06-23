@@ -72,6 +72,7 @@ export class EditorBackend {
     }
 
     this._currentProjectFolder = path.dirname(result.filePaths[0])
+    this._sendProjectFolder()
     await this._reloadAssetBrowserForRenderer()
 
     this._watcher?.destroy()
@@ -106,6 +107,13 @@ export class EditorBackend {
    */
   private _sendAssetUpdate(ops: AssetOp[]): void {
     this._window.webContents.send('update-assets', ops)
+  }
+
+  /**
+   * Sends the current project folder.
+   */
+  private _sendProjectFolder(): void {
+    this._window.webContents.send('select-project', this._currentProjectFolder)
   }
 
   /**

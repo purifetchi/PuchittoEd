@@ -20,11 +20,17 @@ import type { GenericGizmo } from './entities/gizmos/genericGizmo'
 import { CameraSwitchSystem } from './systems/cameraSwitchSystem.svelte'
 import { MeshGizmo } from './entities/gizmos/meshGizmo'
 import { selectionState } from '../state/selectionState.svelte'
+import { callEditorReadyCallbacks } from './helpers/loadHelpers'
 
 /**
  * The backing class for the editor, extending a normal Puchitto game.
  */
 export class EditorGame extends Game {
+  /**
+   * Is the editor ready?
+   */
+  ready = false
+
   /**
    * The game data.
    */
@@ -108,6 +114,14 @@ export class EditorGame extends Game {
   }
 
   /**
+   * Sets the editor as ready.
+   */
+  async setReady(): Promise<void> {
+    this.ready = true
+    await callEditorReadyCallbacks()
+  }
+
+  /**
    * Load the initial config.
    */
   private async _loadInitialConfig(): Promise<void> {
@@ -160,6 +174,7 @@ export class EditorGame extends Game {
    * Creates a new scene.
    */
   newScene(): void {
+    console.log('new scene called')
     this._createAllocators()
 
     this.createScene()
@@ -218,7 +233,7 @@ export class EditorGame extends Game {
    * @param obj The game object.
    */
   private _createObjectGizmos(obj: GameObject): void {
-    if (obj.tag === 'editor' || this.gameData === undefined) {
+    if (!this.ready || obj.tag === 'editor' || this.gameData === undefined) {
       return
     }
 
