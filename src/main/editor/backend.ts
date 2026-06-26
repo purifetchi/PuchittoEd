@@ -1,5 +1,5 @@
 import { app, BrowserWindow, dialog, ipcMain, net, protocol } from 'electron'
-import { readdir, writeFile } from 'fs/promises'
+import { copyFile, readdir, writeFile } from 'fs/promises'
 import path from 'path'
 import { Level } from 'puchitto/level'
 import { AssetOp } from '../../preload/editor/assetOps'
@@ -55,6 +55,9 @@ export class EditorBackend {
     ipcMain.handle('select-new-project-folder', () => this._selectNewProjectFolder())
     ipcMain.handle('select-project', () => this._selectProject())
     ipcMain.handle('save-level', (_, level: Level) => this._saveLevel(level))
+    ipcMain.handle('copy-files-to-project', (_, filePaths: string[]) =>
+      this._copyFilesToProject(filePaths)
+    )
     protocol.handle('asset', (req) => this._handleAssetRequest(req))
     protocol.handle('editor', (req) => this._handleEditorRequest(req))
   }
@@ -161,6 +164,28 @@ export class EditorBackend {
     const absolutePath = path.join(app.getAppPath(), 'resources', filename)
 
     return net.fetch('file://' + absolutePath)
+  }
+
+  /**
+   * Copies files into the current project folder.
+   * @param filePaths The absolute paths of the files to copy.
+   */
+  private async _copyFilesToProject(filePaths: string[]): Promise<boolean> {
+    if (!this._currentProjectFolder) {
+      return false
+    }
+
+    try {
+      for (const filePath of filePaths) {
+        const fileName = path.basename(filePath)
+        const dest = path.join(this._currentProjectFolder, fileName)
+        await copyFile(filePath, dest)
+      }
+      return true
+    } catch (e) {
+      console.error('Failed to copy files to project:', e)
+      return false
+    }
   }
 
   /**

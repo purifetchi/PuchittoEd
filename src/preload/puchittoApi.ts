@@ -8,6 +8,7 @@ export interface PuchittoAPI {
   selectNewProjectFolder: () => Promise<boolean>
   selectProject: () => Promise<boolean>
   saveLevel: (level: Level) => Promise<boolean>
+  copyFilesToProject: (filePaths: string[]) => Promise<boolean>
   onAssetUpdate: (callback: (ops: AssetOp[]) => void) => void
   onProjectSelected: (callback: (path: string) => void) => void
 }
