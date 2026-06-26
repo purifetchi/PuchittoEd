@@ -22,7 +22,9 @@ export class ProjectWatcher {
   private _sender: AssetOpSender
 
   constructor(path: string, sender: AssetOpSender) {
-    this._watcher = chokidar.watch(path)
+    this._watcher = chokidar.watch(path, {
+      ignoreInitial: true
+    })
     this._sender = sender
 
     this._buildChokidarListeners()
