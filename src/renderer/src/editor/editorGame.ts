@@ -17,10 +17,11 @@ import { EventEmitter } from '@mary/events'
 import { TransformsObject } from './entities/transformsObject'
 import { SphereGizmo } from './entities/gizmos/sphereGizmo'
 import type { GenericGizmo } from './entities/gizmos/genericGizmo'
-import { CameraSwitchSystem } from './systems/cameraSwitchSystem.svelte'
 import { MeshGizmo } from './entities/gizmos/meshGizmo'
 import { selectionState } from '../state/selectionState.svelte'
 import { callEditorReadyCallbacks } from './helpers/loadHelpers'
+import { HotkeyToolSystem } from './systems/hotkeyToolSystem.svelte'
+import { LookAtObjectTool } from './tools/lookAtObjectTool'
 
 /**
  * The backing class for the editor, extending a normal Puchitto game.
@@ -146,17 +147,24 @@ export class EditorGame extends Game {
 
     factory.registerUnknownEntityHandler(this._makeUnknownEntity.bind(this))
   }
-
   /**
    * Registers the custom editor game systems.
    */
   protected registerCustomGameSystems(): void {
     this.addGameSystem(new SceneObjectSelectionSystem())
-    this.addGameSystem(new CameraSwitchSystem())
+    this.addGameSystem(this._createHotkeyToolSystem())
   }
 
   protected registerCustomEventStreamHandlers(): void {
     this.eventStream.on('objectAttached', this._createObjectGizmos.bind(this))
+  }
+
+  private _createHotkeyToolSystem(): HotkeyToolSystem {
+    const toolSystem = new HotkeyToolSystem()
+
+    toolSystem.registerTool(new LookAtObjectTool())
+
+    return toolSystem
   }
 
   /**

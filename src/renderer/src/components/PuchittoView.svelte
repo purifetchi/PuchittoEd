@@ -3,6 +3,7 @@
   import { editor } from '../editor/editorGame'
   import { OfflineNetworkListener } from '../editor/offlineNetworkListener'
   import TransformToolbar from './scene/TransformToolbar.svelte'
+  import ActiveToolToolbar from './scene/ActiveToolToolbar.svelte'
 
   let container: HTMLElement
 
@@ -21,6 +22,7 @@
 
 <div id="puchitto-view" bind:this={container}>
   <TransformToolbar />
+  <ActiveToolToolbar />
 </div>
 
 <style>
