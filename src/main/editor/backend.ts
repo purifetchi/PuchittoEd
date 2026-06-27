@@ -1,9 +1,10 @@
 import { app, BrowserWindow, dialog, ipcMain, net, protocol } from 'electron'
 import { copyFile, readdir, writeFile } from 'fs/promises'
-import path from 'path'
+import path, { join } from 'path'
 import { Level } from 'puchitto/level'
 import { AssetOp } from '../../preload/editor/assetOps'
 import { ProjectWatcher } from './projectWatcher'
+import { AlfBuilder } from './alfBuilder'
 
 /**
  * The backend of PuchittoEd.
@@ -55,6 +56,7 @@ export class EditorBackend {
     ipcMain.handle('select-new-project-folder', () => this._selectNewProjectFolder())
     ipcMain.handle('select-project', () => this._selectProject())
     ipcMain.handle('save-level', (_, level: Level) => this._saveLevel(level))
+    ipcMain.handle('export-level', (_, level: Level) => this._exportLevel(level))
     ipcMain.handle('copy-files-to-project', (_, filePaths: string[]) =>
       this._copyFilesToProject(filePaths)
     )
@@ -202,6 +204,35 @@ export class EditorBackend {
       console.log(e, 'Failed to write puchitto realm.')
       return false
     }
+
+    return true
+  }
+
+  /**
+   * Exports a level.
+   * @param level The level data.
+   */
+  private async _exportLevel(level: Level): Promise<boolean> {
+    if (!(await this._saveLevel(level))) {
+      return false
+    }
+
+    const builder = new AlfBuilder()
+    const files = await readdir(this._currentProjectFolder!)
+    for (const file of files) {
+      builder.addFile(join(this._currentProjectFolder!, file), file)
+    }
+
+    const result = await dialog.showSaveDialog({
+      title: 'Save the realm.',
+      filters: [{ name: 'realm', extensions: ['alf'] }],
+      properties: ['showOverwriteConfirmation']
+    })
+    if (result.canceled || result.filePath.length < 1) {
+      return false
+    }
+
+    await builder.save(result.filePath)
 
     return true
   }

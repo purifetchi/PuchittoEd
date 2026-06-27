@@ -17,6 +17,7 @@ if (process.contextIsolated) {
       selectNewProjectFolder: () => ipcRenderer.invoke('select-new-project-folder'),
       selectProject: () => ipcRenderer.invoke('select-project'),
       saveLevel: (level: Level) => ipcRenderer.invoke('save-level', level),
+      exportLevel: (level: Level) => ipcRenderer.invoke('export-level', level),
       copyFilesToProject: (filePaths: string[]) =>
         ipcRenderer.invoke('copy-files-to-project', filePaths),
       onAssetUpdate: (callback: (ops: AssetOp[]) => void) =>

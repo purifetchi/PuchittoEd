@@ -174,7 +174,6 @@ export class EditorGame extends Game {
    * Creates a new scene.
    */
   newScene(): void {
-    console.log('new scene called')
     this._createAllocators()
 
     this.createScene()
@@ -198,6 +197,14 @@ export class EditorGame extends Game {
   async saveLevel(): Promise<void> {
     const data = buildLevelJsonData(editor)
     await window.puchittoAPI.saveLevel(data)
+  }
+
+  /**
+   * Exports the level.
+   */
+  async exportLevel(): Promise<void> {
+    const data = buildLevelJsonData(editor)
+    await window.puchittoAPI.exportLevel(data)
   }
 
   /**

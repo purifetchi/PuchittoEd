@@ -30,6 +30,10 @@
     await editor.saveLevel()
   }
 
+  const exportLevel = async (): Promise<void> => {
+    await editor.exportLevel()
+  }
+
   const about = (): void => {
     alert('PuchittoEd! todo...')
   }
@@ -51,6 +55,8 @@
     <DropdownButton clicked={newLevel}>New realm</DropdownButton>
     <DropdownButton clicked={loadLevel}>Load realm</DropdownButton>
     <DropdownButton clicked={saveLevel}>Save realm</DropdownButton>
+    <DropdownSeparator />
+    <DropdownButton clicked={exportLevel}>Export realm as ALF</DropdownButton>
     <DropdownSeparator />
     <DropdownButton clicked={exit}>Exit</DropdownButton>
   </MenuBarItem>
