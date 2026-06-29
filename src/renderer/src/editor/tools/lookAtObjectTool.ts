@@ -3,6 +3,7 @@ import type { EditorGame } from '../editorGame'
 import { HotkeyHandlingResult } from '../systems/hotkey/hotkeyHandlingResult'
 import { HotkeyTool } from '../systems/hotkey/hotkeyTool'
 import { selectionState } from '../../state/selectionState.svelte'
+import { recordTransformManipulation } from '../systems/history/commands/entityTransformManipulationCommand'
 
 export class LookAtObjectTool extends HotkeyTool {
   private _object?: GameObject
@@ -48,7 +49,9 @@ export class LookAtObjectTool extends HotkeyTool {
       return HotkeyHandlingResult.CONTINUE
     }
 
-    this._object.transform.lookAt(selectedObject)
+    recordTransformManipulation(this._object, () => {
+      this._object.transform.lookAt(selectedObject)
+    })
 
     return HotkeyHandlingResult.FINISHED
   }

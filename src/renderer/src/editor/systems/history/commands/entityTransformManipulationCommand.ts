@@ -1,6 +1,7 @@
 import type { GameObject } from 'puchitto/objects'
 import { HistoryCommand } from '../historyCommand'
 import { Quaternion, type Vector3 } from 'three'
+import { recordCommand } from '../editorHistory'
 
 /**
  * A historical recorded transform.
@@ -21,6 +22,19 @@ export const packTransform = (entity: GameObject): HistoryTransform => {
     rotation: entity.transform.rotation.clone(),
     scale: entity.transform.scale.clone()
   }
+}
+
+/**
+ * Records all changes done to the entity.
+ * @param entity The entity.
+ * @param callback The callback modifying the state.
+ */
+export const recordTransformManipulation = (entity: GameObject, callback: () => void): void => {
+  const prev = packTransform(entity)
+  callback()
+  const current = packTransform(entity)
+
+  recordCommand(new EntityTransformManipulationCommand(entity, prev, current))
 }
 
 /**
