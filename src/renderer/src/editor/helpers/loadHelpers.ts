@@ -1,6 +1,6 @@
 import { editor } from '../editorGame'
 
-let storedCallback: () => Promise<void> | undefined
+let storedCallbacks: (() => Promise<void>)[] | undefined
 
 export const afterEditorReady = (callback: () => Promise<void>): void => {
   if (editor.ready) {
@@ -8,14 +8,17 @@ export const afterEditorReady = (callback: () => Promise<void>): void => {
     return
   }
 
-  storedCallback = callback
+  storedCallbacks = [...(storedCallbacks ?? []), callback]
 }
 
 export const callEditorReadyCallbacks = async (): Promise<void> => {
-  if (storedCallback === undefined) {
+  if (storedCallbacks === undefined) {
     return
   }
 
-  await storedCallback()
-  storedCallback = undefined
+  for (const callback of storedCallbacks) {
+    await callback()
+  }
+
+  storedCallbacks = undefined
 }

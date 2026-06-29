@@ -6,6 +6,7 @@
   import type { EditorEntityDefinition } from '../../editor/data/editorEntityDefinition'
   import { onMount } from 'svelte'
   import { selectionState } from '../../state/selectionState.svelte'
+  import { afterEditorReady } from '../../editor/helpers/loadHelpers'
 
   let addObject = (type: string): void => {
     const object = editor._entityFactory.create<GameObject>(type, editor.allocator.get(), {})
@@ -17,8 +18,15 @@
   let entities: EditorEntityDefinition[] = $state([])
 
   onMount(() => {
-    editor.editorEventStream.on('gameDataLoaded', () => {
-      entities = editor.gameData.entities.filter((ent) => ent.type !== 'unknown')
+    afterEditorReady(async () => {
+      if (editor.gameData !== undefined) {
+        entities = editor.gameData.entities.filter((ent) => ent.type !== 'unknown')
+        return
+      }
+
+      editor.editorEventStream.on('gameDataLoaded', () => {
+        entities = editor.gameData.entities.filter((ent) => ent.type !== 'unknown')
+      })
     })
   })
 </script>
