@@ -2,6 +2,8 @@
   import { GameObject } from 'puchitto/objects'
   import Input from '../../common/Input.svelte'
   import Property from '../Property.svelte'
+  import { recordCommand } from '../../../editor/systems/history/editorHistory'
+  import { EntityPropertyChangedCommand } from '../../../editor/systems/history/commands/entityPropertyChangedCommand'
 
   let { name, obj, path }: { name: string; obj: GameObject; path: string } = $props()
 
@@ -20,6 +22,7 @@
     const previous = accessor()
 
     if (previous !== value) {
+      recordCommand(new EntityPropertyChangedCommand(obj, path, previous, value))
       setter(value)
     }
   })

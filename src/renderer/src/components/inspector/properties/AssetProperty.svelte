@@ -4,6 +4,8 @@
   import Circle from '@lucide/svelte/icons/circle'
   import Input from '../../common/Input.svelte'
   import AssetThumbnail from '../../assets/AssetThumbnail.svelte'
+  import { recordCommand } from '../../../editor/systems/history/editorHistory'
+  import { EntityPropertyChangedCommand } from '../../../editor/systems/history/commands/entityPropertyChangedCommand'
 
   let { name, obj, path }: { name: string; obj: GameObject; path: string } = $props()
 
@@ -52,6 +54,7 @@
     const previous = accessor()
 
     if (previous !== asset) {
+      recordCommand(new EntityPropertyChangedCommand(obj, name, previous, asset))
       setter(asset)
     }
   })

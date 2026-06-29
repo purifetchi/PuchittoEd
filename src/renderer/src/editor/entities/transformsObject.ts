@@ -12,6 +12,12 @@ import {
 } from 'three'
 import { OBJLoader } from 'three/examples/jsm/Addons.js'
 import { transformsState } from '../../state/transformsState.svelte'
+import {
+  EntityTransformManipulationCommand,
+  packTransform,
+  type HistoryTransform
+} from '../systems/history/commands/entityTransformManipulationCommand'
+import { recordCommand } from '../systems/history/editorHistory'
 
 /**
  * The tool type.
@@ -46,6 +52,11 @@ export class TransformsObject extends GameObject {
    * The last point.
    */
   private _lastPoint?: Vector3
+
+  /**
+   * The transform that we began at.
+   */
+  private _beginningTransform?: HistoryTransform
 
   constructor(opts: GameObjectOptions) {
     super(opts)
@@ -93,6 +104,16 @@ export class TransformsObject extends GameObject {
     if (this._currentAxis !== undefined) {
       if (!this.game.input.mouseHeld(MOUSE_LEFT)) {
         this._lastPoint = undefined
+
+        recordCommand(
+          new EntityTransformManipulationCommand(
+            this._selectedObject,
+            this._beginningTransform,
+            packTransform(this._selectedObject)
+          )
+        )
+
+        this._beginningTransform = undefined
         this.setHandlingAxis(undefined)
         return
       }
@@ -100,6 +121,7 @@ export class TransformsObject extends GameObject {
       const tgt = this._getProjectedPoint()
       if (this._lastPoint === undefined) {
         this._lastPoint = tgt
+        this._beginningTransform = packTransform(this._selectedObject)
         return
       }
 

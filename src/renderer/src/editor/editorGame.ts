@@ -22,6 +22,9 @@ import { selectionState } from '../state/selectionState.svelte'
 import { callEditorReadyCallbacks } from './helpers/loadHelpers'
 import { HotkeyToolSystem } from './systems/hotkeyToolSystem.svelte'
 import { LookAtObjectTool } from './tools/lookAtObjectTool'
+import { EditorHistory } from './systems/history/editorHistory'
+import { UndoTool } from './systems/history/tools/undoTool'
+import { RedoTool } from './systems/history/tools/redoTool'
 
 /**
  * The backing class for the editor, extending a normal Puchitto game.
@@ -53,6 +56,11 @@ export class EditorGame extends Game {
   editorEventStream = new EventEmitter<{
     gameDataLoaded: []
   }>()
+
+  /**
+   * The editor's history.
+   */
+  readonly history: EditorHistory = new EditorHistory(this)
 
   /**
    * The editor camera.
@@ -163,6 +171,8 @@ export class EditorGame extends Game {
     const toolSystem = new HotkeyToolSystem()
 
     toolSystem.registerTool(new LookAtObjectTool())
+    toolSystem.registerTool(new UndoTool())
+    toolSystem.registerTool(new RedoTool())
 
     return toolSystem
   }
@@ -182,6 +192,7 @@ export class EditorGame extends Game {
    * Creates a new scene.
    */
   newScene(): void {
+    this.history.reset()
     this._createAllocators()
 
     this.createScene()
