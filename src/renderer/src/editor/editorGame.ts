@@ -206,6 +206,7 @@ export class EditorGame extends Game {
 
     this.createScene()
     this._makeEditorEntities()
+    this._dataManager.addProvider(new AssetProtocolDataProvider())
   }
 
   /**
@@ -214,7 +215,6 @@ export class EditorGame extends Game {
   async loadLevel(): Promise<void> {
     this.newScene()
 
-    this._dataManager.addProvider(new AssetProtocolDataProvider())
     const gameLoader = new GameLoader(this)
     await gameLoader.load()
   }

@@ -10,6 +10,10 @@ export class AssetProtocolDataProvider implements DataProvider {
    * @returns Always asset://assetPath
    */
   getUrl(assetPath: string): string | undefined {
+    if (assetPath.startsWith('editor')) {
+      return undefined
+    }
+
     return `asset://${assetPath}`
   }
 
