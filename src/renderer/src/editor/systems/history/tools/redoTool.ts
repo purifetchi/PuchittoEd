@@ -14,7 +14,7 @@ export class RedoTool extends HotkeyTool {
     return 'tool.redo'
   }
 
-  setup(game: EditorGame): boolean {
+  available(game: EditorGame): boolean {
     return game.history.canRedo
   }
 

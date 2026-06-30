@@ -20,19 +20,18 @@ export class DeleteTool extends HotkeyTool {
     return 'tool.delete'
   }
 
-  setup(game: EditorGame): boolean {
+  available(game: EditorGame): boolean {
     const id = selectionState.id
-    if (id < 0) {
-      return false
+    if (id >= 0) {
+      return game.getObjectById(id) !== undefined
     }
 
-    const selectedObject = game.getObjectById(id)
-    if (selectedObject === undefined) {
-      return false
-    }
+    return false
+  }
 
-    this._object = selectedObject
-    return true
+  setup(game: EditorGame): void {
+    const id = selectionState.id
+    this._object = game.getObjectById(id)
   }
 
   tick(game: EditorGame): HotkeyHandlingResult {

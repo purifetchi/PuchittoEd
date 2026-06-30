@@ -19,9 +19,19 @@ export abstract class HotkeyTool {
     this._defaultConfig = config
   }
 
+  /**
+   * The keybinding config.
+   */
   get config(): HotkeyConfig {
     // TODO: Support rebinding.
     return this._defaultConfig
+  }
+
+  /**
+   * The menu bar path of the tool.
+   */
+  get menuBarPath(): string | undefined {
+    return undefined
   }
 
   /**
@@ -30,10 +40,19 @@ export abstract class HotkeyTool {
   abstract get name(): string
 
   /**
+   * Gets whether the tool is available to use.
+   */
+  abstract available(game: EditorGame): boolean
+
+  /**
    * Sets up the tool.
    * @param game The game.
    */
-  abstract setup(game: EditorGame): boolean
+  setup(game: EditorGame): void {
+    void game
+
+    // Overridable.
+  }
 
   /**
    * Ticks this hotkey.

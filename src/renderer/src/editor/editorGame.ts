@@ -21,11 +21,8 @@ import { MeshGizmo } from './entities/gizmos/meshGizmo'
 import { selectionState } from '../state/selectionState.svelte'
 import { callEditorReadyCallbacks } from './helpers/loadHelpers'
 import { HotkeyToolSystem } from './systems/hotkeyToolSystem.svelte'
-import { LookAtObjectTool } from './tools/lookAtObjectTool'
 import { EditorHistory } from './systems/history/editorHistory'
-import { UndoTool } from './systems/history/tools/undoTool'
-import { RedoTool } from './systems/history/tools/redoTool'
-import { DeleteTool } from './tools/deleteTool'
+import { registerToolsInSystem } from './systems/hotkey/hotkeyToolRegistrar'
 
 /**
  * The backing class for the editor, extending a normal Puchitto game.
@@ -171,11 +168,7 @@ export class EditorGame extends Game {
 
   private _createHotkeyToolSystem(): HotkeyToolSystem {
     const toolSystem = new HotkeyToolSystem()
-
-    toolSystem.registerTool(new LookAtObjectTool())
-    toolSystem.registerTool(new UndoTool())
-    toolSystem.registerTool(new RedoTool())
-    toolSystem.registerTool(new DeleteTool())
+    registerToolsInSystem(toolSystem)
 
     return toolSystem
   }

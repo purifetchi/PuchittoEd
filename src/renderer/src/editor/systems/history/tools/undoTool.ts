@@ -14,7 +14,7 @@ export class UndoTool extends HotkeyTool {
     return 'tool.undo'
   }
 
-  setup(game: EditorGame): boolean {
+  available(game: EditorGame): boolean {
     return game.history.canUndo
   }
 

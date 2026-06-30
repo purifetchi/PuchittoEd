@@ -56,6 +56,7 @@ export class HotkeyToolSystem implements GameSystem {
 
     for (const tool of this._tools) {
       if (this.validate(tool)) {
+        tool.setup(this._game)
         toolState.tool = tool.name
         this._activeTool = tool
         break
@@ -82,6 +83,6 @@ export class HotkeyToolSystem implements GameSystem {
     }
 
     // Return whether the setup has finished properly.
-    return tool.setup(this._game)
+    return tool.available(this._game)
   }
 }
