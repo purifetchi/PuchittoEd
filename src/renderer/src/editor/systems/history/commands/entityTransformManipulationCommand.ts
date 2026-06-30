@@ -25,6 +25,18 @@ export const packTransform = (entity: GameObject): HistoryTransform => {
 }
 
 /**
+ * Checks whether two transforms are equal.
+ * @param l The left hand side.
+ * @param r The right hand side.
+ */
+const transformsEqual = (l: HistoryTransform, r: HistoryTransform): boolean => {
+  const equals =
+    l.position.equals(r.position) && l.rotation.equals(r.rotation) && l.scale.equals(l.scale)
+
+  return equals
+}
+
+/**
  * Records all changes done to the entity.
  * @param entity The entity.
  * @param callback The callback modifying the state.
@@ -33,6 +45,10 @@ export const recordTransformManipulation = (entity: GameObject, callback: () => 
   const prev = packTransform(entity)
   callback()
   const current = packTransform(entity)
+
+  if (transformsEqual(prev, current)) {
+    return
+  }
 
   recordCommand(new EntityTransformManipulationCommand(entity, prev, current))
 }
