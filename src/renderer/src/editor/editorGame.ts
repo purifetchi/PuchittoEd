@@ -25,6 +25,7 @@ import { LookAtObjectTool } from './tools/lookAtObjectTool'
 import { EditorHistory } from './systems/history/editorHistory'
 import { UndoTool } from './systems/history/tools/undoTool'
 import { RedoTool } from './systems/history/tools/redoTool'
+import { DeleteTool } from './tools/deleteTool'
 
 /**
  * The backing class for the editor, extending a normal Puchitto game.
@@ -165,6 +166,7 @@ export class EditorGame extends Game {
 
   protected registerCustomEventStreamHandlers(): void {
     this.eventStream.on('objectAttached', this._createObjectGizmos.bind(this))
+    this.eventStream.on('objectRemoved', this._removeObjectGizmos.bind(this))
   }
 
   private _createHotkeyToolSystem(): HotkeyToolSystem {
@@ -173,6 +175,7 @@ export class EditorGame extends Game {
     toolSystem.registerTool(new LookAtObjectTool())
     toolSystem.registerTool(new UndoTool())
     toolSystem.registerTool(new RedoTool())
+    toolSystem.registerTool(new DeleteTool())
 
     return toolSystem
   }
@@ -340,6 +343,27 @@ export class EditorGame extends Game {
     }
 
     this._objectGizmoMap.set(obj.id, gizmos)
+  }
+
+  /**
+   * Removes the gizmos for a given object.
+   * @param obj The object to remove the gizmos for.
+   */
+  private _removeObjectGizmos(obj: GameObject): void {
+    if (!this.ready || obj.tag === 'editor' || this.gameData === undefined) {
+      return
+    }
+
+    const gizmos = this._objectGizmoMap.get(obj.id)
+    if (gizmos === undefined) {
+      return
+    }
+
+    for (const gizmo of gizmos) {
+      this.removeObject(gizmo)
+    }
+
+    this._objectGizmoMap.delete(obj.id)
   }
 
   /**

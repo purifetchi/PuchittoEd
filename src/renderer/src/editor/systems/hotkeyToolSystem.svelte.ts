@@ -75,11 +75,9 @@ export class HotkeyToolSystem implements GameSystem {
     }
 
     // If we have bindings, all have to be pressed.
-    if (bindings.modifiers !== undefined) {
-      for (const modifier of bindings.modifiers) {
-        if (!this._game.input.keyDown(modifier)) {
-          return false
-        }
+    for (const modifier of bindings.modifiers) {
+      if (!this._game.input.keyDown(modifier)) {
+        return false
       }
     }
 

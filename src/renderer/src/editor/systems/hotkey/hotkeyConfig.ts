@@ -1,4 +1,4 @@
 export interface HotkeyConfig {
   key: string
-  modifiers: string[] | undefined
+  modifiers: string[]
 }

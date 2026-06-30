@@ -7,10 +7,14 @@
   import { onMount } from 'svelte'
   import { selectionState } from '../../state/selectionState.svelte'
   import { afterEditorReady } from '../../editor/helpers/loadHelpers'
+  import { recordCommand } from '../../editor/systems/history/editorHistory'
+  import { EntityCreatedCommand } from '../../editor/systems/history/commands/entityCreatedCommand'
 
   let addObject = (type: string): void => {
     const object = editor._entityFactory.create<GameObject>(type, editor.allocator.get(), {})
     editor.addObject(object)
+
+    recordCommand(new EntityCreatedCommand(object))
 
     selectionState.id = object.id
   }
