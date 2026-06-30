@@ -14,6 +14,10 @@ export class UndoTool extends HotkeyTool {
     return 'tool.undo'
   }
 
+  get menuBarPath(): string {
+    return 'Edit/Undo'
+  }
+
   available(game: EditorGame): boolean {
     return game.history.canUndo
   }

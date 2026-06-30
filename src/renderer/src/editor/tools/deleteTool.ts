@@ -20,6 +20,10 @@ export class DeleteTool extends HotkeyTool {
     return 'tool.delete'
   }
 
+  get menuBarPath(): string {
+    return 'Object/Delete'
+  }
+
   available(game: EditorGame): boolean {
     const id = selectionState.id
     if (id >= 0) {

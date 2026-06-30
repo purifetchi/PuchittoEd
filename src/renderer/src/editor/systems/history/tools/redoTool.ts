@@ -14,6 +14,10 @@ export class RedoTool extends HotkeyTool {
     return 'tool.redo'
   }
 
+  get menuBarPath(): string {
+    return 'Edit/Redo'
+  }
+
   available(game: EditorGame): boolean {
     return game.history.canRedo
   }

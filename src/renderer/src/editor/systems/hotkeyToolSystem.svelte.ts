@@ -37,6 +37,23 @@ export class HotkeyToolSystem implements GameSystem {
   }
 
   /**
+   * Manually invokes a tool.
+   */
+  invokeTool(toolName: string): void {
+    // Get the tool
+    const tool = this._tools.find((t) => t.name == toolName)
+    if (tool === undefined) {
+      return
+    }
+
+    if (tool.available) {
+      tool.setup(this._game)
+      toolState.tool = tool.name
+      this._activeTool = tool
+    }
+  }
+
+  /**
    * Ticks this system.
    * @param dt The delta time since the last frame.
    */

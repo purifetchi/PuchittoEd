@@ -19,6 +19,10 @@ export class LookAtObjectTool extends HotkeyTool {
     return 'tool.lookAtObject'
   }
 
+  get menuBarPath(): string {
+    return 'Object/Look at'
+  }
+
   available(game: EditorGame): boolean {
     const id = selectionState.id
     if (id >= 0) {

@@ -12,11 +12,81 @@ const toolList: Constructor<HotkeyTool>[] = []
 type Constructor<T> = new () => T
 
 /**
+ * The tool leaf.
+ */
+export type ToolTreeLeaf = {
+  name: string
+  toolName: string
+}
+
+/**
+ * The tool tree node.
+ */
+export type ToolTreeNode =
+  | {
+      name: string
+      children: ToolTreeNode[]
+    }
+  | ToolTreeLeaf
+
+/**
  * Registers a single tool.
  * @param ctor The constructor.
  */
 export function registerTool<T extends HotkeyTool>(ctor: Constructor<T>): void {
   toolList.push(ctor)
+}
+
+/**
+ * Builds the tool tree.
+ */
+export const getToolTree = (): ToolTreeNode => {
+  const root: ToolTreeNode = {
+    name: '',
+    children: []
+  }
+
+  for (const tool of toolList) {
+    // Not the prettiest but oh well.
+    const obj = new tool()
+
+    const path = obj.menuBarPath
+    if (path === undefined) {
+      continue
+    }
+
+    let lastNode: ToolTreeNode = root
+    const parts = path.split('/')
+    for (let i = 0; i < parts.length; i++) {
+      const part = parts[i]
+      if ('toolName' in lastNode) {
+        throw new Error('Hit a leaf node while constructing the tool tree.')
+      }
+
+      if (i == parts.length - 1) {
+        lastNode.children.push({
+          name: part,
+          toolName: obj.name
+        })
+        continue
+      }
+
+      let nodeIndex = lastNode.children.findIndex((n) => n.name == part)
+      if (nodeIndex < 0) {
+        const newNode: ToolTreeNode = {
+          name: part,
+          children: []
+        }
+
+        nodeIndex = lastNode.children.length
+        lastNode.children.push(newNode)
+      }
+
+      lastNode = lastNode.children[nodeIndex]
+    }
+  }
+
+  return root
 }
 
 /**

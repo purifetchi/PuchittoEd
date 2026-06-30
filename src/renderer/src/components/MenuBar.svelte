@@ -6,6 +6,10 @@
   import MenuBarItem from './menu/MenuBarItem.svelte'
   import { projectState } from '../state/projectState.svelte'
   import { afterEditorReady } from '../editor/helpers/loadHelpers'
+  import { getToolTree, type ToolTreeNode } from '../editor/systems/hotkey/hotkeyToolRegistrar'
+  import RecursiveMenuButton from './menu/RecursiveMenuButton.svelte'
+
+  let tree: ToolTreeNode = $state()
 
   const newLevel = async (): Promise<void> => {
     const selected = await window.puchittoAPI.selectNewProjectFolder()
@@ -42,11 +46,15 @@
     window.close()
   }
 
+
+
   onMount(() => {
     window.puchittoAPI.onProjectSelected((path) => {
       projectState.project = path
       document.title = `PuchittoEd - ${path}`
     })
+
+    tree = getToolTree()
   })
 </script>
 
@@ -60,6 +68,13 @@
     <DropdownSeparator />
     <DropdownButton clicked={exit}>Exit</DropdownButton>
   </MenuBarItem>
+
+  {#if tree !== undefined && 'children' in tree}
+    {#each tree.children as node (node.name)}
+      <RecursiveMenuButton {node} />
+    {/each}
+  {/if}
+
   <MenuBarItem label="About">
     <DropdownButton clicked={about}>About PuchittoEd</DropdownButton>
   </MenuBarItem>

@@ -81,6 +81,11 @@ export class EditorGame extends Game {
   private _objectGizmoMap: Map<number, GenericGizmo[]> = new Map<number, GenericGizmo[]>()
 
   /**
+   * The hotkey tool system.
+   */
+  private _toolSystem: HotkeyToolSystem
+
+  /**
    * Constructs a new editor.
    */
   constructor() {
@@ -118,6 +123,14 @@ export class EditorGame extends Game {
         gizmo.setVisible(visible && (gizmo.display === 'always' || selectionState.id == gizmo.id))
       }
     }
+  }
+
+  /**
+   * Invokes an editor tool.
+   * @param toolName The tool to invoke.
+   */
+  invokeEditorTool(toolName: string): void {
+    this._toolSystem.invokeTool(toolName)
   }
 
   /**
@@ -167,10 +180,10 @@ export class EditorGame extends Game {
   }
 
   private _createHotkeyToolSystem(): HotkeyToolSystem {
-    const toolSystem = new HotkeyToolSystem()
-    registerToolsInSystem(toolSystem)
+    this._toolSystem = new HotkeyToolSystem()
+    registerToolsInSystem(this._toolSystem)
 
-    return toolSystem
+    return this._toolSystem
   }
 
   /**
