@@ -1,10 +1,44 @@
 <script lang="ts">
   let { label }: { label: string } = $props()
+
+  let isOpen = $state(false)
+
+  const onclick = (e: MouseEvent): void => {
+    isOpen = !isOpen
+    e.stopPropagation()
+  }
+
+  const onmouseover = (e: MouseEvent): void => {
+    void e
+  }
+
+  const onfocus = (e: FocusEvent): void => {
+    void e // todo
+  }
+
+  const onkeydown = (e: KeyboardEvent): void => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      isOpen = !isOpen
+    } else if (e.key === 'Escape') {
+      isOpen = false
+    }
+  }
 </script>
 
-<div class="menu-item">
+<svelte:window onclick={() => (isOpen = false)} />
+
+<div
+  class="menu-item"
+  role="menuitem"
+  tabindex="0"
+  class:open={isOpen}
+  {onfocus}
+  {onclick}
+  {onmouseover}
+  {onkeydown}
+>
   {label}
-  <div class="dropdown">
+  <div class="dropdown" class:open={isOpen}>
     <slot></slot>
   </div>
 </div>
@@ -21,8 +55,8 @@
     background: var(--bg-hover);
   }
 
-  .menu-item:hover .dropdown {
-    display: flex;
+  .menu-item.open {
+    background: var(--bg-hover);
   }
 
   .dropdown {
@@ -37,5 +71,9 @@
     min-width: 220px;
     z-index: 5;
     padding: 4px 0;
+  }
+
+  .dropdown.open {
+    display: flex;
   }
 </style>

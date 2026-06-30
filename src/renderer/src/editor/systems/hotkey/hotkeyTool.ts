@@ -35,6 +35,13 @@ export abstract class HotkeyTool {
   }
 
   /**
+   * The order within the menu.
+   */
+  get menuOrder(): number {
+    return 0
+  }
+
+  /**
    * The name of the tool.
    */
   abstract get name(): string

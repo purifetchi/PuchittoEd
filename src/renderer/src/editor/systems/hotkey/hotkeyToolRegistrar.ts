@@ -17,6 +17,7 @@ type Constructor<T> = new () => T
 export type ToolTreeLeaf = {
   name: string
   toolName: string
+  order: number
 }
 
 /**
@@ -26,6 +27,7 @@ export type ToolTreeNode =
   | {
       name: string
       children: ToolTreeNode[]
+      order: number
     }
   | ToolTreeLeaf
 
@@ -43,7 +45,8 @@ export function registerTool<T extends HotkeyTool>(ctor: Constructor<T>): void {
 export const getToolTree = (): ToolTreeNode => {
   const root: ToolTreeNode = {
     name: '',
-    children: []
+    children: [],
+    order: 0
   }
 
   for (const tool of toolList) {
@@ -66,8 +69,10 @@ export const getToolTree = (): ToolTreeNode => {
       if (i == parts.length - 1) {
         lastNode.children.push({
           name: part,
-          toolName: obj.name
+          toolName: obj.name,
+          order: obj.menuOrder
         })
+        lastNode.children.sort((l, r) => l.order - r.order)
         continue
       }
 
@@ -75,7 +80,8 @@ export const getToolTree = (): ToolTreeNode => {
       if (nodeIndex < 0) {
         const newNode: ToolTreeNode = {
           name: part,
-          children: []
+          children: [],
+          order: obj.menuOrder
         }
 
         nodeIndex = lastNode.children.length
