@@ -8,6 +8,8 @@
   import { afterEditorReady } from '../editor/helpers/loadHelpers'
   import { getToolTree, type ToolTreeNode } from '../editor/systems/hotkey/hotkeyToolRegistrar'
   import RecursiveMenuButton from './menu/RecursiveMenuButton.svelte'
+  import { openModal } from '../state/modalState.svelte'
+  import AboutDialogModal from './modals/AboutDialogModal.svelte'
 
   let tree: ToolTreeNode = $state()
 
@@ -39,14 +41,12 @@
   }
 
   const about = (): void => {
-    alert('PuchittoEd! todo...')
+    openModal(AboutDialogModal)
   }
 
   const exit = (): void => {
     window.close()
   }
-
-
 
   onMount(() => {
     window.puchittoAPI.onProjectSelected((path) => {
