@@ -43,7 +43,7 @@ export class HotkeyToolSystem implements GameSystem {
   tick(): void {
     if (this._activeTool !== undefined) {
       const result = this._activeTool.tick(this._game)
-      if (result === HotkeyHandlingResult.FINISHED) {
+      if (result === HotkeyHandlingResult.FINISHED || this._game.input.keyDown('Escape')) {
         this._activeTool = undefined
         toolState.tool = undefined
       }
