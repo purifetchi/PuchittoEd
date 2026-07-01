@@ -106,6 +106,30 @@
       ]
     },
     {
+      "type": "light_ambient",
+      "displayName": "Ambient Light",
+      "singleton": true,
+      "properties": [
+        {
+          "path": "color",
+          "type": "color",
+          "displayName": "Color"
+        },
+        {
+          "path": "intensity",
+          "type": "number",
+          "displayName": "Intensity"
+        }
+      ],
+      "gizmos": [
+        {
+          "type": "icon",
+          "display": "always",
+          "path": "gizmos/light.png"
+        }
+      ]
+    },
+    {
       "type": "camera",
       "displayName": "Camera",
       "gizmos": [
