@@ -15,6 +15,13 @@ export type ModalStackItem = {
 export const modalStack: ModalStackItem[] = $state([])
 
 /**
+ * Returns whether a modal is active.
+ */
+export const isModalActive = (): boolean => {
+  return modalStack.length > 0
+}
+
+/**
  * Opens a modal component.
  * @param component The component to open.
  * @returns A promise with the value returned.

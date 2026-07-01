@@ -1,49 +1,15 @@
 <script lang="ts">
   import Plus from '@lucide/svelte/icons/plus'
-  import DropdownButton from '../menu/DropdownButton.svelte'
   import { editor } from '../../editor/editorGame'
-  import { GameObject } from 'puchitto/objects'
-  import type { EditorEntityDefinition } from '../../editor/data/editorEntityDefinition'
-  import { onMount } from 'svelte'
-  import { selectionState } from '../../state/selectionState.svelte'
-  import { afterEditorReady } from '../../editor/helpers/loadHelpers'
-  import { recordCommand } from '../../editor/systems/history/editorHistory'
-  import { EntityCreatedCommand } from '../../editor/systems/history/commands/entityCreatedCommand'
 
-  let addObject = (type: string): void => {
-    const object = editor._entityFactory.create<GameObject>(type, editor.allocator.get(), {})
-    editor.addObject(object)
-
-    recordCommand(new EntityCreatedCommand(object))
-
-    selectionState.id = object.id
+  const onclick = (): void => {
+    editor.invokeEditorTool('tool.createEntity')
   }
-
-  let entities: EditorEntityDefinition[] = $state([])
-
-  onMount(() => {
-    afterEditorReady(async () => {
-      if (editor.gameData !== undefined) {
-        entities = editor.gameData.entities.filter((ent) => ent.type !== 'unknown')
-        return
-      }
-
-      editor.editorEventStream.on('gameDataLoaded', () => {
-        entities = editor.gameData.entities.filter((ent) => ent.type !== 'unknown')
-      })
-    })
-  })
 </script>
 
-<div class="add-button">
+<button class="add-button" {onclick}>
   <Plus size="16" />
-
-  <div class="dropdown">
-    {#each entities as entity (entity.type)}
-      <DropdownButton clicked={() => addObject(entity.type)}>{entity.displayName}</DropdownButton>
-    {/each}
-  </div>
-</div>
+</button>
 
 <style>
   .add-button {
@@ -53,27 +19,13 @@
     padding: 2px;
     border-radius: 4px;
     position: relative;
+    background: inherit;
+    border: none;
+    color: var(--text-main);
+    cursor: pointer;
   }
 
   .add-button:hover {
     background: var(--bg-hover);
-  }
-
-  .add-button:hover .dropdown {
-    display: flex;
-  }
-
-  .dropdown {
-    display: none;
-    flex-direction: column;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    background: var(--bg-panel);
-    border: 1px solid var(--border-color);
-    border-radius: 4px;
-    min-width: 220px;
-    z-index: 5;
-    padding: 4px 0;
   }
 </style>

@@ -4,6 +4,7 @@ import type { Game } from 'puchitto'
 import { HotkeyHandlingResult } from './hotkey/hotkeyHandlingResult'
 import type { HotkeyTool } from './hotkey/hotkeyTool'
 import { toolState } from '../../state/toolState.svelte'
+import { isModalActive } from '../../state/modalState.svelte'
 
 export class HotkeyToolSystem implements GameSystem {
   private _game: EditorGame
@@ -67,7 +68,7 @@ export class HotkeyToolSystem implements GameSystem {
       return
     }
 
-    if (!this._game.input.keysChanged) {
+    if (!this._game.input.keysChanged || this._game.input.cursorLocked || isModalActive()) {
       return
     }
 

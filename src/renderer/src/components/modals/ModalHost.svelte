@@ -5,6 +5,21 @@
   const topmost = $derived(modalStack.length < 1 ? undefined : modalStack[modalStack.length - 1])
 
   /**
+   * Captured by the svelte window.
+   * @param ev The keyboard event.
+   */
+  const onkeydown = (ev: KeyboardEvent): void => {
+    if (topmost === undefined) {
+      return
+    }
+
+    if (ev.key === 'Escape') {
+      resolveModal(topmost, undefined)
+      ev.preventDefault()
+    }
+  }
+
+  /**
    * Resolves a modal and pops it off the stack.
    * @param modal The modal.
    * @param value The value to resolve it with.
@@ -20,6 +35,8 @@
     })
   }
 </script>
+
+<svelte:window {onkeydown} />
 
 {#if topmost !== undefined}
   {@const modal = topmost}

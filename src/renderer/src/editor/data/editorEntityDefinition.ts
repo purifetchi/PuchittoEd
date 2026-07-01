@@ -16,6 +16,16 @@ export interface EditorEntityDefinition {
   displayName: string
 
   /**
+   * Is this entity a singleton?
+   */
+  singleton?: boolean
+
+  /**
+   * The group this entity belongs to.
+   */
+  group?: string
+
+  /**
    * The serialized properties this entity has.
    */
   properties?: SerializedPropertyDefinition[]
