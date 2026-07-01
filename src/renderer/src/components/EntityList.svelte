@@ -3,12 +3,16 @@
   import { editor } from '../editor/editorGame'
   import EntityListItem from './entities/EntityListItem.svelte'
   import type { GameObject } from 'puchitto/objects'
-  import { resetSelectedObject, selectionState } from '../state/selectionState.svelte'
+  import {
+    resetSelectedObject,
+    selectionState,
+    setSelectedObject
+  } from '../state/selectionState.svelte'
 
   let objects: GameObject[] = []
 
   let onclicked = (id: number): void => {
-    selectionState.id = id
+    setSelectedObject(editor.getObjectById(id))
   }
 
   let reloadObjects = (): void => {

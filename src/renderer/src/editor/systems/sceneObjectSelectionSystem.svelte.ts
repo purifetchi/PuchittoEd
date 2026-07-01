@@ -134,7 +134,6 @@ export class SceneObjectSelectionSystem implements GameSystem {
         resetSelectedObject()
       }
       this._outlinePass.selectedObjects = []
-      this._game.handles.setObject(object)
       this._lastSelectedObject = object
       return
     }
@@ -145,7 +144,6 @@ export class SceneObjectSelectionSystem implements GameSystem {
     }
 
     this._outlinePass.selectedObjects = [actualObject.threeObject]
-    this._game.handles.setObject(actualObject)
 
     this._setSelectionGizmosVisible(actualObject, true)
     this._lastSelectedObject = actualObject
