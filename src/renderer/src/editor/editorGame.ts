@@ -177,6 +177,8 @@ export class EditorGame extends Game {
   protected registerCustomEventStreamHandlers(): void {
     this.eventStream.on('objectAttached', this._createObjectGizmos.bind(this))
     this.eventStream.on('objectRemoved', this._removeObjectGizmos.bind(this))
+
+    this.eventStream.on('loaded', this._onRealmLoaded.bind(this))
   }
 
   private _createHotkeyToolSystem(): HotkeyToolSystem {
@@ -370,6 +372,20 @@ export class EditorGame extends Game {
     }
 
     this._objectGizmoMap.delete(obj.id)
+  }
+
+  /**
+   * Called when we load into the realm.
+   */
+  private _onRealmLoaded(): void {
+    let maxId = 0
+    for (const obj of this._objects) {
+      maxId = Math.max(maxId, obj.id)
+    }
+
+    this.allocator = new IdAllocator({
+      last: maxId
+    })
   }
 
   /**
