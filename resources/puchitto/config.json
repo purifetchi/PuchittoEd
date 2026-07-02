@@ -142,6 +142,25 @@
       ]
     },
     {
+      "type": "realm_info",
+      "displayName": "Realm Information",
+      "singleton": true,
+      "properties": [
+        {
+          "path": "defaultCamera",
+          "type": "entityReference",
+          "displayName": "Default Camera"
+        }
+      ],
+      "gizmos": [
+        {
+          "type": "icon",
+          "display": "always",
+          "path": "gizmos/obsolete.png"
+        }
+      ]
+    },
+    {
       "type": "default",
       "displayName": "Unknown Entity",
       "gizmos": [

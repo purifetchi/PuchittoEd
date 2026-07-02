@@ -3,7 +3,7 @@ import { AssetProtocolDataProvider } from './assetProtocolDataProvider'
 import type { EntityFactory } from 'puchitto/level'
 import { EditorCameraObject } from './entities/editorCameraObject'
 import { SceneObjectSelectionSystem } from './systems/sceneObjectSelectionSystem.svelte'
-import type { GameObject, GameObjectOptions } from 'puchitto/objects'
+import type { CameraObject, GameObject, GameObjectOptions } from 'puchitto/objects'
 import { PlaceholderObject } from './entities/placeholderObject'
 import { buildLevelJsonData } from './saving/levelBuilder'
 import type { GameData } from './data/gameData'
@@ -69,11 +69,6 @@ export class EditorGame extends Game {
    * The grid.
    */
   private _grid?: GridObject
-
-  /**
-   * The editor ID allocator.
-   */
-  private _editorIdAllocator: IdAllocator
 
   /**
    * A map from the object ids to the gizmos it contains.
@@ -166,6 +161,7 @@ export class EditorGame extends Game {
 
     factory.registerUnknownEntityHandler(this._makeUnknownEntity.bind(this))
   }
+
   /**
    * Registers the custom editor game systems.
    */
@@ -181,6 +177,28 @@ export class EditorGame extends Game {
     this.eventStream.on('loaded', this._onRealmLoaded.bind(this))
   }
 
+  protected createDefaultCamera(): CameraObject {
+    const res = this._getResolution()
+
+    this._editorCamera = this._entityFactory.create<EditorCameraObject>(
+      'editor_camera',
+      this.getNextInternalId(),
+      {
+        width: res.x,
+        height: res.y,
+        type: 'perspective',
+        fov: 90,
+        near: 0.001
+      }
+    )
+
+    return this._editorCamera
+  }
+
+  protected resolveMainCamera(): CameraObject {
+    return this._editorCamera
+  }
+
   private _createHotkeyToolSystem(): HotkeyToolSystem {
     this._toolSystem = new HotkeyToolSystem()
     registerToolsInSystem(this._toolSystem)
@@ -193,10 +211,6 @@ export class EditorGame extends Game {
    */
   private _createAllocators(): void {
     this.allocator = new IdAllocator()
-    this._editorIdAllocator = new IdAllocator({
-      last: -1,
-      skip: -1
-    })
   }
 
   /**
@@ -302,7 +316,7 @@ export class EditorGame extends Game {
         case 'icon': {
           const icon = this._entityFactory.create<IconGizmo>(
             'editor_icon_gizmo',
-            this._editorIdAllocator.get(),
+            this.getNextInternalId(),
             {}
           )
           icon.icon = `editor://puchitto/${gizmoDef.path}`
@@ -314,7 +328,7 @@ export class EditorGame extends Game {
         case 'sphere': {
           const sphere = this._entityFactory.create<SphereGizmo>(
             'editor_sphere_gizmo',
-            this._editorIdAllocator.get(),
+            this.getNextInternalId(),
             {}
           )
           sphere.path = gizmoDef.path
@@ -327,7 +341,7 @@ export class EditorGame extends Game {
         case 'mesh': {
           const mesh = this._entityFactory.create<MeshGizmo>(
             'editor_mesh_gizmo',
-            this._editorIdAllocator.get(),
+            this.getNextInternalId(),
             {}
           )
           mesh.color = gizmoDef.color
@@ -414,34 +428,16 @@ export class EditorGame extends Game {
    * Adds the editor entities to the game.
    */
   private _makeEditorEntities(): void {
-    const res = this._getResolution()
-
-    this._editorCamera = this._entityFactory.create<EditorCameraObject>(
-      'editor_camera',
-      this._editorIdAllocator.get(),
-      {
-        width: res.x,
-        height: res.y,
-        type: 'perspective',
-        fov: 90,
-        near: 0.001
-      }
-    )
-
     this._editorCamera.transform.position = new Vector3(0, 1, 0)
     this.addObject(this._editorCamera)
 
-    this._grid = this._entityFactory.create<GridObject>(
-      'editor_grid',
-      this._editorIdAllocator.get(),
-      {}
-    )
+    this._grid = this._entityFactory.create<GridObject>('editor_grid', this.getNextInternalId(), {})
     this.addObject(this._grid)
     this._grid.threeObject.rotateX(-Math.PI / 2)
 
     this.handles = this._entityFactory.create<TransformsObject>(
       'editor_transforms',
-      this._editorIdAllocator.get(),
+      this.getNextInternalId(),
       {}
     )
     this.addObject(this.handles)

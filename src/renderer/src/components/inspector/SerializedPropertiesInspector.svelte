@@ -21,6 +21,8 @@
       <BooleanProperty name={prop.displayName} {obj} path={prop.path} />
     {:else if prop.type === 'assetReference'}
       <AssetProperty name={prop.displayName} {obj} path={prop.path} />
+    {:else}
+      <div>Unknown property type {prop.type}</div>
     {/if}
   {/each}
 </InspectorPart>
