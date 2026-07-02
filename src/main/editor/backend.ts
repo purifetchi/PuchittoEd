@@ -5,6 +5,7 @@ import { Level } from 'puchitto/level'
 import { AssetOp } from '../../preload/editor/assetOps'
 import { ProjectWatcher } from './projectWatcher'
 import { AlfBuilder } from './alfBuilder'
+import { pathToFileURL } from 'url'
 
 /**
  * The backend of PuchittoEd.
@@ -152,9 +153,9 @@ export class EditorBackend {
    */
   private async _handleAssetRequest(request: Request): Promise<Response> {
     const filename = request.url.slice('asset://'.length)
-    const absolutePath = path.join(this._currentProjectFolder!, filename)
+    const absolutePath = path.join(this._currentProjectFolder!, decodeURIComponent(filename))
 
-    return net.fetch('file://' + absolutePath)
+    return net.fetch(pathToFileURL(absolutePath).toString())
   }
 
   /**
@@ -163,9 +164,9 @@ export class EditorBackend {
    */
   private async _handleEditorRequest(request: Request): Promise<Response> {
     const filename = request.url.slice('editor://'.length)
-    const absolutePath = path.join(app.getAppPath(), 'resources', filename)
+    const absolutePath = path.join(app.getAppPath(), 'resources', decodeURIComponent(filename))
 
-    return net.fetch('file://' + absolutePath)
+    return net.fetch(pathToFileURL(absolutePath).toString())
   }
 
   /**
