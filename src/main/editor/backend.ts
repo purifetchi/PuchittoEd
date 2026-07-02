@@ -198,7 +198,7 @@ export class EditorBackend {
   private async _saveLevel(level: Level): Promise<boolean> {
     const serialized = JSON.stringify(level)
     try {
-      const levelPath = path.join(this._currentProjectFolder!, 'level_new.json')
+      const levelPath = path.join(this._currentProjectFolder!, 'level.json')
       await writeFile(levelPath, serialized)
       console.log(`Realm saved to ${levelPath}`)
     } catch (e) {
