@@ -31,7 +31,7 @@
 
   const onkeydown = (ev: KeyboardEvent): void => {
     if (ev.key === 'Enter') {
-      close(searchState.state.items[selected].value)
+      close(filteredResults[selected].value)
       ev.preventDefault()
       return
     }
@@ -40,13 +40,13 @@
       selected = Math.max(0, selected - 1)
       ev.preventDefault()
     } else if (ev.key === 'ArrowDown') {
-      selected = Math.min(searchState.state.items.length - 1, selected + 1)
+      selected = Math.min(filteredResults.length - 1, selected + 1)
       ev.preventDefault()
     }
   }
 
   const onclick = (index: number): void => {
-    close(searchState.state.items[index].value)
+    close(filteredResults[index].value)
   }
 
   const onhover = (index: number): void => {
