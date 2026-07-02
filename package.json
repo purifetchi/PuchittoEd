@@ -25,6 +25,7 @@
     "@electron-toolkit/utils": "^4.0.0",
     "@lucide/svelte": "^1.3.0",
     "chokidar": "^4.0.3",
+    "fzf": "^0.5.2",
     "puchitto": "*"
   },
   "devDependencies": {

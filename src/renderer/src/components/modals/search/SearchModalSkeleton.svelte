@@ -1,5 +1,6 @@
 <script lang="ts">
   import Search from '@lucide/svelte/icons/search'
+  import { Fzf } from 'fzf'
   import { searchState, type SearchItem } from '../../../state/searchState.svelte'
   import SearchResultItem from './SearchResultItem.svelte'
 
@@ -15,6 +16,12 @@
     input.focus()
   })
 
+  const fzf = $derived(
+    new Fzf(searchState.state.items, {
+      selector: (item) => `${item.name} ${item.info}`
+    })
+  )
+
   $effect(() => {
     selected = 0
 
@@ -23,10 +30,7 @@
       return
     }
 
-    // TODO: Fuzzy find.
-    filteredResults = searchState.state.items.filter(
-      (i) => i.name.indexOf(searchTerm) > -1 || i.info.indexOf(searchTerm) > -1
-    )
+    filteredResults = fzf.find(searchTerm).map((f) => f.item)
   })
 
   const onkeydown = (ev: KeyboardEvent): void => {
