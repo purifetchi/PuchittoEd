@@ -1,5 +1,5 @@
 import { app, BrowserWindow, dialog, ipcMain, net, protocol } from 'electron'
-import { copyFile, readdir, writeFile } from 'fs/promises'
+import { copyFile, lstat, readdir, writeFile } from 'fs/promises'
 import path, { join } from 'path'
 import { Level } from 'puchitto/level'
 import { AssetOp } from '../../preload/editor/assetOps'
@@ -221,7 +221,15 @@ export class EditorBackend {
     const builder = new AlfBuilder()
     const files = await readdir(this._currentProjectFolder!)
     for (const file of files) {
-      builder.addFile(join(this._currentProjectFolder!, file), file)
+      const path = join(this._currentProjectFolder!, file)
+      const stat = await lstat(path)
+
+      // We do not support nesting, for now.
+      if (stat.isDirectory()) {
+        continue
+      }
+
+      builder.addFile(path, file)
     }
 
     const result = await dialog.showSaveDialog({
