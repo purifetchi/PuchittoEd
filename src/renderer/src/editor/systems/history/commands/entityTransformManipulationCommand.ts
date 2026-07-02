@@ -31,7 +31,7 @@ export const packTransform = (entity: GameObject): HistoryTransform => {
  */
 const transformsEqual = (l: HistoryTransform, r: HistoryTransform): boolean => {
   const equals =
-    l.position.equals(r.position) && l.rotation.equals(r.rotation) && l.scale.equals(l.scale)
+    l.position.equals(r.position) && l.rotation.equals(r.rotation) && l.scale.equals(r.scale)
 
   return equals
 }
@@ -54,7 +54,7 @@ export const recordTransformManipulation = (entity: GameObject, callback: () => 
 }
 
 /**
- * A command recorded when manipulation an entity's transform.
+ * A command recorded when manipulating an entity's transform.
  */
 export class EntityTransformManipulationCommand extends HistoryCommand {
   /**
