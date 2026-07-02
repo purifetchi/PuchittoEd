@@ -5,7 +5,7 @@
 <div class="window">
   {@render children()}
   <div class="final-row">
-    <button onclick={close(true)}>OK</button>
+    <button onclick={() => close(true)}>OK</button>
   </div>
 </div>
 
