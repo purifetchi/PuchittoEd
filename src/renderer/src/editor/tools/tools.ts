@@ -3,6 +3,7 @@ import { UndoTool } from '../systems/history/tools/undoTool'
 import { registerTool } from '../systems/hotkey/hotkeyToolRegistrar'
 import { CreateEntityTool } from './createEntityTool'
 import { DeleteTool } from './deleteTool'
+import { FindEntityTool } from './findEntityTool'
 import { LookAtObjectTool } from './lookAtObjectTool'
 
 /**
@@ -14,4 +15,5 @@ export const registerTools = (): void => {
   registerTool<LookAtObjectTool>(LookAtObjectTool)
   registerTool<DeleteTool>(DeleteTool)
   registerTool<CreateEntityTool>(CreateEntityTool)
+  registerTool<FindEntityTool>(FindEntityTool)
 }
