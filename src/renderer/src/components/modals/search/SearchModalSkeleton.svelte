@@ -3,13 +3,20 @@
   import { Fzf } from 'fzf'
   import { searchState, type SearchItem } from '../../../state/searchState.svelte'
   import SearchResultItem from './SearchResultItem.svelte'
+  import SearchGroupPill from './SearchGroupPill.svelte'
 
   let { close } = $props()
 
   let searchTerm: string = $state('')
+  let selectedGroup: string | undefined = $state(searchState.state?.lockedGroup)
   let selected = $state(0)
   let input: HTMLInputElement
 
+  const eligibleItems = $derived(
+    selectedGroup !== undefined
+      ? searchState.state.items.filter((i) => i.group == selectedGroup)
+      : searchState.state.items
+  )
   let filteredResults: SearchItem[] = $state([])
 
   $effect(() => {
@@ -17,7 +24,7 @@
   })
 
   const fzf = $derived(
-    new Fzf(searchState.state.items, {
+    new Fzf(eligibleItems, {
       selector: (item) => `${item.name} ${item.info}`
     })
   )
@@ -26,7 +33,7 @@
     selected = 0
 
     if (searchTerm.length === 0) {
-      filteredResults = searchState.state.items
+      filteredResults = eligibleItems
       return
     }
 
@@ -56,6 +63,14 @@
   const onhover = (index: number): void => {
     selected = index
   }
+
+  const onfilterchanged = (filter?: string): void => {
+    if (filter === undefined || filter === 'all') {
+      selectedGroup = undefined
+    } else {
+      selectedGroup = filter
+    }
+  }
 </script>
 
 <div class="search-container" role="dialog">
@@ -63,11 +78,40 @@
     <Search size="15" />
     <input type="text" placeholder="Search" {onkeydown} bind:this={input} bind:value={searchTerm} />
   </div>
+  {#if searchState.state?.groups !== undefined}
+    <div class="groups">
+      {#if searchState.state.lockedGroup !== undefined}
+        <SearchGroupPill name={searchState.state.lockedGroup} {onfilterchanged} selected locked />
+      {:else}
+        <SearchGroupPill
+          name="all"
+          selected={selectedGroup === undefined}
+          {onfilterchanged}
+          locked={false}
+        />
+        {#each searchState.state.groups as group (group)}
+          <SearchGroupPill
+            name={group}
+            selected={group === selectedGroup}
+            {onfilterchanged}
+            locked={false}
+          />
+        {/each}
+      {/if}
+    </div>
+  {/if}
   <div class="search-items" role="list">
-    {#if searchState.state !== undefined}
+    {#if searchState.state !== undefined && filteredResults.length > 0}
       {#each filteredResults as item, index (index)}
         <SearchResultItem {item} {index} {onhover} {onclick} selected={selected == index} />
       {/each}
+    {:else}
+      <div class="empty">
+        <div class="glass">
+          <Search size="20" />
+        </div>
+        <div>no items found</div>
+      </div>
     {/if}
   </div>
 </div>
@@ -80,6 +124,19 @@
     height: fit-content;
     overflow: hidden;
     width: 440px;
+    max-height: 50vh;
+
+    display: flex;
+    flex-direction: column;
+  }
+
+  .groups {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    align-items: center;
+    padding: 7px 13px;
+    border-bottom: 1px solid var(--border-color);
   }
 
   .search-box {
@@ -87,6 +144,7 @@
     gap: 10px;
     align-items: center;
     padding: 11px 13px;
+    border-bottom: 1px solid var(--border-color);
   }
 
   input {
@@ -100,11 +158,27 @@
     outline: none;
   }
 
-  .search-box {
-    border-bottom: 1px solid var(--border-color);
-  }
-
   .search-items {
     padding: 5px;
+
+    overflow-y: auto;
+    flex: 1;
+    min-height: 0;
+  }
+
+  .search-items .empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 15px;
+
+    font-size: 11px;
+
+    color: var(--text-muted);
+  }
+
+  .search-items .empty .glass {
+    opacity: 0.4;
   }
 </style>

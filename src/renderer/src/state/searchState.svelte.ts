@@ -15,6 +15,9 @@ export const searchState = $state({
  */
 export type SearchState = {
   items: SearchItem[]
+  groups?: string[]
+
+  lockedGroup?: string
 }
 
 /**
@@ -47,9 +50,33 @@ export interface SearchItem {
  * @param items The items to search through.
  * @returns The selected item.
  */
-export const openSearch = <TData>(items: SearchItem[]): Promise<TData | undefined> => {
+export const openSearch = <TData>(
+  items: SearchItem[],
+  opts?: {
+    forceGroup: string
+  }
+): Promise<TData | undefined> => {
+  const potentialGroups = items.filter((i) => i.group !== undefined).map((i) => i.group)
+  let groups: string[] | undefined = undefined
+  if (potentialGroups.length > 0) {
+    groups = []
+
+    for (const group of potentialGroups) {
+      const normalized = group.toLowerCase()
+      const exists = groups.find((g) => g === normalized)
+
+      if (exists) {
+        continue
+      }
+
+      groups.push(normalized)
+    }
+  }
+
   searchState.state = {
-    items
+    items,
+    groups,
+    lockedGroup: opts?.forceGroup
   }
 
   let resolver: (value: TData | undefined) => void

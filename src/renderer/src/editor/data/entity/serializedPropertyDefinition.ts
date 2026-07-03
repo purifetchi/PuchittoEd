@@ -9,6 +9,7 @@ export type PropertyType =
   | 'color'
   | 'entityReference'
   | 'assetReference'
+  | 'enum'
 
 /**
  * Definition for a single serialized property.

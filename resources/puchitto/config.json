@@ -149,7 +149,10 @@
         {
           "path": "defaultCamera",
           "type": "entityReference",
-          "displayName": "Default Camera"
+          "displayName": "Default Camera",
+          "hints": {
+            "type": "camera"
+          }
         }
       ],
       "gizmos": [
