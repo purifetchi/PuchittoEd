@@ -44,7 +44,7 @@ export class BringObjectToViewTool extends HotkeyTool {
 
     const camera = game.editorCamera
 
-    recordTransformManipulation(camera, () => {
+    recordTransformManipulation(this._object, () => {
       this._object.transform.position.copy(camera.transform.position)
       this._object.transform.rotation.copy(camera.transform.rotation)
     })
