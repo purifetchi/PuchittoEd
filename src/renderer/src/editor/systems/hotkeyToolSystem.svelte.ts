@@ -5,6 +5,7 @@ import { HotkeyHandlingResult } from './hotkey/hotkeyHandlingResult'
 import type { HotkeyTool } from './hotkey/hotkeyTool'
 import { toolState } from '../../state/toolState.svelte'
 import { isModalActive } from '../../state/modalState.svelte'
+import type { HotkeyConfig } from './hotkey/hotkeyConfig'
 
 export class HotkeyToolSystem implements GameSystem {
   private _game: EditorGame
@@ -72,13 +73,32 @@ export class HotkeyToolSystem implements GameSystem {
       return
     }
 
+    let selectedTool: HotkeyTool | undefined = undefined
+    let selectedToolConfig: HotkeyConfig
     for (const tool of this._tools) {
-      if (this.validate(tool)) {
-        tool.setup(this._game)
-        toolState.tool = tool.name
-        this._activeTool = tool
-        break
+      if (selectedTool !== undefined) {
+        const cfg = tool.config
+
+        // The tool with the highest modifier count wins.
+        if (cfg.key !== selectedToolConfig.key) {
+          continue
+        }
+
+        if (cfg.modifiers.length < selectedToolConfig.modifiers.length) {
+          continue
+        }
       }
+
+      if (this.validate(tool)) {
+        selectedTool = tool
+        selectedToolConfig = tool.config
+      }
+    }
+
+    if (selectedTool !== undefined) {
+      selectedTool.setup(this._game)
+      toolState.tool = selectedTool.name
+      this._activeTool = selectedTool
     }
   }
 
