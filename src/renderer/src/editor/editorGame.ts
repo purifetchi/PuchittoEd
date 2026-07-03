@@ -23,6 +23,7 @@ import { callEditorReadyCallbacks } from './helpers/loadHelpers'
 import { HotkeyToolSystem } from './systems/hotkeyToolSystem.svelte'
 import { EditorHistory } from './systems/history/editorHistory'
 import { registerToolsInSystem } from './systems/hotkey/hotkeyToolRegistrar'
+import { resetModifiedFlag } from '../state/projectState.svelte'
 
 /**
  * The backing class for the editor, extending a normal Puchitto game.
@@ -217,6 +218,8 @@ export class EditorGame extends Game {
    * Creates a new scene.
    */
   newScene(): void {
+    resetModifiedFlag()
+
     this.history.reset()
     this._createAllocators()
 
@@ -241,6 +244,8 @@ export class EditorGame extends Game {
   async saveLevel(): Promise<void> {
     const data = buildLevelJsonData(editor)
     await window.puchittoAPI.saveLevel(data)
+
+    resetModifiedFlag()
   }
 
   /**

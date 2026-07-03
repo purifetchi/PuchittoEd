@@ -1,3 +1,4 @@
+import { setModifiedFlag } from '../../../state/projectState.svelte'
 import { editor, type EditorGame } from '../../editorGame'
 import type { HistoryCommand } from './historyCommand'
 
@@ -7,7 +8,7 @@ import type { HistoryCommand } from './historyCommand'
  */
 export const recordCommand = (command: HistoryCommand): void => {
   editor.history.record(command)
-  console.log(`recorded ${command}`)
+  setModifiedFlag()
 }
 
 /**

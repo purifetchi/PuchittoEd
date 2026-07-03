@@ -51,10 +51,20 @@
   onMount(() => {
     window.puchittoAPI.onProjectSelected((path) => {
       projectState.project = path
-      document.title = `PuchittoEd - ${path}`
     })
 
     tree = getToolTree()
+  })
+
+  $effect(() => {
+    if (projectState.project.length > 0) {
+      let branding = 'PuchittoEd'
+      if (projectState.modified) {
+        branding += '*'
+      }
+
+      document.title = `${branding} - ${projectState.project}`
+    }
   })
 </script>
 
