@@ -1,8 +1,7 @@
 import type { Game } from 'puchitto'
-import type { Level, LevelEntityDefinition, LightData } from 'puchitto/level'
+import type { Level, LevelEntityDefinition } from 'puchitto/level'
 import type { GameObject } from 'puchitto/objects'
 import type { SerializedMetadataProps } from 'puchitto/serialization'
-import { AmbientLight, Color } from 'three'
 import { PlaceholderObject } from '../entities/placeholderObject'
 
 /**
@@ -12,36 +11,10 @@ import { PlaceholderObject } from '../entities/placeholderObject'
  */
 export const buildLevelJsonData = (game: Game): Level => {
   const ents = buildEntityDefinitions(game)
-  const ambient = buildAmbientInformation(game)
 
   return {
     version: 2,
-    ambient,
     ents
-  }
-}
-
-/**
- * Builds the ambient light information from the game.
- * @param game The game for which we're building the ambient light information.
- * @returns The built ambient light information.
- */
-export const buildAmbientInformation = (game: Game): LightData => {
-  let ambientLight: AmbientLight | undefined
-
-  // TODO: Do not traverse, instead we should somehow store it on the game.
-  game._scene.traverse((obj) => {
-    if (obj instanceof AmbientLight) {
-      ambientLight = obj as AmbientLight
-    }
-  })
-
-  const color = ambientLight?.color ?? new Color('white')
-  const intensity = ambientLight?.intensity ?? 1
-
-  return {
-    color: [color.r, color.g, color.b],
-    intensity
   }
 }
 
@@ -52,7 +25,7 @@ export const buildAmbientInformation = (game: Game): LightData => {
  */
 export const buildEntityDefinitions = (game: Game): LevelEntityDefinition[] => {
   return game._objects
-    .filter((obj) => obj.tag !== 'internal' && obj.tag !== 'editor')
+    .filter((obj) => !obj.isLocalObject)
     .map((obj) => {
       let data: Record<string, unknown>
       let type: string
