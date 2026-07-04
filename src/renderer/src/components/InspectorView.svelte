@@ -26,18 +26,18 @@
     <InspectorPart>
       <Vector3Property
         name="Position"
-        accessor={() => obj.threeObject.position}
-        setter={(x, y, z) => obj.threeObject.position.set(x, y, z)}
+        accessor={() => obj.transform.position}
+        setter={(x, y, z) => obj.transform.position.set(x, y, z)}
       />
       <Vector3Property
         name="Rotation"
-        accessor={() => obj.threeObject.rotation}
-        setter={(x, y, z) => obj.threeObject.rotation.set(x, y, z)}
+        accessor={() => obj.transform.eulerDeg}
+        setter={(x, y, z) => obj.transform.setRotationFromDegrees(x, y, z)}
       />
       <Vector3Property
         name="Scale"
-        accessor={() => obj.threeObject.scale}
-        setter={(x, y, z) => obj.threeObject.scale.set(x, y, z)}
+        accessor={() => obj.transform.scale}
+        setter={(x, y, z) => obj.transform.scale.set(x, y, z)}
       />
     </InspectorPart>
     <ObjectInspector {obj} />
