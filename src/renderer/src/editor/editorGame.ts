@@ -3,7 +3,7 @@ import { AssetProtocolDataProvider } from './assetProtocolDataProvider'
 import type { EntityFactory } from 'puchitto/level'
 import { EditorCameraObject } from './entities/editorCameraObject'
 import { SceneObjectSelectionSystem } from './systems/sceneObjectSelectionSystem.svelte'
-import type { CameraObject, GameObject, GameObjectOptions } from 'puchitto/objects'
+import { CameraObject, type GameObject, type GameObjectOptions, type RealmInfoObject } from 'puchitto/objects'
 import { PlaceholderObject } from './entities/placeholderObject'
 import { buildLevelJsonData } from './saving/levelBuilder'
 import type { GameData } from './data/gameData'
@@ -212,6 +212,39 @@ export class EditorGame extends Game {
    */
   private _createAllocators(): void {
     this.allocator = new IdAllocator()
+  }
+
+  /**
+   * Resolves the rendering camera for the camera view mode.
+   */
+  private _resolveCameraModeCamera(): CameraObject | undefined {
+    const realmInfos = this.getObjectsOfType('realm_info')
+    if (realmInfos.length < 1) {
+      return undefined
+    }
+
+    const realmInfo = realmInfos[0] as RealmInfoObject
+    const cameraObject = this.getObjectById(realmInfo.defaultCamera)
+
+    if (cameraObject === undefined || !(cameraObject instanceof CameraObject)) {
+      return undefined
+    }
+
+    return cameraObject
+  }
+
+  /**
+   * Sets the view mode of the editor.
+   * @param mode The view mode of the editor.
+   */
+  setViewMode(mode: 'editor' | 'camera'): void {
+    if (mode === 'editor') {
+      this.setObjectEditorVisibility(true)
+      this.setMainCamera(this.editorCamera)
+    } else {
+      this.setObjectEditorVisibility(false)
+      this.setMainCamera(this._resolveCameraModeCamera())
+    }
   }
 
   /**

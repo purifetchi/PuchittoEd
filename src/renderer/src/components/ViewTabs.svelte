@@ -1,16 +1,25 @@
 <script lang="ts">
   import Camera from '@lucide/svelte/icons/camera'
   import Globe from '@lucide/svelte/icons/globe'
+  import { projectState, setViewMode } from '../state/projectState.svelte'
 </script>
 
 <div class="view-tabs">
-  <button class="tab active">
+  <button
+    class="tab"
+    class:active={projectState.viewMode === 'editor'}
+    onclick={() => setViewMode('editor')}
+  >
     <span class="icon">
       <Globe size="14" />
     </span>
     <span>Editor</span>
   </button>
-  <button class="tab">
+  <button
+    class="tab"
+    class:active={projectState.viewMode === 'camera'}
+    onclick={() => setViewMode('camera')}
+  >
     <span class="icon">
       <Camera size="14" />
     </span>

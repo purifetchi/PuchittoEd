@@ -51,6 +51,7 @@
   onMount(() => {
     window.puchittoAPI.onProjectSelected((path) => {
       projectState.project = path
+      projectState.viewMode = 'editor'
     })
 
     tree = getToolTree()
