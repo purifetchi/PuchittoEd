@@ -57,7 +57,10 @@
         {
           "path": "path",
           "type": "assetReference",
-          "displayName": "Asset"
+          "displayName": "Asset",
+          "hints": {
+            "type": "mesh"
+          }
         },
         {
           "path": "clamp",

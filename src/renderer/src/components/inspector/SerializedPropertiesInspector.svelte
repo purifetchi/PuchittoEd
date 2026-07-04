@@ -5,7 +5,7 @@
   import ColorProperty from './properties/ColorProperty.svelte'
   import InspectorPart from './InspectorPart.svelte'
   import BooleanProperty from './properties/BooleanProperty.svelte'
-  import AssetProperty from './properties/AssetProperty.svelte'
+  import AssetReferenceProperty from './properties/AssetReferenceProperty.svelte'
   import EntityReferenceProperty from './properties/EntityReferenceProperty.svelte'
 
   let { obj, props }: { obj: GameObject; props?: SerializedPropertyDefinition[] | undefined } =
@@ -21,7 +21,7 @@
     {:else if prop.type === 'boolean'}
       <BooleanProperty name={prop.displayName} {obj} path={prop.path} />
     {:else if prop.type === 'assetReference'}
-      <AssetProperty name={prop.displayName} {obj} path={prop.path} />
+      <AssetReferenceProperty name={prop.displayName} {obj} path={prop.path} hints={prop.hints} />
     {:else if prop.type === 'entityReference'}
       <EntityReferenceProperty name={prop.displayName} {obj} path={prop.path} hints={prop.hints} />
     {:else}
