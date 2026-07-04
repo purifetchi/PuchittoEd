@@ -14,7 +14,7 @@
   let obj: GameObject | undefined = $derived(editor.getObjectById(selectionState.id))
 </script>
 
-<div>
+<div class="container">
   {#if obj !== undefined && !obj.isLocalObject}
     <ObjectProperties {obj} />
     <InspectorPartHeader>
@@ -50,5 +50,43 @@
     <InspectorPart>
       <ObjectAntics id={selectionState.id} />
     </InspectorPart>
+  {:else}
+    <div class="empty">
+      <div>No entity selected.</div>
+      <div class="hint">Select an entity to edit it here!</div>
+    </div>
   {/if}
 </div>
+
+<style>
+  .container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .empty {
+    flex: 1;
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    color: var(--text-muted);
+
+    font-size: 12px;
+  }
+
+  .empty .hint {
+    font-size: 10px;
+    text-align: center;
+
+    font-style: italic;
+  }
+
+  .empty .icon {
+    opacity: 0.3;
+  }
+</style>
