@@ -99,6 +99,10 @@
     color: var(--text-light);
   }
 
+  .active:hover {
+    background: var(--accent);
+  }
+
   .tool-divider {
     width: 1px;
     background: var(--border-color);

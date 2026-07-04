@@ -4,6 +4,7 @@
   import EntityList from './EntityList.svelte'
   import InspectorView from './InspectorView.svelte'
   import PuchittoView from './PuchittoView.svelte'
+  import ViewTabs from './ViewTabs.svelte'
   import Panel from './workspace/Panel.svelte'
   import PanelHeader from './workspace/PanelHeader.svelte'
 </script>
@@ -17,6 +18,7 @@
     <EntityList />
   </Panel>
   <Panel flex={1}>
+    <ViewTabs />
     <PuchittoView />
     <AssetBrowserView />
   </Panel>

@@ -25,10 +25,16 @@
 
   .entity-list-item:hover {
     background: var(--bg-hover);
+    color: var(--text-light);
     cursor: pointer;
   }
 
   .entity-list-item.selected {
     background: var(--bg-active);
+    color: var(--text-light);
+  }
+
+  .entity-list-item.selected:hover {
+    background: var(--accent);
   }
 </style>
