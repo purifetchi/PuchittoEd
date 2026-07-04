@@ -135,6 +135,16 @@
     {
       "type": "camera",
       "displayName": "Camera",
+      "properties": [
+        {
+          "path": "type",
+          "type": "enum",
+          "displayName": "Camera Type",
+          "hints": {
+            "values": ["perspective", "orthographic"]
+          }
+        }
+      ],
       "gizmos": [
         {
           "type": "mesh",

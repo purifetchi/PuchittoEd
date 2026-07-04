@@ -19,5 +19,6 @@
     display: flex;
     gap: 5px;
     align-items: center;
+    position: relative;
   }
 </style>

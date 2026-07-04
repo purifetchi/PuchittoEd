@@ -7,6 +7,7 @@
   import BooleanProperty from './properties/BooleanProperty.svelte'
   import AssetReferenceProperty from './properties/AssetReferenceProperty.svelte'
   import EntityReferenceProperty from './properties/EntityReferenceProperty.svelte'
+  import EnumProperty from './properties/EnumProperty.svelte'
 
   let { obj, props }: { obj: GameObject; props?: SerializedPropertyDefinition[] | undefined } =
     $props()
@@ -24,6 +25,8 @@
       <AssetReferenceProperty name={prop.displayName} {obj} path={prop.path} hints={prop.hints} />
     {:else if prop.type === 'entityReference'}
       <EntityReferenceProperty name={prop.displayName} {obj} path={prop.path} hints={prop.hints} />
+    {:else if prop.type === 'enum'}
+      <EnumProperty name={prop.displayName} {obj} path={prop.path} hints={prop.hints} />
     {:else}
       <div>Unknown property type {prop.type}</div>
     {/if}
