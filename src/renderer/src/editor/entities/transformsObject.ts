@@ -99,6 +99,7 @@ export class TransformsObject extends GameObject {
       return
     }
 
+    this._doDistanceScale()
     this._switchTools()
 
     if (this._currentAxis !== undefined) {
@@ -151,6 +152,22 @@ export class TransformsObject extends GameObject {
     } else {
       this.transform.euler = this.BASE_ROT
     }
+  }
+
+  /**
+   * Does the distance-based scaling of the gizmos.
+   */
+  private _doDistanceScale(): void {
+    // Calculate the distance between the editor camera and the transforms
+    const baseline = 0.5
+    const distance = this.transform.position.distanceTo(this.game._camera.transform.position)
+
+    let scale = baseline
+    if (distance > 4) {
+      scale += (distance - 4) / 20
+    }
+
+    this.transform.setUniformScale(scale)
   }
 
   /**
