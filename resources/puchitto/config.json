@@ -177,6 +177,76 @@
       ]
     },
     {
+      "type": "env_background",
+      "displayName": "Background",
+      "singleton": true,
+      "properties": [
+        {
+          "path": "type",
+          "type": "enum",
+          "displayName": "Background Type",
+          "hints": {
+            "values": ["css", "cubeSkybox"]
+          }
+        },
+        {
+          "path": "skyboxPosX",
+          "type": "assetReference",
+          "displayName": "Skybox +X",
+          "hints": {
+            "type": "texture"
+          }
+        },
+        {
+          "path": "skyboxNegX",
+          "type": "assetReference",
+          "displayName": "Skybox -X",
+          "hints": {
+            "type": "texture"
+          }
+        },
+        {
+          "path": "skyboxPosY",
+          "type": "assetReference",
+          "displayName": "Skybox +Y",
+          "hints": {
+            "type": "texture"
+          }
+        },
+        {
+          "path": "skyboxNegY",
+          "type": "assetReference",
+          "displayName": "Skybox -Y",
+          "hints": {
+            "type": "texture"
+          }
+        },
+        {
+          "path": "skyboxPosZ",
+          "type": "assetReference",
+          "displayName": "Skybox +Z",
+          "hints": {
+            "type": "texture"
+          }
+        },
+        {
+          "path": "skyboxNegZ",
+          "type": "assetReference",
+          "displayName": "Skybox -Z",
+          "hints": {
+            "type": "texture"
+          }
+        }
+      ],
+      "gizmos": [
+        {
+          "type": "icon",
+          "display": "always",
+          "path": "gizmos/obsolete.png"
+        }
+      ]
+    },
+    {
       "type": "default",
       "displayName": "Unknown Entity",
       "gizmos": [
