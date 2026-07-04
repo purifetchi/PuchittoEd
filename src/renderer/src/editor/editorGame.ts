@@ -244,6 +244,9 @@ export class EditorGame extends Game {
     } else {
       this.setObjectEditorVisibility(false)
       this.setMainCamera(this._resolveCameraModeCamera())
+
+      const res = this._getResolution()
+      this._camera.resize(res.width, res.height)
     }
   }
 
