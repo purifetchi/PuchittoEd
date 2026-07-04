@@ -15,7 +15,7 @@
 </script>
 
 <div>
-  {#if obj !== undefined}
+  {#if obj !== undefined && !obj.isLocalObject}
     <ObjectProperties {obj} />
     <InspectorPartHeader>
       <div slot="icon">

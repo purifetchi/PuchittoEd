@@ -16,7 +16,7 @@
   }
 
   let reloadObjects = (): void => {
-    objects = [...editor._objects.filter((obj) => obj.tag !== 'editor' && obj.tag !== 'internal')]
+    objects = [...editor._objects.filter((obj) => !obj.isLocalObject)]
   }
 
   onMount(() => {
@@ -49,7 +49,8 @@
 <style>
   .entity-list {
     padding-top: 5px;
-    height: 100%;
-    overflow-y: scroll;
+    min-height: 0;
+    flex: 1;
+    overflow-y: auto;
   }
 </style>
