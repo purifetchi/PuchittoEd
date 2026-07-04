@@ -214,23 +214,42 @@ export class TransformsObject extends GameObject {
    * @param delta The delta movement vector between the last two projected points.
    */
   private _doPositionTransform(delta: Vector3): void {
+    let direction: Vector3
+    let length: number = 0
     switch (this._currentAxis) {
       case 'x':
-        this._selectedObject.transform.position.x += delta.x
+        direction =
+          transformsState.space === 'local'
+            ? this._selectedObject.transform.right
+            : new Vector3(1, 0, 0)
+
+        length = delta.x
         break
 
       case 'y':
-        this._selectedObject.transform.position.y += delta.y
+        direction =
+          transformsState.space === 'local'
+            ? this._selectedObject.transform.up
+            : new Vector3(0, 1, 0)
+
+        length = delta.y
         break
 
       case 'z':
-        this._selectedObject.transform.position.z += delta.z
+        direction =
+          transformsState.space === 'local'
+            ? this._selectedObject.transform.forward
+            : new Vector3(0, 0, 1)
+
+        length = delta.z
         break
 
       case 'all':
         this._selectedObject.transform.position.add(delta)
-        break
+        return
     }
+
+    this._selectedObject.transform.position.add(direction.multiplyScalar(length))
   }
 
   /**
