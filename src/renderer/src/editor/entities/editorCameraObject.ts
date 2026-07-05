@@ -32,23 +32,23 @@ export class EditorCameraObject extends CameraObject {
 
     // Rotate the camera based on the delta!
     const delta = this.game.input.mouseDelta.multiplyScalar(0.5 * dt)
-    this.threeObject.rotateX(-delta.y)
+    this.threeObject.rotateX(delta.y)
     this.threeObject.rotateOnWorldAxis(WORLD_Y_AXIS, -delta.x)
 
     if (this.game.input.keyDown('KeyW')) {
-      this.threeObject.translateZ(-7 * dt * movementMultiplier)
-    }
-
-    if (this.game.input.keyDown('KeyS')) {
       this.threeObject.translateZ(7 * dt * movementMultiplier)
     }
 
+    if (this.game.input.keyDown('KeyS')) {
+      this.threeObject.translateZ(-7 * dt * movementMultiplier)
+    }
+
     if (this.game.input.keyDown('KeyA')) {
-      this.threeObject.translateX(-7 * dt * movementMultiplier)
+      this.threeObject.translateX(7 * dt * movementMultiplier)
     }
 
     if (this.game.input.keyDown('KeyD')) {
-      this.threeObject.translateX(7 * dt * movementMultiplier)
+      this.threeObject.translateX(-7 * dt * movementMultiplier)
     }
   }
 }
