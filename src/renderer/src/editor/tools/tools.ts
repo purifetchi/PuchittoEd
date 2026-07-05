@@ -6,6 +6,7 @@ import { CreateEntityTool } from './createEntityTool'
 import { DeleteTool } from './deleteTool'
 import { FindEntityTool } from './findEntityTool'
 import { LookAtObjectTool } from './lookAtObjectTool'
+import { SaveTool } from './saveTool'
 
 /**
  * Registers all the tools.
@@ -18,4 +19,5 @@ export const registerTools = (): void => {
   registerTool<DeleteTool>(DeleteTool)
   registerTool<CreateEntityTool>(CreateEntityTool)
   registerTool<FindEntityTool>(FindEntityTool)
+  registerTool<SaveTool>(SaveTool)
 }

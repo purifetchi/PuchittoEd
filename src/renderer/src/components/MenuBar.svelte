@@ -32,8 +32,8 @@
     }
   }
 
-  const saveLevel = async (): Promise<void> => {
-    await editor.saveLevel()
+  const saveLevel = (): void => {
+    editor.invokeEditorTool('tool.save')
   }
 
   const exportLevel = async (): Promise<void> => {
