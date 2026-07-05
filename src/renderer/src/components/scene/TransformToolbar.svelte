@@ -7,6 +7,7 @@
   import Object from '@lucide/svelte/icons/box'
   import type { Space, Tool } from '../../editor/entities/transformsObject'
   import { transformsState } from '../../state/transformsState.svelte'
+  import { projectState } from '../../state/projectState.svelte'
 
   let setTool = (tool: Tool): void => {
     transformsState.tool = tool
@@ -17,7 +18,7 @@
   }
 </script>
 
-<div class="toolbar">
+<div class="toolbar" class:visible={projectState.viewMode === 'editor'}>
   <button
     class="tool-button"
     class:active={transformsState.tool === 'position'}
@@ -63,10 +64,11 @@
 
 <style>
   .toolbar {
+    display: none;
+
     position: absolute;
     top: 20px;
     left: 20px;
-    display: flex;
     background: var(--bg-header);
     border: 1px solid var(--border-color);
     border-radius: 4px;
@@ -75,6 +77,10 @@
     align-items: center;
 
     z-index: 999;
+  }
+
+  .toolbar.visible {
+    display: flex;
   }
 
   .tool-button {
