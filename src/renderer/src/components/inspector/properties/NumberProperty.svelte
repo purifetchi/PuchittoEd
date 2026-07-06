@@ -13,7 +13,7 @@
 
   $effect(() => {
     accessor = () => obj[path]
-    setter = (value: number) => (obj[path] = value)
+    setter = (value: number) => (obj[path] = Number(value))
 
     value = accessor()
   })

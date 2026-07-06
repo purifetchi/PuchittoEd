@@ -143,6 +143,16 @@
           "hints": {
             "values": ["perspective", "orthographic"]
           }
+        },
+        {
+          "path": "near",
+          "type": "number",
+          "displayName": "Near clip plane"
+        },
+        {
+          "path": "far",
+          "type": "number",
+          "displayName": "Far clip plane"
         }
       ],
       "gizmos": [
