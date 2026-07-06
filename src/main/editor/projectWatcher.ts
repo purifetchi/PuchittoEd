@@ -1,6 +1,7 @@
 import chokidar, { FSWatcher } from 'chokidar'
 import { AssetOp } from '../../preload/editor/assetOps'
 import path from 'path'
+import { stat } from 'fs/promises'
 
 /**
  * Type used for sending asset ops to the renderer.
@@ -43,12 +44,15 @@ export class ProjectWatcher {
    * Handles the addition of an asset.
    * @param asset The path to the asset.
    */
-  private _addAsset(asset: string): void {
-    const filename = path.basename(asset)
+  private async _addAsset(asset: string): Promise<void> {
+    const ent = await stat(asset)
     this._sender([
       {
         type: 'create',
-        name: filename
+        name: {
+          path: asset,
+          type: ent.isDirectory() ? 'folder' : 'file'
+        }
       }
     ])
   }

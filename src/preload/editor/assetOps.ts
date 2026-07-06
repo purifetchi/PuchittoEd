@@ -3,7 +3,7 @@
  */
 export interface AssetCreate {
   type: 'create'
-  name: string
+  name: Asset
 }
 
 /**
@@ -26,8 +26,13 @@ export interface AssetClearAll {
  */
 export interface AssetBulkLoad {
   type: 'bulkLoad'
-  names: string[]
+  names: Asset[]
 }
+
+/**
+ * A singular asset imported.
+ */
+export type Asset = { type: 'file' | 'folder'; path: string }
 
 /**
  * A union type representing all possible operations that can be performed

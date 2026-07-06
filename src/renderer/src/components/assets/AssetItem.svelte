@@ -1,19 +1,35 @@
 <script lang="ts">
+  import type { AssetNode } from '../../state/assetState.svelte'
   import AssetThumbnail from './AssetThumbnail.svelte'
 
-  let { name }: { name: string } = $props()
+  let { node, onAssetSelected }: { node: AssetNode; onAssetSelected: (node: AssetNode) => void } =
+    $props()
+
+  const onclick = (): void => {
+    onAssetSelected(node)
+  }
+
+  const onkeydown = (): void => {}
 
   let ondragstart = (ev: DragEvent): void => {
-    ev.dataTransfer.setData('x-puchitto/asset', name)
+    ev.dataTransfer.setData('x-puchitto/asset', node.path)
   }
 </script>
 
-<div class="asset-item" role="gridcell" tabindex="0" {ondragstart} draggable="true">
+<div
+  class="asset-item"
+  role="gridcell"
+  tabindex="0"
+  {ondragstart}
+  {onclick}
+  {onkeydown}
+  draggable="true"
+>
   <div class="asset-icon">
-    <AssetThumbnail filename={name} size={48} />
+    <AssetThumbnail filename={node.path} size={48} />
   </div>
   <div class="asset-name">
-    {name}
+    {node.name}
   </div>
 </div>
 

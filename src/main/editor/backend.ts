@@ -2,7 +2,7 @@ import { app, BrowserWindow, dialog, ipcMain, net, protocol } from 'electron'
 import { copyFile, lstat, readdir, writeFile } from 'fs/promises'
 import path, { join } from 'path'
 import { Level } from 'puchitto/level'
-import { AssetOp } from '../../preload/editor/assetOps'
+import { Asset, AssetOp } from '../../preload/editor/assetOps'
 import { ProjectWatcher } from './projectWatcher'
 import { AlfBuilder } from './alfBuilder'
 import { pathToFileURL } from 'url'
@@ -118,14 +118,25 @@ export class EditorBackend {
    * Reloads the asset browser for the renderer.
    */
   private async _reloadAssetBrowserForRenderer(): Promise<void> {
-    const files = await readdir(this._currentProjectFolder!)
+    const files = await readdir(this._currentProjectFolder!, {
+      withFileTypes: true,
+      recursive: true
+    })
+
+    const ents = files.map((f) => {
+      return {
+        path: join(f.parentPath, f.name).replace(this._currentProjectFolder!, ''),
+        type: f.isDirectory() ? 'folder' : 'file'
+      } as Asset
+    })
+
     const ops: AssetOp[] = [
       {
         type: 'clearAll'
       },
       {
         type: 'bulkLoad',
-        names: files
+        names: ents
       }
     ]
 

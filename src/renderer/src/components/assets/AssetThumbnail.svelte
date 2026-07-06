@@ -11,7 +11,12 @@
 
 <span>
   {#if format === 'texture'}
-    <img alt={filename} src={`asset://${filename}`} width={size} height={size} />
+    <img
+      alt={filename}
+      src={`asset://${encodeURIComponent(filename)}`}
+      width={size}
+      height={size}
+    />
   {:else if format === 'mesh'}
     <Box {size} />
   {:else if format === 'audio'}
