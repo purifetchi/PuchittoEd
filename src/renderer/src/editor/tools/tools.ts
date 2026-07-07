@@ -4,6 +4,7 @@ import { registerTool } from '../systems/hotkey/hotkeyToolRegistrar'
 import { BringObjectToViewTool } from './bringObjectToViewTool'
 import { CreateEntityTool } from './createEntityTool'
 import { DeleteTool } from './deleteTool'
+import { DuplicateEntityTool } from './duplicateEntityTool'
 import { FindEntityTool } from './findEntityTool'
 import { LookAtObjectTool } from './lookAtObjectTool'
 import { SaveTool } from './saveTool'
@@ -20,4 +21,5 @@ export const registerTools = (): void => {
   registerTool<CreateEntityTool>(CreateEntityTool)
   registerTool<FindEntityTool>(FindEntityTool)
   registerTool<SaveTool>(SaveTool)
+  registerTool<DuplicateEntityTool>(DuplicateEntityTool)
 }
