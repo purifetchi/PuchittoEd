@@ -230,7 +230,9 @@ export class EditorBackend {
     }
 
     const builder = new AlfBuilder()
-    const files = await readdir(this._currentProjectFolder!)
+    const files = await readdir(this._currentProjectFolder!, {
+      recursive: true
+    })
     for (const file of files) {
       const path = join(this._currentProjectFolder!, file)
       const stat = await lstat(path)
