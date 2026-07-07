@@ -12,6 +12,21 @@ export type PropertyType =
   | 'enum'
 
 /**
+ * The visibility rule for a property
+ */
+export interface VisibilityRule {
+  /**
+   * The property we're matching against
+   */
+  property: string
+
+  /**
+   * The value it equals.
+   */
+  equals: unknown | unknown[]
+}
+
+/**
  * Definition for a single serialized property.
  */
 export interface SerializedPropertyDefinition {
@@ -29,6 +44,11 @@ export interface SerializedPropertyDefinition {
    * The property type.
    */
   type: PropertyType
+
+  /**
+   * The visibility rule for this property.
+   */
+  visibility?: VisibilityRule
 
   /**
    * Property hints. For example the minimum size, max size, etc.

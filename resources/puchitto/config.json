@@ -153,6 +153,15 @@
           "path": "far",
           "type": "number",
           "displayName": "Far clip plane"
+        },
+        {
+          "path": "fov",
+          "type": "number",
+          "displayName": "Field of View",
+          "visibility": {
+            "property": "type",
+            "equals": "perspective"
+          }
         }
       ],
       "gizmos": [
@@ -205,6 +214,10 @@
           "displayName": "Skybox +X",
           "hints": {
             "type": "texture"
+          },
+          "visibility": {
+            "property": "type",
+            "equals": "cubeSkybox"
           }
         },
         {
@@ -213,6 +226,10 @@
           "displayName": "Skybox -X",
           "hints": {
             "type": "texture"
+          },
+          "visibility": {
+            "property": "type",
+            "equals": "cubeSkybox"
           }
         },
         {
@@ -221,6 +238,10 @@
           "displayName": "Skybox +Y",
           "hints": {
             "type": "texture"
+          },
+          "visibility": {
+            "property": "type",
+            "equals": "cubeSkybox"
           }
         },
         {
@@ -229,6 +250,10 @@
           "displayName": "Skybox -Y",
           "hints": {
             "type": "texture"
+          },
+          "visibility": {
+            "property": "type",
+            "equals": "cubeSkybox"
           }
         },
         {
@@ -237,6 +262,10 @@
           "displayName": "Skybox +Z",
           "hints": {
             "type": "texture"
+          },
+          "visibility": {
+            "property": "type",
+            "equals": "cubeSkybox"
           }
         },
         {
@@ -245,6 +274,10 @@
           "displayName": "Skybox -Z",
           "hints": {
             "type": "texture"
+          },
+          "visibility": {
+            "property": "type",
+            "equals": "cubeSkybox"
           }
         }
       ],
