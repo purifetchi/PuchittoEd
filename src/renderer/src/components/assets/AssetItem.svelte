@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { AssetNode } from '../../state/assetState.svelte'
   import AssetThumbnail from './AssetThumbnail.svelte'
+  import Folder from '@lucide/svelte/icons/folder'
 
   let { node, onAssetSelected }: { node: AssetNode; onAssetSelected: (node: AssetNode) => void } =
     $props()
@@ -25,9 +26,15 @@
   {onkeydown}
   draggable="true"
 >
-  <div class="asset-icon">
-    <AssetThumbnail filename={node.path} size={48} />
-  </div>
+  {#if node.kind === 'file'}
+    <div class="asset-icon bg">
+      <AssetThumbnail filename={node.path} size={48} />
+    </div>
+  {:else}
+    <div class="asset-icon">
+      <Folder size="48" />
+    </div>
+  {/if}
   <div class="asset-name">
     {node.name}
   </div>
@@ -53,10 +60,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background: var(--bg-base);
     border-radius: 6px;
-    border: 1px solid var(--border-color);
     padding: 3px;
+  }
+
+  .asset-icon.bg {
+    background: var(--bg-base);
+    border: 1px solid var(--border-color);
   }
 
   .asset-name {

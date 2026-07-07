@@ -19,7 +19,6 @@ export const assetBrowserState = $state({
 
 export const assetsInFolder = (assets: AssetNode[], folder: string): AssetNode[] => {
   const prefix = !folder.endsWith('\\') ? folder + '\\' : folder
-  console.log('hi', assets, prefix)
 
   const folders: AssetNode[] = []
   const files: AssetNode[] = []
