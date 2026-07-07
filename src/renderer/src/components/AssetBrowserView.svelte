@@ -7,7 +7,7 @@
   import Folder from '@lucide/svelte/icons/folder'
 
   let folderStack: string[] = $state([''])
-  let currentFolder = $derived(folderStack.join('\\'))
+  let currentFolder = $derived(folderStack.join('/'))
   let assets = $derived(assetsInFolder(assetBrowserState.assets, currentFolder))
 
   const back = (): void => {

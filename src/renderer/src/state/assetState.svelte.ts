@@ -18,7 +18,7 @@ export const assetBrowserState = $state({
 })
 
 export const assetsInFolder = (assets: AssetNode[], folder: string): AssetNode[] => {
-  const prefix = !folder.endsWith('\\') ? folder + '\\' : folder
+  const prefix = !folder.endsWith('/') ? folder + '/' : folder
 
   const folders: AssetNode[] = []
   const files: AssetNode[] = []
@@ -29,7 +29,7 @@ export const assetsInFolder = (assets: AssetNode[], folder: string): AssetNode[]
     }
 
     const rest = asset.path.slice(prefix.length)
-    const slash = rest.indexOf('\\')
+    const slash = rest.indexOf('/')
     if (slash > -1) {
       continue
     }
@@ -52,21 +52,22 @@ export const assetsInFolder = (assets: AssetNode[], folder: string): AssetNode[]
  */
 export const assetToAssetNode = (asset: Asset): AssetNode => {
   const name = asset.path.split('\\').pop()
+  const path = asset.path.replaceAll('\\', '/')
 
   switch (asset.type) {
     case 'folder':
       return {
         kind: 'folder',
         name: name,
-        path: asset.path
+        path: path
       }
 
     case 'file':
       return {
         kind: 'file',
         name: name,
-        path: asset.path,
-        type: deduceFormat(asset.path)
+        path: path,
+        type: deduceFormat(path)
       }
 
     default:

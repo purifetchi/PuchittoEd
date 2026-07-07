@@ -1,7 +1,7 @@
 import { assetBrowserState } from '../../state/assetState.svelte'
 import { openSearch } from '../../state/searchState.svelte'
 import { editor } from '../editorGame'
-import { deduceFormat, type FileFormat } from './formatHelpers'
+import { type FileFormat } from './formatHelpers'
 
 /**
  * Opens the entity search modal.
@@ -31,17 +31,16 @@ export const openEntitySearch = (desiredType?: string): Promise<number | undefin
  * @param desiredType The desired asset type
  */
 export const openAssetSearch = (desiredType?: FileFormat): Promise<string | undefined> => {
-  const entities = assetBrowserState.assets.map((o) => {
-    // TODO: The format should probably be stored alongside the asset in the browser state.
-    //       I am not putting that much effort into the Asset Browser for now, though.
-    const type = deduceFormat(o)
-    return {
-      name: o,
-      info: type,
-      group: type,
-      value: o
-    }
-  })
+  const entities = assetBrowserState.assets
+    .filter((o) => o.kind === 'file')
+    .map((o) => {
+      return {
+        name: o.name,
+        info: o.type,
+        group: o.type,
+        value: o.path
+      }
+    })
 
   return openSearch<string>(entities, {
     forceGroup: desiredType
