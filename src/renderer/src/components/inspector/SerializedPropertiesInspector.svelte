@@ -8,6 +8,7 @@
   import AssetReferenceProperty from './properties/AssetReferenceProperty.svelte'
   import EntityReferenceProperty from './properties/EntityReferenceProperty.svelte'
   import EnumProperty from './properties/EnumProperty.svelte'
+  import StringProperty from './properties/StringProperty.svelte'
 
   let { obj, props }: { obj: GameObject; props?: SerializedPropertyDefinition[] | undefined } =
     $props()
@@ -36,6 +37,8 @@
     {#if isVisible(prop)}
       {#if prop.type === 'number'}
         <NumberProperty name={prop.displayName} {obj} path={prop.path} />
+      {:else if prop.type === 'string'}
+        <StringProperty name={prop.displayName} {obj} path={prop.path} hints={prop.hints} />
       {:else if prop.type === 'color'}
         <ColorProperty name={prop.displayName} {obj} path={prop.path} />
       {:else if prop.type === 'boolean'}

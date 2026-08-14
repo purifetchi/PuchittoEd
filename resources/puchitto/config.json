@@ -279,6 +279,15 @@
             "property": "type",
             "equals": "cubeSkybox"
           }
+        },
+        {
+          "path": "css",
+          "type": "string",
+          "displayName": "Background Definition",
+          "visibility": {
+            "property": "type",
+            "equals": "css"
+          }
         }
       ],
       "gizmos": [
