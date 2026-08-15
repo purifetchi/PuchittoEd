@@ -282,7 +282,7 @@
         },
         {
           "path": "css",
-          "type": "string",
+          "type": "cssBackground",
           "displayName": "Background Definition",
           "visibility": {
             "property": "type",

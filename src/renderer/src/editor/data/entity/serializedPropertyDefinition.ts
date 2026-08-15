@@ -10,6 +10,7 @@ export type PropertyType =
   | 'entityReference'
   | 'assetReference'
   | 'enum'
+  | 'cssBackground'
 
 /**
  * The visibility rule for a property

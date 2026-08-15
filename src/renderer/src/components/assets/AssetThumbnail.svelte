@@ -7,16 +7,15 @@
   let { filename, size = 48 }: { filename: string; size: number } = $props()
 
   let format = $derived(deduceFormat(filename))
+
+  let src = $derived(
+    filename.startsWith('asset://') ? filename : `asset://${encodeURIComponent(filename)}`
+  )
 </script>
 
 <span>
   {#if format === 'texture'}
-    <img
-      alt={filename}
-      src={`asset://${encodeURIComponent(filename)}`}
-      width={size}
-      height={size}
-    />
+    <img alt={filename} {src} width={size} height={size} />
   {:else if format === 'mesh'}
     <Box {size} />
   {:else if format === 'audio'}

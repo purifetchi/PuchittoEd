@@ -76,8 +76,11 @@
     const previous = accessor()
 
     if (previous !== asset) {
-      recordCommand(new EntityPropertyChangedCommand(obj, name, previous, asset))
-      setter(asset)
+      const prefix = hints?.['prefix'] ?? ''
+      const actualValue = prefix + asset
+
+      recordCommand(new EntityPropertyChangedCommand(obj, name, previous, actualValue))
+      setter(actualValue)
     }
   })
 </script>

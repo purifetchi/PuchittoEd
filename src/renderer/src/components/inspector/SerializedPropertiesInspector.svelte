@@ -9,6 +9,7 @@
   import EntityReferenceProperty from './properties/EntityReferenceProperty.svelte'
   import EnumProperty from './properties/EnumProperty.svelte'
   import StringProperty from './properties/StringProperty.svelte'
+  import CssBackgroundProperty from './properties/CssBackgroundProperty.svelte'
 
   let { obj, props }: { obj: GameObject; props?: SerializedPropertyDefinition[] | undefined } =
     $props()
@@ -54,6 +55,8 @@
         />
       {:else if prop.type === 'enum'}
         <EnumProperty name={prop.displayName} {obj} path={prop.path} hints={prop.hints} />
+      {:else if prop.type === 'cssBackground'}
+        <CssBackgroundProperty name={prop.displayName} {obj} path={prop.path} />
       {:else}
         <div>Unknown property type {prop.type}</div>
       {/if}

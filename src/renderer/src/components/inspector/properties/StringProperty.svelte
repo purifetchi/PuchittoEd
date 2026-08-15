@@ -8,8 +8,7 @@
   let {
     name,
     obj,
-    path,
-    hints
+    path
   }: { name: string; obj: GameObject; path: string; hints?: Record<string, unknown> } = $props()
 
   let value = $state('')
