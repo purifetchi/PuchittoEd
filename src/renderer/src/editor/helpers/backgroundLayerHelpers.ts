@@ -1,16 +1,10 @@
+import { isColorToken, type CssColorLayer } from './css/backgroundColorLayer'
+import { joinImageLayer, parseImageLayer, type CssImageLayer } from './css/backgroundImageLayer'
+import { tokenize } from './css/tokenizer'
+
 export type CssBackgroundLayer =
-  | {
-      type: 'image'
-      asset: string
-      size?: string
-      repeat?: string
-      position?: string
-      scroll?: string
-    }
-  | {
-      type: 'color'
-      color: string
-    }
+  | CssImageLayer
+  | CssColorLayer
   | {
       type: 'unknown'
       data: string
@@ -24,29 +18,25 @@ export const parseCssBackgroundLayers = (background: string): CssBackgroundLayer
   const parts = background.split(',')
   const result: CssBackgroundLayer[] = []
 
-  // TODO: This sucks.
   for (const part of parts) {
-    const elements = part.split(' ')
+    const trimmed = part.trim()
+    if (trimmed.length < 1) {
+      continue
+    }
 
-    // Image
-    if (elements[0].startsWith('url')) {
-      const asset = decodeURIComponent(
-        elements[0].replace('url(', '').replace(')', '').replaceAll("'", '').replaceAll('"', '')
-      )
+    const tokens = tokenize(trimmed)
 
-      result.push({
-        type: 'image',
-        asset
-      })
-    } else if (elements.length === 1) {
+    if (tokens[0].startsWith('url')) {
+      result.push(parseImageLayer(tokens))
+    } else if (tokens.length === 1 && isColorToken(tokens[0])) {
       result.push({
         type: 'color',
-        color: elements[0]
+        color: tokens[0]
       })
     } else {
       result.push({
         type: 'unknown',
-        data: part
+        data: trimmed
       })
     }
   }
@@ -57,16 +47,17 @@ export const parseCssBackgroundLayers = (background: string): CssBackgroundLayer
 export const joinCssBackgroundLayers = (layers: CssBackgroundLayer[]): string => {
   const cssParts: string[] = []
 
-  // TODO: Mock
   for (const layer of layers) {
     if (layer.type === 'image') {
-      cssParts.push(`url('${encodeURIComponent(layer.asset)}')`)
+      cssParts.push(joinImageLayer(layer))
+    } else if (layer.type === 'color') {
+      cssParts.push(layer.color)
     } else if (layer.type === 'unknown') {
       cssParts.push(layer.data)
     }
   }
 
-  console.log(layers, cssParts, cssParts.join(', '))
+  console.log(cssParts)
 
   return cssParts.join(', ')
 }

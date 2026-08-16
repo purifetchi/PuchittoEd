@@ -51,12 +51,24 @@
         })
         break
 
+      case 'color':
+        value.push({
+          type: 'color',
+          color: 'white'
+        })
+        break
+
       default:
         console.error(`Invalid layer type ${type}`)
         break
     }
 
     open = false
+  }
+
+  const onremove = (layer: CssBackgroundLayer): void => {
+    value = value.filter((l) => l !== layer)
+    onchanged()
   }
 </script>
 
@@ -67,7 +79,7 @@
     </div>
     <div class="layers">
       {#each value as layer, i (i)}
-        <CssBackgroundLayerProperty {layer} {onchanged} />
+        <CssBackgroundLayerProperty {layer} {onchanged} {onremove} />
       {/each}
     </div>
     <div class="add-layer">
@@ -109,6 +121,12 @@
     padding: 2px 6px;
     border-radius: 3px;
     background: rgba(0, 0, 0, 0.55);
+  }
+
+  .layers {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
   }
 
   .add-layer {

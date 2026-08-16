@@ -17,6 +17,8 @@
   let accessor: () => string
   let setter: (value: string) => void
 
+  let valueName = $derived(value === undefined ? 'none' : value)
+
   let dropdownVisible = $state(false)
 
   const values: string[] = $derived((hints?.['values'] as string[]) ?? [])
@@ -49,12 +51,21 @@
 
 <Property label={name}>
   <button class="selector" aria-haspopup="listbox" {onclick}>
-    <span class="value">{value}</span>
+    <span class="value">{valueName}</span>
     <span class="chev">
       <Chevron size="12" />
     </span>
   </button>
   <div class="popup" role="listbox" class:visible={dropdownVisible}>
+    {#if hints?.['allowNone']}
+      <button
+        class="option"
+        class:on={value === undefined}
+        onclick={() => {
+          setValue(undefined)
+        }}>none</button
+      >
+    {/if}
     {#each values as optionValue (optionValue)}
       <button
         class="option"
