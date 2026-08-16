@@ -21,10 +21,18 @@ export class EntityPropertyChangedCommand extends HistoryCommand {
   }
 
   undo(): void {
-    this._entity[this._path] = this._previous
+    if (this._entity) {
+      this._entity[this._path] = this._previous
+    } else {
+      console.warn(`Trying to undo ${this._path} on a missing object!`)
+    }
   }
 
   redo(): void {
-    this._entity[this._path] = this._current
+    if (this._entity) {
+      this._entity[this._path] = this._current
+    } else {
+      console.warn(`Trying to redo ${this._path} on a missing object!`)
+    }
   }
 }
