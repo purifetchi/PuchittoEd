@@ -1,8 +1,8 @@
 <script lang="ts">
-  let { flex = 0.3, children } = $props()
+  let { flex = 0.3, width = undefined, children } = $props()
 </script>
 
-<div class="workspace-container" style:flex>
+<div class="workspace-container" style:flex={width === undefined ? flex : `0 0 ${width}px`}>
   {@render children()}
 </div>
 
