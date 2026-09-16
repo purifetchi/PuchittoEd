@@ -2,10 +2,11 @@ import { app, BrowserWindow, dialog, ipcMain, net, protocol } from 'electron'
 import { copyFile, lstat, readdir, writeFile } from 'fs/promises'
 import path, { join } from 'path'
 import { Level } from 'puchitto/level'
-import { Asset, AssetOp } from '../../preload/editor/assetOps'
+import { AssetOp } from '../../preload/editor/assetOps'
 import { ProjectWatcher } from './projectWatcher'
 import { AlfBuilder } from './alfBuilder'
 import { pathToFileURL } from 'url'
+import { direntToAsset } from '../helpers/assetImportHelpers'
 
 /**
  * The backend of PuchittoEd.
@@ -123,13 +124,7 @@ export class EditorBackend {
       recursive: true
     })
 
-    const ents = files.map((f) => {
-      return {
-        path: join(f.parentPath, f.name).replace(this._currentProjectFolder!, ''),
-        type: f.isDirectory() ? 'folder' : 'file'
-      } as Asset
-    })
-
+    const ents = files.map((f) => direntToAsset(this._currentProjectFolder!, f))
     const ops: AssetOp[] = [
       {
         type: 'clearAll'

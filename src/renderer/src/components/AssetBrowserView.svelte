@@ -85,7 +85,7 @@
     </div>
   </div>
   <div class="assets">
-    {#each assets as asset, i (i)}
+    {#each assets as asset (asset.path)}
       <AssetItem node={asset} {onAssetSelected} />
     {/each}
   </div>

@@ -17,6 +17,14 @@ export const assetBrowserState = $state({
   assets: AssetNode[]
 })
 
+/**
+ * Normalizes an asset path received from the main process.
+ */
+export const normalizeAssetPath = (assetPath: string): string => {
+  const parts = assetPath.replaceAll('\\', '/').split('/').filter(Boolean)
+  return `/${parts.join('/')}`
+}
+
 export const assetsInFolder = (assets: AssetNode[], folder: string): AssetNode[] => {
   const prefix = !folder.endsWith('/') ? folder + '/' : folder
 
@@ -51,8 +59,8 @@ export const assetsInFolder = (assets: AssetNode[], folder: string): AssetNode[]
  * @param asset The imported asset.
  */
 export const assetToAssetNode = (asset: Asset): AssetNode => {
-  const name = asset.path.split('\\').pop()
-  const path = asset.path.replaceAll('\\', '/')
+  const path = normalizeAssetPath(asset.path)
+  const name = path.slice(path.lastIndexOf('/') + 1)
 
   switch (asset.type) {
     case 'folder':

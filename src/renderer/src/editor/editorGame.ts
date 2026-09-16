@@ -16,7 +16,7 @@ import { IconGizmo } from './entities/gizmos/iconGizmo'
 import { GridObject } from './entities/gridObject'
 import { Vector3 } from 'three'
 import type { AssetOp } from '../../../preload/editor/assetOps'
-import { assetBrowserState, assetToAssetNode } from '../state/assetState.svelte'
+import { assetBrowserState, assetToAssetNode, normalizeAssetPath } from '../state/assetState.svelte'
 import { IdAllocator } from './idAllocator'
 import { EventEmitter } from '@mary/events'
 import { TransformsObject } from './entities/transformsObject'
@@ -305,12 +305,21 @@ export class EditorGame extends Game {
     for (const op of ops) {
       switch (op.type) {
         case 'create':
-          assetBrowserState.assets.push(assetToAssetNode(op.name))
+          assetBrowserState.assets = [
+            ...assetBrowserState.assets.filter(
+              (asset) => asset.path !== normalizeAssetPath(op.name.path)
+            ),
+            assetToAssetNode(op.name)
+          ]
           continue
 
-        case 'delete':
-          assetBrowserState.assets = assetBrowserState.assets.filter((a) => a.path !== op.name)
+        case 'delete': {
+          const deletedPath = normalizeAssetPath(op.name)
+          assetBrowserState.assets = assetBrowserState.assets.filter(
+            (asset) => asset.path !== deletedPath && !asset.path.startsWith(`${deletedPath}/`)
+          )
           continue
+        }
 
         case 'clearAll':
           assetBrowserState.assets = []
@@ -318,8 +327,6 @@ export class EditorGame extends Game {
 
         case 'bulkLoad': {
           const assets = [...assetBrowserState.assets, ...op.names.map((a) => assetToAssetNode(a))]
-          console.log('assets', assets)
-
           assetBrowserState.assets = assets
           continue
         }

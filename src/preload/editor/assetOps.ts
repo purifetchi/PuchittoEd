@@ -30,7 +30,8 @@ export interface AssetBulkLoad {
 }
 
 /**
- * A singular asset imported.
+ * A singular imported asset. Its path is relative to the project root, starts
+ * with a slash, and always uses forward slashes.
  */
 export type Asset = { type: 'file' | 'folder'; path: string }
 

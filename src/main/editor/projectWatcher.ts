@@ -1,7 +1,7 @@
 import chokidar, { FSWatcher } from 'chokidar'
 import { AssetOp } from '../../preload/editor/assetOps'
-import path from 'path'
 import { stat } from 'fs/promises'
+import { statToAsset, toAssetPath } from '../helpers/assetImportHelpers'
 
 /**
  * Type used for sending asset ops to the renderer.
@@ -22,7 +22,13 @@ export class ProjectWatcher {
    */
   private _sender: AssetOpSender
 
+  /**
+   * The parent's path.
+   */
+  private _parent: string
+
   constructor(path: string, sender: AssetOpSender) {
+    this._parent = path
     this._watcher = chokidar.watch(path, {
       ignoreInitial: true
     })
@@ -37,7 +43,9 @@ export class ProjectWatcher {
   private _buildChokidarListeners(): void {
     this._watcher
       .on('add', (path) => this._addAsset(path))
+      .on('addDir', (path) => this._addAsset(path))
       .on('unlink', (path) => this._removeAsset(path))
+      .on('unlinkDir', (path) => this._removeAsset(path))
   }
 
   /**
@@ -49,10 +57,7 @@ export class ProjectWatcher {
     this._sender([
       {
         type: 'create',
-        name: {
-          path: asset,
-          type: ent.isDirectory() ? 'folder' : 'file'
-        }
+        name: statToAsset(this._parent, asset, ent)
       }
     ])
   }
@@ -62,11 +67,10 @@ export class ProjectWatcher {
    * @param asset The path to the asset.
    */
   private _removeAsset(asset: string): void {
-    const filename = path.basename(asset)
     this._sender([
       {
         type: 'delete',
-        name: filename
+        name: toAssetPath(this._parent, asset)
       }
     ])
   }
