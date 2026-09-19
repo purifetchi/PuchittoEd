@@ -399,7 +399,7 @@ export class EditorGame extends Game {
             this.getNextInternalId(),
             {}
           )
-          mesh.color = gizmoDef.color
+          mesh.scale = gizmoDef.scale
           mesh.model = `editor://puchitto/${gizmoDef.path}`
 
           gizmo = mesh

@@ -1,5 +1,4 @@
 import type { BaseGizmoDefinition } from './baseGizmoDefinition'
-import { type ColorRepresentation } from 'three'
 
 /**
  * A definition of a mesh gizmo.
@@ -7,5 +6,5 @@ import { type ColorRepresentation } from 'three'
 export interface MeshGizmoDefinition extends BaseGizmoDefinition {
   type: 'mesh'
   path: string
-  color: ColorRepresentation
+  scale: number
 }

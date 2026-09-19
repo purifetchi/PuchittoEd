@@ -1,8 +1,7 @@
-import { OBJLoader } from 'three/examples/jsm/Addons.js'
 import { Serialized } from 'puchitto/serialization'
 import { GenericGizmo } from './genericGizmo'
 import { AssetLoading } from 'puchitto/mixins'
-import { Mesh, MeshBasicMaterial, type ColorRepresentation } from 'three'
+import { Group, Mesh, MeshBasicMaterial, type ColorRepresentation } from 'three'
 
 /**
  * A mesh-based gizmo.
@@ -14,30 +13,39 @@ export class MeshGizmo extends AssetLoading(GenericGizmo) {
   @Serialized('color')
   accessor color: ColorRepresentation = 'white'
 
+  @Serialized('scale')
+  accessor scale: number = 1
+
   onSerializedPropertyChanged(path: string): void {
     if (path === 'model') {
       this._setModel()
     }
+
+    this.transform.setUniformScale(this.scale)
   }
 
   private _setModel(): void {
-    this.beginAssetLoad()
     this.clearAttachments()
 
-    new OBJLoader().load(this.model, (data) => {
+    this.loadAssetSync<Group>(this.model, (data) => {
       this.attachThreeObject(data)
 
-      data.traverse((o) => {
-        if (!(o instanceof Mesh)) {
+      data.traverse((obj) => {
+        if (!(obj instanceof Mesh)) {
           return
         }
 
-        o.material = new MeshBasicMaterial({
-          color: this.color,
-          wireframe: true
-        })
+        const isArray = Array.isArray(obj.material)
+        const mats = isArray ? obj.material : [obj.material]
+        for (let i = 0; i < mats.length; i++) {
+          mats[i] = new MeshBasicMaterial({
+            color: 'white',
+            map: mats[i].map
+          })
+        }
+
+        obj.material = isArray ? mats : mats[0]
       })
-      this.finishAssetLoad()
     })
   }
 }

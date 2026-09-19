@@ -168,8 +168,8 @@
         {
           "type": "mesh",
           "display": "always",
-          "path": "gizmos/camera/camera.obj",
-          "color": "lime"
+          "path": "gizmos/camera/Camera.fbx",
+          "scale": 0.03
         }
       ]
     },
