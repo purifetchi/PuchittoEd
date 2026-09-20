@@ -3,10 +3,17 @@
   import { consoleState } from '../state/consoleState.svelte'
   import LogLine from './console/LogLine.svelte'
   import { onMount } from 'svelte'
+  import LogLevelSwitch from './console/LogLevelSwitch.svelte'
 
   let autoScroll: boolean = true
   let observer: MutationObserver
   let log: HTMLDivElement = $state()
+
+  let visibility = $state({
+    log: true,
+    warn: true,
+    error: true
+  })
 
   const clear = (): void => {
     consoleState.messages = []
@@ -50,15 +57,21 @@
     <button class="icon-button" onclick={clear}>
       <Trash size="16" />
     </button>
+    <span class="separator"></span>
+    <LogLevelSwitch severity="log" name="Log" bind:enabled={visibility.log} />
+    <LogLevelSwitch severity="warn" name="Warn" bind:enabled={visibility.warn} />
+    <LogLevelSwitch severity="error" name="Error" bind:enabled={visibility.error} />
   </div>
   <div class="log" bind:this={log} {onscroll}>
     {#each consoleState.messages as message (message.timestamp)}
-      <LogLine
-        timestamp={message.timestamp}
-        group={message.group}
-        message={message.message}
-        severity={message.severity}
-      />
+      {#if visibility[message.severity]}
+        <LogLine
+          timestamp={message.timestamp}
+          group={message.group}
+          message={message.message}
+          severity={message.severity}
+        />
+      {/if}
     {/each}
   </div>
 </div>
@@ -95,6 +108,14 @@
     gap: 4px;
     padding: 4px 8px;
     border-bottom: 1px solid var(--border-color);
+  }
+
+  .header .separator {
+    width: 1px;
+    height: 18px;
+    background: var(--border-color);
+    margin: 0 4px;
+    flex: none;
   }
 
   .console .log {
