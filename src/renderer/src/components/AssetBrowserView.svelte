@@ -93,7 +93,6 @@
 
 <style>
   .asset-browser {
-    height: 320px;
     border-top: 1px solid var(--border-color);
     display: flex;
     flex-direction: column;
