@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { Logger } from 'puchitto/logging'
   import { GameObject } from 'puchitto/objects'
   import Property from '../Property.svelte'
   import { recordCommand } from '../../../editor/systems/history/editorHistory'
@@ -11,6 +12,8 @@
   import { untrack } from 'svelte'
   import CssBackgroundLayerProperty from '../css/CssBackgroundLayerProperty.svelte'
   import Plus from '@lucide/svelte/icons/plus'
+
+  const logger = new Logger('Inspector', 'CssBackgroundProperty')
 
   let { name, obj, path }: { name: string; obj: GameObject; path: string } = $props()
 
@@ -59,7 +62,7 @@
         break
 
       default:
-        console.error(`Invalid layer type ${type}`)
+        logger.error(`Invalid layer type ${type}`)
         break
     }
 

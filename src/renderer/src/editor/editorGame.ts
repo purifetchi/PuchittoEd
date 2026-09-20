@@ -469,7 +469,7 @@ export class EditorGame extends Game {
     type: string,
     data: Record<string, unknown>
   ): GameObject {
-    console.log(`[EditorGame::_makeUnknownEntity] Created placeholder for ${type}.`)
+    this.logger.log(`Created placeholder for ${type}.`)
     const placeholder = new PlaceholderObject({
       ...opts,
       type,

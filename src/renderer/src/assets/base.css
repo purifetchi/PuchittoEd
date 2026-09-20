@@ -13,6 +13,9 @@
     --accent: #007acc;
     --accent-hover: #0098ff;
 
+    --bg-warn: #d7a55c14;
+    --warn: #d7a55c;
+    --bg-error: #e3545414;
     --error: #e35454;
 
     --axis-x: #f44336;

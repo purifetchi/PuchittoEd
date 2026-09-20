@@ -1,7 +1,10 @@
+import { Logger } from 'puchitto/logging'
 import type { GameObject } from 'puchitto/objects'
 import { HistoryCommand } from '../historyCommand'
 
 export class EntityPropertyChangedCommand extends HistoryCommand {
+  private readonly _logger = new Logger('History', 'EntityPropertyChangedCommand')
+
   private _entity: GameObject
 
   private _path: string
@@ -24,7 +27,7 @@ export class EntityPropertyChangedCommand extends HistoryCommand {
     if (this._entity) {
       this._entity[this._path] = this._previous
     } else {
-      console.warn(`Trying to undo ${this._path} on a missing object!`)
+      this._logger.warn(`Trying to undo ${this._path} on a missing object!`)
     }
   }
 
@@ -32,7 +35,7 @@ export class EntityPropertyChangedCommand extends HistoryCommand {
     if (this._entity) {
       this._entity[this._path] = this._current
     } else {
-      console.warn(`Trying to redo ${this._path} on a missing object!`)
+      this._logger.warn(`Trying to redo ${this._path} on a missing object!`)
     }
   }
 }
