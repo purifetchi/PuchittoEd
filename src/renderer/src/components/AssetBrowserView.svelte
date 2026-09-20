@@ -96,6 +96,7 @@
     border-top: 1px solid var(--border-color);
     display: flex;
     flex-direction: column;
+    min-height: 0;
   }
 
   .header {

@@ -12,6 +12,7 @@
   import Tabs from './workspace/Tabs.svelte'
   import { projectState, setViewMode } from '../state/projectState.svelte'
   import HorizontalPanel from './workspace/HorizontalPanel.svelte'
+  import ConsoleView from './ConsoleView.svelte'
 
   const viewTabs = [
     { value: 'editor', name: 'Editor', icon: Globe },
@@ -44,7 +45,17 @@
     </HorizontalPanel>
     <Splitter onresize={(d) => resizePanel('assetBrowserWidth', -d)} direction="horizontal" />
     <HorizontalPanel height={workspaceState.assetBrowserWidth}>
-      <AssetBrowserView />
+      <Tabs
+        tabs={assetTabs}
+        value={projectState.assetMode}
+        onchange={(val: 'assets' | 'console') => (projectState.assetMode = val)}
+        splits="top"
+      />
+      {#if projectState.assetMode === 'assets'}
+        <AssetBrowserView />
+      {:else if projectState.assetMode === 'console'}
+        <ConsoleView />
+      {/if}
     </HorizontalPanel>
   </Panel>
   <Splitter onresize={(d) => resizePanel('inspectorWidth', -d)} />

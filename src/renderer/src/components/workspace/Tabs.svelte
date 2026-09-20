@@ -4,7 +4,8 @@
   let {
     tabs,
     value,
-    onchange
+    onchange,
+    splits = 'bottom'
   }: {
     tabs: {
       value: string
@@ -13,10 +14,11 @@
     }[]
     value: string
     onchange: (value: string) => void
+    splits?: 'bottom' | 'top'
   } = $props()
 </script>
 
-<div class="tabs">
+<div class="tabs" class:top={splits === 'top'} class:bottom={splits === 'bottom'}>
   {#each tabs as tab (tab.name)}
     <button class="tab" class:active={tab.value === value} onclick={() => onchange(tab.value)}>
       <span class="icon">
@@ -34,7 +36,14 @@
     flex-shrink: 0;
     height: 26px;
     background: var(--bg-header);
+  }
+
+  .tabs.bottom {
     border-bottom: 1px solid var(--border-color);
+  }
+
+  .tabs.top {
+    border-top: 1px solid var(--border-color);
   }
 
   .tabs .tab {
