@@ -2,10 +2,47 @@
   import { Trash } from '@lucide/svelte'
   import { consoleState } from '../state/consoleState.svelte'
   import LogLine from './console/LogLine.svelte'
+  import { onMount } from 'svelte'
+
+  let autoScroll: boolean = true
+  let observer: MutationObserver
+  let log: HTMLDivElement = $state()
 
   const clear = (): void => {
     consoleState.messages = []
   }
+
+  const onscroll = (): void => {
+    const distanceFromTop = log.scrollHeight - log.scrollTop - log.clientHeight
+
+    autoScroll = distanceFromTop < 5
+  }
+
+  onMount(() => {
+    log.scrollTo({
+      top: log.scrollHeight
+    })
+
+    observer = new MutationObserver(() => {
+      if (!autoScroll) {
+        return
+      }
+
+      log.scrollTo({
+        top: log.scrollHeight,
+        behavior: 'smooth'
+      })
+    })
+
+    observer.observe(log, {
+      childList: true,
+      subtree: true
+    })
+
+    return () => {
+      observer.disconnect()
+    }
+  })
 </script>
 
 <div class="console">
@@ -14,7 +51,7 @@
       <Trash size="16" />
     </button>
   </div>
-  <div class="log">
+  <div class="log" bind:this={log} {onscroll}>
     {#each consoleState.messages as message (message.timestamp)}
       <LogLine
         timestamp={message.timestamp}
