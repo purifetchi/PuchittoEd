@@ -1,12 +1,13 @@
 <script lang="ts">
-  import { Trash } from '@lucide/svelte'
-  import { consoleState } from '../state/consoleState.svelte'
+  import { Search, Trash } from '@lucide/svelte'
+  import { consoleState, type ConsoleMessage } from '../state/consoleState.svelte'
   import LogLine from './console/LogLine.svelte'
   import { onMount } from 'svelte'
   import LogLevelSwitch from './console/LogLevelSwitch.svelte'
 
   let autoScroll: boolean = true
   let observer: MutationObserver
+  let searchTopic: string = $state('')
   let log: HTMLDivElement = $state()
 
   let visibility = $state({
@@ -23,6 +24,18 @@
     const distanceFromTop = log.scrollHeight - log.scrollTop - log.clientHeight
 
     autoScroll = distanceFromTop < 5
+  }
+
+  const isValid = (message: ConsoleMessage): boolean => {
+    if (!visibility[message.severity]) {
+      return false
+    }
+
+    if (searchTopic === undefined || searchTopic.length < 1) {
+      return true
+    }
+
+    return message.group.includes(searchTopic) || message.message.includes(searchTopic)
   }
 
   onMount(() => {
@@ -61,10 +74,17 @@
     <LogLevelSwitch severity="log" name="Log" bind:enabled={visibility.log} />
     <LogLevelSwitch severity="warn" name="Warn" bind:enabled={visibility.warn} />
     <LogLevelSwitch severity="error" name="Error" bind:enabled={visibility.error} />
+    <span class="separator"></span>
+    <div class="search">
+      <span class="icon">
+        <Search size="13" />
+      </span>
+      <input bind:value={searchTopic} placeholder="Filter messages... " />
+    </div>
   </div>
   <div class="log" bind:this={log} {onscroll}>
     {#each consoleState.messages as message (message.timestamp)}
-      {#if visibility[message.severity]}
+      {#if isValid(message)}
         <LogLine
           timestamp={message.timestamp}
           group={message.group}
@@ -116,6 +136,33 @@
     background: var(--border-color);
     margin: 0 4px;
     flex: none;
+  }
+
+  .header .search {
+    position: relative;
+    flex: 1;
+    gap: 7px;
+    min-width: 90px;
+    max-width: 260px;
+    display: flex;
+    align-items: center;
+    background: var(--bg-base);
+    border: 1px solid var(--border-color);
+    border-radius: 3px;
+    color: var(--text-light);
+    padding: 4px 8px 4px 8px;
+  }
+
+  .header .search .icon {
+    color: var(--text-muted);
+  }
+
+  .header .search input {
+    background: none;
+    border: none;
+    font: inherit;
+    flex: 1;
+    color: var(--text-light);
   }
 
   .console .log {
