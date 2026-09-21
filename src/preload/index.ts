@@ -1,7 +1,10 @@
+import { Logger } from 'puchitto/logging'
 import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 import { Level } from 'puchitto/level'
 import { AssetOp } from './editor/assetOps'
+
+const logger = new Logger('Preload')
 
 // Custom APIs for renderer
 const api = {}
@@ -26,7 +29,7 @@ if (process.contextIsolated) {
         ipcRenderer.on('select-project', (_, path) => callback(path))
     })
   } catch (error) {
-    console.error(error)
+    logger.error(error, 'Failed to expose preload APIs.')
   }
 } else {
   // @ts-ignore (define in dts)

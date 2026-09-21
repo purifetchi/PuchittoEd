@@ -3,11 +3,13 @@ import { editor } from '../editor/editorGame'
 export const projectState = $state({
   project: '',
   modified: false,
-  viewMode: 'editor'
+  viewMode: 'editor',
+  assetMode: 'assets'
 } as {
   project: string
   modified: boolean
   viewMode: 'editor' | 'camera'
+  assetMode: 'assets' | 'console'
 })
 
 export const setModifiedFlag = (): void => {

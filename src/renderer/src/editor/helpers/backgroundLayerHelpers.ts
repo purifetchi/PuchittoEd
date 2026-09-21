@@ -1,6 +1,9 @@
+import { Logger } from 'puchitto/logging'
 import { isColorToken, type CssColorLayer } from './css/backgroundColorLayer'
 import { joinImageLayer, parseImageLayer, type CssImageLayer } from './css/backgroundImageLayer'
 import { tokenize } from './css/tokenizer'
+
+const logger = new Logger('Editor', 'BackgroundLayerHelpers')
 
 export type CssBackgroundLayer =
   | CssImageLayer
@@ -57,7 +60,7 @@ export const joinCssBackgroundLayers = (layers: CssBackgroundLayer[]): string =>
     }
   }
 
-  console.log(cssParts)
+  logger.log(`Joined background layers: ${JSON.stringify(cssParts)}`)
 
   return cssParts.join(', ')
 }

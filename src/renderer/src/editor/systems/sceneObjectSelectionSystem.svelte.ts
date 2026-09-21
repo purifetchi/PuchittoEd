@@ -1,3 +1,4 @@
+import { Logger } from 'puchitto/logging'
 import { MOUSE_LEFT, type Game } from 'puchitto'
 import type { GameObject } from 'puchitto/objects'
 import type { GameSystem } from 'puchitto/systems'
@@ -15,6 +16,8 @@ import { TransformsObject } from '../entities/transformsObject'
  * The selection system for the scene.
  */
 export class SceneObjectSelectionSystem implements GameSystem {
+  private readonly _logger = new Logger('Editor', 'SceneObjectSelectionSystem')
+
   /**
    * The game instance.
    */
@@ -109,7 +112,7 @@ export class SceneObjectSelectionSystem implements GameSystem {
    * @param visible Whether they are visible.
    */
   private _setSelectionGizmosVisible(object: GameObject, visible: boolean): void {
-    console.log(`Setting gizmos for ${object.name} to ${visible}`)
+    this._logger.log(`Setting gizmos for ${object.name} to ${visible}`)
     const gizmos = this._game.getObjectGizmos(object)
     if (gizmos !== undefined && gizmos.length > 0) {
       for (const gizmo of gizmos) {

@@ -1,43 +1,52 @@
 <script lang="ts">
-  import Camera from '@lucide/svelte/icons/camera'
-  import Globe from '@lucide/svelte/icons/globe'
-  import { projectState, setViewMode } from '../state/projectState.svelte'
+  import type { Component } from 'svelte'
+
+  let {
+    tabs,
+    value,
+    onchange,
+    splits = 'bottom'
+  }: {
+    tabs: {
+      value: string
+      name: string
+      icon: Component
+    }[]
+    value: string
+    onchange: (value: string) => void
+    splits?: 'bottom' | 'top'
+  } = $props()
 </script>
 
-<div class="view-tabs">
-  <button
-    class="tab"
-    class:active={projectState.viewMode === 'editor'}
-    onclick={() => setViewMode('editor')}
-  >
-    <span class="icon">
-      <Globe size="14" />
-    </span>
-    <span>Editor</span>
-  </button>
-  <button
-    class="tab"
-    class:active={projectState.viewMode === 'camera'}
-    onclick={() => setViewMode('camera')}
-  >
-    <span class="icon">
-      <Camera size="14" />
-    </span>
-    Camera
-  </button>
+<div class="tabs" class:top={splits === 'top'} class:bottom={splits === 'bottom'}>
+  {#each tabs as tab (tab.name)}
+    <button class="tab" class:active={tab.value === value} onclick={() => onchange(tab.value)}>
+      <span class="icon">
+        <tab.icon size="14" />
+      </span>
+      {tab.name}
+    </button>
+  {/each}
 </div>
 
 <style>
-  .view-tabs {
+  .tabs {
     display: flex;
     align-items: stretch;
     flex-shrink: 0;
     height: 26px;
     background: var(--bg-header);
+  }
+
+  .tabs.bottom {
     border-bottom: 1px solid var(--border-color);
   }
 
-  .view-tabs .tab {
+  .tabs.top {
+    border-top: 1px solid var(--border-color);
+  }
+
+  .tabs .tab {
     display: flex;
     text-align: left;
     align-items: center;
@@ -56,7 +65,7 @@
     border-right: 1px solid var(--border-color);
   }
 
-  .view-tabs .tab .icon {
+  .tabs .tab .icon {
     display: flex;
     align-items: center;
   }
@@ -77,7 +86,7 @@
     background: var(--accent-hover);
   }
 
-  .view-tabs .tab:hover {
+  .tabs .tab:hover {
     background: var(--bg-hover);
     color: var(--text-main);
   }

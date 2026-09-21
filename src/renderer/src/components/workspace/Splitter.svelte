@@ -1,8 +1,12 @@
 <script lang="ts">
-  let { onresize }: { onresize: (delta: number) => void } = $props()
+  let {
+    onresize,
+    direction = 'vertical'
+  }: { onresize: (delta: number) => void; direction?: 'vertical' | 'horizontal' } = $props()
 
   const onmousemove = (ev: MouseEvent): void => {
-    onresize(ev.movementX)
+    const movement = direction === 'vertical' ? ev.movementX : ev.movementY
+    onresize(movement)
   }
 
   const onmouseup = (): void => {
@@ -20,10 +24,12 @@
   }
 </script>
 
+<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 <div
   class="splitter"
+  class:horizontal={direction === 'horizontal'}
   role="separator"
-  aria-orientation="vertical"
+  aria-orientation={direction}
   tabindex="-1"
   {onmousedown}
 ></div>
@@ -36,6 +42,11 @@
     cursor: col-resize;
     background-color: transparent;
     transition: background-color 0.1s;
+  }
+
+  .splitter.horizontal {
+    margin: -2px 0;
+    cursor: row-resize;
   }
 
   .splitter:hover {

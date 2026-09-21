@@ -4,7 +4,10 @@ import './assets/main.css'
 
 import App from './App.svelte'
 import { registerTools } from './editor/tools/tools'
+import { registerLogSink } from 'puchitto/logging'
+import { ConsoleLogSink } from './editor/logging/consoleLogSink'
 
+registerLogSink(new ConsoleLogSink())
 registerTools()
 const app = mount(App, {
   target: document.getElementById('app')!

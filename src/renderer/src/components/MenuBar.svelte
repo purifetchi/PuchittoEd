@@ -94,6 +94,7 @@
 <style>
   .menu-bar {
     height: 28px;
+    flex-shrink: 0;
     background-color: var(--bg-header);
     display: flex;
     align-items: center;
