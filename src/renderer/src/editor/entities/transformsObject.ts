@@ -10,7 +10,7 @@ import {
   MeshBasicMaterial,
   Euler
 } from 'three'
-import { OBJLoader } from 'three/examples/jsm/Addons.js'
+import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js'
 import { transformsState } from '../../state/transformsState.svelte'
 import {
   EntityTransformManipulationCommand,

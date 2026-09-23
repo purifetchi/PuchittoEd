@@ -1,4 +1,4 @@
-appId: com.electron.app
+appId: com.shinolabs.puchittoed
 productName: puchittoed
 directories:
   buildResources: build
@@ -32,13 +32,13 @@ dmg:
 linux:
   target:
     - AppImage
-    - snap
     - deb
-  maintainer: electronjs.org
-  category: Utility
+  maintainer: shinonome laboratories
+  category: Development
 appImage:
   artifactName: ${name}-${version}.${ext}
 npmRebuild: false
 publish:
-  provider: generic
-  url: https://example.com/auto-updates
+  provider: github
+  owner: shinolabs
+  repo: puchittoed
