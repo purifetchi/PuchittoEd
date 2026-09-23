@@ -47,12 +47,14 @@ jobs:
           CSC_IDENTITY_AUTO_DISCOVERY: false
         run: npm run build:${{ matrix.target }} -- ${{ matrix.targets }} --publish never
 
-      - uses: actions/upload-artifact@v4
+      - name: Upload installer
+        uses: actions/upload-artifact@v4
         with:
           name: puchittoed-${{ matrix.target }}
           path: |
-            puchittoed/dist/*-setup.exe
-            puchittoed/dist/*.dmg
-            puchittoed/dist/*.AppImage
-            puchittoed/dist/*.deb
+            dist/*-setup.exe
+            dist/*.dmg
+            dist/*.AppImage
+            dist/*.deb
           if-no-files-found: error
+          compression-level: 0
