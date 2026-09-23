@@ -1,0 +1,60 @@
+name: Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: ${{ matrix.target }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            target: win
+            targets: ''
+          - os: macos-latest
+            target: mac
+            targets: ''
+          - os: ubuntu-latest
+            target: linux
+            targets: AppImage deb
+
+    steps:
+      - name: Checkout puchittoed
+        uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 26
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build and package
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: false
+        run: npm run build:${{ matrix.target }} -- ${{ matrix.targets }} --publish never
+
+      - name: Upload installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: puchittoed-${{ matrix.target }}
+          path: |
+            dist/*-setup.exe
+            dist/*.dmg
+            dist/*.AppImage
+            dist/*.deb
+          if-no-files-found: error
+          compression-level: 0

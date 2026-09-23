@@ -2,7 +2,8 @@ import { Logger } from 'puchitto/logging'
 import { MOUSE_LEFT, type Game } from 'puchitto'
 import type { GameObject } from 'puchitto/objects'
 import type { GameSystem } from 'puchitto/systems'
-import { OutlinePass, type EffectComposer } from 'three/examples/jsm/Addons.js'
+import type { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js'
+import { OutlinePass } from 'three/examples/jsm/postprocessing/OutlinePass.js'
 import {
   resetSelectedObject,
   selectionState,
