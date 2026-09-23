@@ -32,7 +32,6 @@ jobs:
         with:
           node-version: 26
           cache: npm
-          cache-dependency-path: puchittoed/package-lock.json
 
       - name: Lint
         run: npm run lint
