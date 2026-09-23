@@ -51,7 +51,7 @@ jobs:
         with:
           name: puchittoed-${{ matrix.target }}
           path: |
-            puchittoed/dist/*.exe
+            puchittoed/dist/*-setup.exe
             puchittoed/dist/*.dmg
             puchittoed/dist/*.AppImage
             puchittoed/dist/*.deb
